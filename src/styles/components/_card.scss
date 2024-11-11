@@ -1,0 +1,174 @@
+@import '../variables';
+@import '../typography';
+
+// Card container styles (Block)
+.card {
+  box-shadow: $shadow-elevation-medium;
+  border-radius: $border-radius;
+  background: rgba($card-background-color, 0.5);
+
+  overflow: hidden;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  // Title Section (Element)
+  &__title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    // border-bottom: 1px solid $border-color;
+
+    // Ensures that the title and link are in the same row
+    flex-wrap: wrap; // For responsive layout if necessary
+  }
+
+  // Event Title (Element)
+  &__title {
+    font-size: 1.5rem;
+    color: $font-color-heading;
+    margin: 0;
+    flex-grow: 1;
+    // Ensure truncation when the title is too long
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Link Container (Element)
+  &__link-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  // Link (Element)
+  &__link {
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+    font-size: 1.1rem;
+    color: $color-primary;
+    text-decoration: none;
+    margin-right: 10px; // Space between text and icon
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Link Icon (Element)
+  &__link-icon {
+    width: 16px; // Adjust the size as necessary
+    height: 16px;
+    object-fit: contain;
+    // fill: currentColor;
+    fill: none;
+    stroke-width: 3;
+    stroke: #491EC4;
+
+    svg {
+      color: red;
+    }
+  }
+
+  // Event Label (Element with Modifier)
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 10px;
+
+    .card__label-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    &--paid {
+      color: #f44336; // Red for paid
+    }
+
+    &--free {
+      color: #4caf50; // Green for free
+    }
+  }
+
+  // Colored dot modifiers (Element with Modifiers)
+  &__label-dot--paid {
+    background-color: #f44336;
+  }
+
+  &__label-dot--free {
+    background-color: #4caf50;
+  }
+
+  // Tags Container (Element)
+  &__tags-container {
+    margin-top: 10px;
+  }
+
+  // Tag (Element with Modifier)
+  &__tag {
+    background-color: #f0f0f0;
+    color: #555;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+  }
+
+  // Description (Element)
+  &__description {
+    padding: 20px;
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  // Footer Section (Element)
+  &__footer {
+    padding: 20px;
+    display: flex;
+    // align-items: center;
+    justify-content: space-between;
+    // border-top: 1px solid #e0e0e0;
+    // background-color: #f9f9f9;
+  }
+
+  // User Image (Element)
+  &__user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+  }
+
+  // User Info (Element)
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  // User Name (Element)
+  &__user-name {
+    font-weight: bold;
+    color: #333;
+  }
+
+  // Event Date (Element)
+  &__event-date {
+    font-size: 0.9rem;
+    color: $color-primary;
+  }
+}

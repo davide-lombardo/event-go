@@ -1,0 +1,119 @@
+
+
+:root {
+  --border-color: #fec85b;
+}
+
+/* Grey shades */
+$color-gray-0: #f9f9f9;
+$color-gray-05: #f6f6f6;
+$color-gray-1: #eee;
+$color-gray-2: #e6e6e6;
+$color-gray-3: #ccc;
+$color-gray-4: #bbb;
+$color-gray-5: #999;
+$color-gray-6: #575757;
+$color-gray-65: #525252;
+$color-gray-7: #2c2c2c;
+$color-gray-8: #252525;
+$color-gray-9: #1f1f1f;
+$color-gray-10: #181818;
+
+/* Blue shades */
+$color-blue-dark: #0F172A;
+$color-blue-medium: #1E293B;
+$color-blue-dark-medium: #183656;
+$color-blue-light: #475569;
+$color-blue-light-medium: #64748B;
+$color-blue-very-light: #94A3B8;
+
+/* Green shades */
+$color-teal: #4DC0C5;
+$color-green-medium: #2DD4BF;
+$color-green-light: #5EEAD4;
+$color-green: #5eddac;
+
+/* Misc colors */
+$color-orange: #ff7e22;
+$color-yellow: #fca62a;
+$color-light-yellow: #F6EB61;;
+$color-pink: #f57ad0;
+$color-lavender: #a180f9;
+$color-violet: #ff75f8;
+$color-blue: #59abf7;
+$color-purple: #673ece;
+$color-indigo: #4e5dff;
+$color-indigo-dark: #431dee;
+$color-indigo-light: #a6aaff;
+$color-indigo-muted: #f1f2fd;
+$color-category-link: #dd4eb2;
+$color-highlight: $color-yellow;
+
+/* Primary colors */
+$color-primary: $color-green-light;
+$color-primary-light: $color-green-light;
+$color-primary-dark: $color-green-medium;
+$color-primary-muted: $color-indigo-muted;
+
+/* Borders */
+$border-color: $color-blue-light;
+$border-color-hover: $color-primary-dark;
+$border-radius: 12px;
+
+/* Background colors */
+$background-color: $color-lavender;
+$card-background-color: $color-blue-light;
+
+/* Links and Misc */
+$color-link: $color-green-light;
+$color-link-hover: $color-green-medium;
+$scrollbar-color: $color-blue-light;
+$scrollbar-track: $color-blue-medium;
+
+/* Box Shadow */
+$shadow-color-hex: $color-blue-dark;
+
+$shadow-elevation-low: 
+  0.4px 0.5px 0.7px rgba($shadow-color-hex, 0.33),
+  0.7px 0.8px 1.2px -1.2px rgba($shadow-color-hex, 0.33),
+  1.6px 1.8px 2.7px -2.5px rgba($shadow-color-hex, 0.33);
+
+$shadow-elevation-medium: 
+  0.4px 0.5px 0.7px rgba($shadow-color-hex, 0.34),
+  1.3px 1.5px 2.2px -0.8px rgba($shadow-color-hex, 0.34),
+  3.4px 3.8px 5.7px -1.7px rgba($shadow-color-hex, 0.34),
+  8.1px 9.2px 13.8px -2.5px rgba($shadow-color-hex, 0.34);
+
+$shadow-elevation-high: 
+  0.4px 0.5px 0.7px rgba($shadow-color-hex, 0.36),
+  2.6px 3px 4.5px -0.4px rgba($shadow-color-hex, 0.36),
+  5.1px 5.8px 8.7px -0.8px rgba($shadow-color-hex, 0.36),
+  9px 10.2px 15.3px -1.2px rgba($shadow-color-hex, 0.36),
+  15.3px 17.3px 26px -1.7px rgba($shadow-color-hex, 0.36),
+  25.2px 28.4px 42.7px -2.1px rgba($shadow-color-hex, 0.36),
+  39.7px 44.8px 67.3px -2.5px rgba($shadow-color-hex, 0.36);
+
+/* Font colors */
+$font-color-base: $color-gray-1;
+$font-color-muted: $color-blue-light-medium;
+$font-color-heading: $color-blue-very-light;
+$font-color-bright: $color-gray-1;
+
+/* Button colors */
+$button-border-color: $color-gray-4;
+$button-border-color-hover: $color-gray-5;
+$button-background-color: $color-blue-light;
+$button-font-color: $color-primary;
+
+/* Sizs */
+$content-width: 860px;
+$content-width--small: 560px;
+$content-width--medium: 700px;
+$navbar-height-small: 60px;
+
+/* Breakpoints */
+$breakpoint-small: 700px;
+$breakpoint-medium: 900px;
+$breakpoint-medium-lg: 1024px;
+$breakpoint-large: 1200px;
+$breakpoint-xlarge: 1600px;

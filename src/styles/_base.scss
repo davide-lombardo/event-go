@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@import '../styles/typography';
+@import '../styles/variables';
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $font-family-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  line-height: 1.6;
+  font-size: 16px;
+  font-weight: normal;
+  font-kerning: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: $background-color;
+}
+
+main {
+  margin-top: $navbar-height-small;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* Links */
+a {
+  color: $color-link;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-link-hover;
+  }
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid $color-primary;
+}
+
+p,
+ul,
+ol,
+ul,
+table {
+  font-size: 1rem;
+  color: $font-color-base;
+}
+
+@media screen and (min-width: $breakpoint-small) {
+  p,
+  ul,
+  ol,
+  ul,
+  table,
+  blockquote {
+    font-size: 1.1rem;
+    line-height: 1.625;
+  }
+}
+
+p,
+ul,
+ol {
+  -webkit-font-smoothing: auto;
+  line-height: 1.625;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+ul {
+  padding-left: 1rem;
+}
+
+ul li ul,
+ol li ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+li {
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+li::marker {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: $color-primary;
+}
+
+main {
+  margin-top: $navbar-height-small;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+mark {
+  font-weight: 600;
+  background: $color-light-yellow;
+}
+
+u {
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+}
+
+time {
+  display: block;
+  font-family: $font-family-monospace;
+  letter-spacing: -0.03rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Blockquote */
+blockquote strong {
+  text-decoration-color: $color-primary-dark;
+}
+
+blockquote {
+  background: $color-blue-light;
+  border-radius: $border-radius;
+  box-shadow: $shadow-elevation-low;
+  margin: 2rem 0;
+  padding: 1.5rem;
+}
+
+blockquote  p {
+  color: $color-blue-very-light !important;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+blockquote *:last-child {
+  margin: 0;
+}
+
+blockquote ul {
+  margin-top: 1.5rem;
+}
+
+blockquote strong {
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  font-weight: 700;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: $font-color-heading;
+  line-height: 1.1;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  scroll-margin-top: 6rem;
+  font-family: $font-family-heading;
+}
+
+h1:not(:first-child),
+h2:not(:first-child),
+h3:not(:first-child),
+h4:not(:first-child) {
+  margin-top: 3.5rem;
+}
+
+h2 + h3 {
+  margin-top: 1.5rem !important;
+}
+
+h2 {
+  font-size: 1.7rem;
+  margin: 0 0 1rem;
+  font-weight: 700;
+  padding-bottom: 0.4rem;
+  // border-bottom: 1px solid $border-color;
+  font-family: $font-family-nav;
+  color: $font-color-heading;
+}
+
+h2 code {
+  font-size: 1.7rem !important;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+h3 code {
+  font-size: 1.4rem !important;
+}
+
+@media screen and (min-width: $breakpoint-small) {
+  main {
+    margin-top: 8rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h2 code {
+    font-size: 1.9rem !important;
+  }
+
+  h3 {
+    font-size: 1.6rem;
+  }
+
+  h3 code {
+    font-size: 1.7rem !important;
+  }
+}
+
+h4,
+h4 code {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $border-color;
+}
+
+h5 {
+  color: $font-color-base;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+::selection {
+  background-color: $color-blue-dark-medium;
+  color: $color-blue-very-light;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: $scrollbar-track;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $scrollbar-color;
+  border-radius: 2px;
+}

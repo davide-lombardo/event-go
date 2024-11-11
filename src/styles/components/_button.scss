@@ -1,0 +1,71 @@
+@import '../variables';
+@import '../typography';
+
+button,
+a.button {
+  background: rgba($card-background-color, 0.5);
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  font-family: $font-family-nav;
+  line-height: 1;
+  border-radius: $border-radius;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: $button-font-color;
+  gap: 0.25rem;
+  white-space: nowrap;
+  transition: transform 0.2s ease-in-out;
+}
+
+button.large,
+a.button.large {
+  padding: 1rem 1.75rem;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+button.small,
+a.button.small {
+  padding: 0.5rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+button img,
+a.button img {
+  min-height: 20px;
+  min-width: 20px;
+  max-height: 20px;
+  margin-right: 0.25rem;
+}
+
+button.primary,
+a.button.primary {
+  border-color: $color-primary;
+  font-weight: 700;
+}
+
+button.primary:hover,
+a.button.primary:hover {
+  border-color: $color-yellow;
+}
+
+button:hover,
+a.button:hover {
+  color: $font-color-bright;
+  border-color: $button-border-color-hover;
+}
+
+button:active,
+a.button:active {
+  transform: scale(0.95);
+}
+
+@media screen and (min-width: $breakpoint-small) {
+  button,
+  a.button {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+}
