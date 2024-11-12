@@ -79,15 +79,19 @@ const Input = styled.input`
   }
 `;
 
-const Label = styled.label`
+const Label = styled.label<{ required?: boolean }>`
   font-size: 1rem;
   color: black;
+  &::after {
+    content: ${({ required }) => (required ? "' *'" : '')};
+    color: red;
+    margin-left: 4px;
+  }
 `;
 
 const RadioGroup = styled.div`
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
 `;
 
 const RadioLabel = styled.label`
@@ -186,8 +190,6 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
 
     if (eventData.location.length < 3 || eventData.location.length > 50) {
       newErrors.location = 'Location must be between 3 and 50 characters.';
-    } else if (!specialCharRegex.test(eventData.location)) {
-      newErrors.location = 'Location cannot contain special characters.';
     }
 
     setErrors(newErrors);
@@ -235,19 +237,23 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
   return (
     <ModalOverlay $isOpen={isOpen}>
       <ModalContent>
-        <h2>Add New Event</h2>
+        <h2 style={{ textAlign: 'center' }}>Add New Event</h2>
         <Form onSubmit={handleSubmit}>
-          <Label htmlFor="name">Event Name</Label>
+          <Label htmlFor="name" required>
+            Event Name
+          </Label>
           <Input
             name="name"
-            placeholder="Event Name"
+            placeholder="Enter the name of the event"
             value={eventData.name}
             onChange={handleChange}
             required
           />
           {errors.name && <ErrorText>{errors.name}</ErrorText>}
 
-          <Label htmlFor="date">Event Date</Label>
+          <Label htmlFor="date" required>
+            Event Date
+          </Label>
           <Input
             type="date"
             name="eventDate"
@@ -260,7 +266,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
 
           <Label htmlFor="location">Location</Label>
           <AutocompleteInput
-            placeholder="Enter a location"
+            placeholder="Enter the location of the event"
             onPlaceSelected={handleLocationChange}
           />
 
@@ -269,11 +275,23 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
           <Label htmlFor="description">Description</Label>
           <TextArea
             name="description"
-            placeholder="Description"
+            placeholder="Add a brief description of the event"
             value={eventData.description}
             onChange={handleChange}
             rows={4}
           />
+
+          <Label htmlFor="link" required>
+            Event link
+          </Label>
+          <Input
+            name="link"
+            placeholder="https://example.com"
+            value={eventData.link}
+            onChange={handleChange}
+            required
+          />
+          {errors.link && <ErrorText>{errors.link}</ErrorText>}
 
           <Label>Payment Type</Label>
           <RadioGroup>
@@ -298,16 +316,6 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
               Paid
             </RadioLabel>
           </RadioGroup>
-
-          <Label htmlFor="link">Event link</Label>
-          <Input
-            name="link"
-            placeholder="Event link"
-            value={eventData.link}
-            onChange={handleChange}
-            required
-          />
-          {errors.link && <ErrorText>{errors.link}</ErrorText>}
 
           <ButtonRow>
             <Button onClick={onClose} variant={'danger'}>

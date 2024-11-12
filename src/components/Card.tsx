@@ -33,8 +33,9 @@ const CardContainer = styled.div`
     right: 0;
     bottom: 0;
     border-radius: var(--border-radius);
-    padding: 5px;
+    padding: 3px;
     background: var(--gradient-primary);
+    box-shadow: var(--shadow-elevation-medium);
     -webkit-mask: linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
@@ -56,7 +57,7 @@ const CardContainer = styled.div`
 
 const TitleSection = styled.div`
   display: flex;
-  align-items: start;
+  align-items: baseline;
   padding: var(--20px);
   gap: var(--10px);
 `;
@@ -131,6 +132,7 @@ const Footer = styled.div`
   padding: var(--20px);
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
 `;
 
 const UserImage = styled.img`
@@ -157,10 +159,22 @@ const EventDate = styled.span`
   color: var(--color-primary);
 `;
 
+const LocationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px; // Adjust spacing as needed
+  margin-top: 4px;
+`;
+
 const Location = styled.span`
   font-size: var(--font-size-small);
   color: var(--color-grey-7);
   margin-top: 4px;
+`;
+
+const LocationIconImg = styled.img`
+  width: 14px; // Adjust size as needed
+  height: 14px;
 `;
 
 const Card: React.FC<CardProps> = ({
@@ -172,7 +186,7 @@ const Card: React.FC<CardProps> = ({
   userImage,
   userName,
   eventDate,
-  location
+  location,
 }) => {
   return (
     <CardContainer>
@@ -205,7 +219,10 @@ const Card: React.FC<CardProps> = ({
         <UserInfo>
           <UserName>{userName}</UserName>
           <EventDate>{new Date(eventDate).toLocaleDateString()}</EventDate>
-          <Location>{location}</Location>
+          <LocationContainer>
+            <LocationIconImg src={'./src/assets/map-pin.svg'} alt="Location icon" />
+            <Location>{location}</Location>
+          </LocationContainer>
         </UserInfo>
       </Footer>
     </CardContainer>

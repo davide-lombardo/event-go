@@ -96,7 +96,7 @@ const GlobalStyle = createGlobalStyle`
   --scrollbar-track: var(--color-blue-medium);
 
   /* Box Shadow */
-  --shadow-color-hex: var(--color-blue-dark);
+  --shadow-color-hex: var(--color-gray-8);
 
   --shadow-elevation-low: 
     0.4px 0.5px 0.7px rgba(var(--shadow-color-hex), 0.33),

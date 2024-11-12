@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+* {
+  margin: 0;
+}
+
 html {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

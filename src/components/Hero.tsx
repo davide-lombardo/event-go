@@ -27,7 +27,7 @@ const HeroTitle = styled.h1`
 `;
 
 const HeroSubtitle = styled.p`
-  font-size: var(--25px);
+  font-size: var(--16px);
   margin-top: var(--10px);
   color: var(--color-gray-7);
 `;

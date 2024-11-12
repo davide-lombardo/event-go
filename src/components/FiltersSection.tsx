@@ -30,7 +30,7 @@ const Select = styled.select`
 
 const FilterSection = ({ onFilterChange }: FilterProps) => {
   const [location, setLocation] = useState('');
-  const [dateFilter, setDateFilter] = useState<Filters['dateFilter']>('');
+  const [dateFilter, setDateFilter] = useState<Filters['dateFilter']>('today');
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedDate = event.target.value as Filters['dateFilter'];
@@ -40,6 +40,7 @@ const FilterSection = ({ onFilterChange }: FilterProps) => {
 
   const handleLocationChange = (location: string) => {
     setLocation(location);
+    onFilterChange({ location, dateFilter });
   };
 
   return (
@@ -49,7 +50,6 @@ const FilterSection = ({ onFilterChange }: FilterProps) => {
         onPlaceSelected={handleLocationChange}
       />
       <Select value={dateFilter} onChange={handleDateChange}>
-        <option value="">Select Date</option>
         <option value="today">Today</option>
         <option value="tomorrow">Tomorrow</option>
         <option value="weekend">This Weekend</option>
