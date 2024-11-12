@@ -7,6 +7,7 @@ import { Filters } from '../types/filters.model';
 import { EventData } from '../types/event.model';
 import Hero from '../components/Hero';
 import { useEventContext } from '../context/EventContext';
+import Spinner from '../components/shared/Spinner';
 
 const EventListWrapper = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const NoEventsMessage = styled.div`
   margin-top: 50px;
 `;
 function Home() {
-  const { events } = useEventContext();
+  const { events, loading  } = useEventContext();
 
   const [filters, setFilters] = React.useState<Filters>({
     location: '',
@@ -91,7 +92,7 @@ function Home() {
 
   const eventsToDisplay = filteredEvents.length > 0 ? filteredEvents : events;
   console.log("Filtered events state:", filteredEvents);
-  console.log("Events to display:", eventsToDisplay);  // Log events to display
+  console.log("Events to display:", eventsToDisplay); 
 
   return (
     <React.Fragment>
@@ -101,7 +102,9 @@ function Home() {
       />
       <FilterSection onFilterChange={handleFilterChange} />
       <EventListWrapper>
-        {eventsToDisplay.length > 0 ? (
+        {loading ? (
+          <Spinner $size="15px" $gradient="linear-gradient(45deg, var(--color-teal), var(--color-indigo))" />
+        ) : eventsToDisplay.length > 0 ? (
           eventsToDisplay.map(event => (
             <Card
               key={event.id}
@@ -113,6 +116,7 @@ function Home() {
               userImage={event.userImage}
               userName={event.userName}
               eventDate={event.eventDate}
+              location={event.location}
             />
           ))
         ) : (

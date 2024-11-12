@@ -11,6 +11,7 @@ interface CardProps {
   userImage: string;
   userName: string;
   eventDate: string;
+  location: string;
 }
 
 const CardContainer = styled.div`
@@ -156,6 +157,12 @@ const EventDate = styled.span`
   color: var(--color-primary);
 `;
 
+const Location = styled.span`
+  font-size: var(--font-size-small);
+  color: var(--color-grey-7);
+  margin-top: 4px;
+`;
+
 const Card: React.FC<CardProps> = ({
   title,
   link,
@@ -165,6 +172,7 @@ const Card: React.FC<CardProps> = ({
   userImage,
   userName,
   eventDate,
+  location
 }) => {
   return (
     <CardContainer>
@@ -197,6 +205,7 @@ const Card: React.FC<CardProps> = ({
         <UserInfo>
           <UserName>{userName}</UserName>
           <EventDate>{new Date(eventDate).toLocaleDateString()}</EventDate>
+          <Location>{location}</Location>
         </UserInfo>
       </Footer>
     </CardContainer>

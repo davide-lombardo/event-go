@@ -151,35 +151,33 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   return (
-    <>
-      <EventProvider>
-        <BrowserRouter>
-          <GlobalStyle />
-          <Layout>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-            </Routes>
-          </Layout>
-          <Footer />
-          <Toaster
-            position="top-center"
-            reverseOrder={false}
-            gutter={8}
-            containerClassName=""
-            containerStyle={{}}
-            toastOptions={{
-              className: '',
-              duration: 5000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-            }}
-          />
-        </BrowserRouter>
-      </EventProvider>
-    </>
+    <EventProvider>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Layout>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </Layout>
+        <Footer />
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          gutter={8}
+          containerClassName=""
+          containerStyle={{}}
+          toastOptions={{
+            className: '',
+            duration: 5000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+          }}
+        />
+      </BrowserRouter>
+    </EventProvider>
   );
 }
 

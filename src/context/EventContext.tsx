@@ -4,6 +4,7 @@ import { EventData } from '../types/event.model';
 
 interface EventContextProps {
   events: EventData[];
+  loading: boolean;
   fetchEvents: () => Promise<void>;
   addEvent: (event: EventData) => Promise<void>;
 }
@@ -20,15 +21,23 @@ export const useEventContext = () => {
 
 export const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [events, setEvents] = useState<EventData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchEvents = async () => {
-    const fetchedEvents = await getEventsFromFirestore();
-    setEvents(fetchedEvents);
+    setLoading(true);
+    try {
+      const fetchedEvents = await getEventsFromFirestore();
+      setEvents(fetchedEvents);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const addEvent = async (event: EventData) => {
     await addEventToFirestore(event);
-    await fetchEvents(); // Re-fetch events after adding a new one
+    await fetchEvents();
   };
 
   useEffect(() => {
@@ -36,7 +45,7 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, []);
 
   return (
-    <EventContext.Provider value={{ events, fetchEvents, addEvent }}>
+    <EventContext.Provider value={{ events, fetchEvents, addEvent, loading }}>
       {children}
     </EventContext.Provider>
   );

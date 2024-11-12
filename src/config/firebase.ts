@@ -46,7 +46,6 @@ export const addEventToFirestore = async (eventData: EventData) => {
   try {
     const eventsCollection = collection(db, 'events');
     await addDoc(eventsCollection, eventData);
-    console.log('Event added successfully:', eventData);
   } catch (error) {
     console.error('Error adding event:', error);
   }
@@ -59,8 +58,8 @@ export const getEventsFromFirestore = async (): Promise<EventData[]> => {
 
     // Map through documents, casting each document's data as EventData
     const eventsList = snapshot.docs.map(doc => ({
-      ...doc.data() as EventData,  // Type assertion to ensure fields match EventData
-      id: doc.id, // Firestore auto-generated ID
+      ...doc.data() as EventData,
+      id: doc.id,
     }));
     return eventsList;
   } catch (error) {
