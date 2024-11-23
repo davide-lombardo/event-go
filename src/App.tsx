@@ -1,4 +1,3 @@
-import { Suspense, useState } from 'react';
 import './App.css';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Home from './pages/Home';
@@ -8,6 +7,7 @@ import Layout from './components/Layout';
 import { createGlobalStyle } from 'styled-components';
 import { Toaster } from 'react-hot-toast';
 import { EventProvider } from './context/EventContext';
+import { UserProvider } from './context/UserContext';
 
 const GlobalStyle = createGlobalStyle`
 :root {
@@ -151,33 +151,35 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   return (
-    <EventProvider>
-      <BrowserRouter>
-        <GlobalStyle />
-        <Layout>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </Layout>
-        <Footer />
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          gutter={8}
-          containerClassName=""
-          containerStyle={{}}
-          toastOptions={{
-            className: '',
-            duration: 5000,
-            style: {
-              background: '#363636',
-              color: '#fff',
-            },
-          }}
-        />
-      </BrowserRouter>
-    </EventProvider>
+    <UserProvider>
+      <EventProvider>
+        <BrowserRouter>
+          <GlobalStyle />
+          <Layout>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </Layout>
+          <Footer />
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            gutter={8}
+            containerClassName=""
+            containerStyle={{}}
+            toastOptions={{
+              className: '',
+              duration: 5000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+            }}
+          />
+        </BrowserRouter>
+      </EventProvider>
+    </UserProvider>
   );
 }
 

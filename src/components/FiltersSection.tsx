@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Filters } from '../types/filters.model';
+import { EventFilters } from '../types/event.model';
 import AutocompleteInput from './AutocompleteInput';
 
 type FilterProps = {
-  onFilterChange: (filters: Filters) => void;
+  onFilterChange: (filters: EventFilters) => void;
 };
 
 const FilterWrapper = styled.div`
@@ -30,17 +30,17 @@ const Select = styled.select`
 
 const FilterSection = ({ onFilterChange }: FilterProps) => {
   const [location, setLocation] = useState('');
-  const [dateFilter, setDateFilter] = useState<Filters['dateFilter']>('today');
+  const [date, setDateFilter] = useState<EventFilters['date']>('today');
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedDate = event.target.value as Filters['dateFilter'];
+    const selectedDate = event.target.value as EventFilters['date'];
     setDateFilter(selectedDate);
-    onFilterChange({ location, dateFilter: selectedDate });
+    onFilterChange({ location, date: selectedDate });
   };
 
   const handleLocationChange = (location: string) => {
     setLocation(location);
-    onFilterChange({ location, dateFilter });
+    onFilterChange({ location, date });
   };
 
   return (
@@ -49,7 +49,7 @@ const FilterSection = ({ onFilterChange }: FilterProps) => {
         placeholder="Enter a location"
         onPlaceSelected={handleLocationChange}
       />
-      <Select value={dateFilter} onChange={handleDateChange}>
+      <Select value={date} onChange={handleDateChange}>
         <option value="today">Today</option>
         <option value="tomorrow">Tomorrow</option>
         <option value="weekend">This Weekend</option>

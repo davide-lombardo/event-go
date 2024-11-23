@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import LinkIcon from './shared/LinkIcon';
+import LinkIconImage from '/src/assets/external-link.svg';
+import UserIconImage from '/src/assets/user.svg';
+import MapPinIconImage from '/src/assets/map-pin.svg';
 
 interface CardProps {
   title: string;
@@ -195,7 +198,7 @@ const Card: React.FC<CardProps> = ({
         <LinkContainer>
           <Link href={link} target="_blank">
             view event
-            <LinkIcon src={'src/assets/external-link.svg'} alt="link" />
+            <LinkIcon src={LinkIconImage} alt="link" />
           </Link>
         </LinkContainer>
       </TitleSection>
@@ -213,14 +216,18 @@ const Card: React.FC<CardProps> = ({
 
       <Footer>
         <UserImage
-          src={userImage ? userImage : 'src/assets/user.svg'}
+          src={userImage ? userImage : UserIconImage}
+          onError={e => (e.currentTarget.src = UserIconImage)}
           alt="User Avatar"
         />
         <UserInfo>
           <UserName>{userName}</UserName>
           <EventDate>{new Date(eventDate).toLocaleDateString()}</EventDate>
           <LocationContainer>
-            <LocationIconImg src={'./src/assets/map-pin.svg'} alt="Location icon" />
+            <LocationIconImg
+              src={MapPinIconImage}
+              alt="Location icon"
+            />
             <Location>{location}</Location>
           </LocationContainer>
         </UserInfo>

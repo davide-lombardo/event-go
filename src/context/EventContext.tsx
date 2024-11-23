@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { addEventToFirestore, getEventsFromFirestore } from '../config/firebase';
+// import { addEventToFirestore, getEventsFromFirestore } from '../config/firebase';
 import { EventData } from '../types/event.model';
+import EventsService from '../services/events.service';
 
 interface EventContextProps {
   events: EventData[];
@@ -10,6 +11,9 @@ interface EventContextProps {
 }
 
 const EventContext = createContext<EventContextProps | undefined>(undefined);
+
+// Initialize EventService
+const eventsService = new EventsService();
 
 export const useEventContext = () => {
   const context = useContext(EventContext);
@@ -26,7 +30,7 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      const fetchedEvents = await getEventsFromFirestore();
+      const fetchedEvents = await eventsService.getEventsFromFirestore();
       setEvents(fetchedEvents);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -36,7 +40,7 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const addEvent = async (event: EventData) => {
-    await addEventToFirestore(event);
+    await eventsService.addEvent(event);
     await fetchEvents();
   };
 

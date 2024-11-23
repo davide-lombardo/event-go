@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { EventData } from '../../types/event.model';
 import toast from 'react-hot-toast';
@@ -286,6 +286,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
           </Label>
           <Input
             name="link"
+            type='url'
             placeholder="https://example.com"
             value={eventData.link}
             onChange={handleChange}

@@ -3,10 +3,10 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import FilterSection from '../components/FiltersSection';
-import { Filters } from '../types/filters.model';
 import Hero from '../components/Hero';
 import { useEventContext } from '../context/EventContext';
 import Spinner from '../components/shared/Spinner';
+import { EventFilters } from '../types/event.model';
 
 const EventListWrapper = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ const NoEventsMessage = styled.div`
 function Home() {
   const { events, loading  } = useEventContext();
 
-  const handleFilterChange = (newFilters: Filters) => {
+  const handleFilterChange = (newFilters: EventFilters) => {
     console.log("New filters:", newFilters);
   };
 
@@ -36,7 +36,7 @@ function Home() {
         title="Welcome to Event Go"
         subtitle="Search and discover events happening near you. Explore upcoming events, and find both free and paid experiences tailored to your location."
       />
-      {/* <FilterSection onFilterChange={handleFilterChange} /> */}
+      <FilterSection onFilterChange={handleFilterChange} />
       <EventListWrapper>
         {loading ? (
           <Spinner $size="15px" $gradient="var(--gradient-primary)" />

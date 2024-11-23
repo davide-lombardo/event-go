@@ -10,3 +10,8 @@ export interface EventData {
   userName: string;
   eventDate: string;
 }
+
+export interface EventFilters {
+  location: string;
+  date: '' | 'today' | 'tomorrow' | 'weekend';
+}

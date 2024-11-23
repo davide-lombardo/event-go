@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import Button from './Button';
-import { signInWithGoogle, logout, auth } from '../config/firebase';
+import { auth } from '../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useRef, useState } from 'react';
 import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';
+import { useUserContext } from '../context/UserContext';
 
 const NavbarWrapper = styled.nav`
   display: flex;
@@ -74,7 +75,8 @@ const WelcomeMessage = styled.div`
 `;
 
 const Nav = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
+  const { signInWithGoogle, signOut } = useUserContext(); 
 
   const { fetchEvents } = useEventContext();
 
@@ -148,13 +150,14 @@ const Nav = () => {
             {user.photoURL && (
               <>
                 <UserProfileImage
-                  src={user.photoURL || ''}
+                  src={user?.photoURL || 'src/assets/user.svg'}
+                  onError={(e) => (e.currentTarget.src = 'src/assets/user.svg')}
                   alt="User profile"
                   onClick={handleProfileImageClick}
                 />
                 <Dropdown $show={dropdownOpen} ref={dropdownRef}>
                   <WelcomeMessage>Welcome, {user.displayName}</WelcomeMessage>
-                  <DropdownOption onClick={logout}>Logout</DropdownOption>
+                  <DropdownOption onClick={signOut}>Logout</DropdownOption>
                 </Dropdown>
               </>
             )}
