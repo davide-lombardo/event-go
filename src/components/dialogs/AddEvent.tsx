@@ -264,7 +264,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
           />
           {errors.date && <ErrorText>{errors.date}</ErrorText>}
 
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location" required>Location</Label>
           <AutocompleteInput
             placeholder="Enter the location of the event"
             onPlaceSelected={handleLocationChange}

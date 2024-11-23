@@ -1,82 +1,57 @@
 import {
   collection,
-  DocumentData,
   query,
   where,
-  DocumentReference,
   getDocs,
   addDoc,
+  QueryConstraint,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { EventData, EventFilters } from '../types/event.model';
 
 export default class EventsService {
   private eventsRef = collection(db, 'events');
-       
-  getEventsFromFirestore = async (): Promise<EventData[]> => {
-    try {
-      const eventsCollection = collection(db, 'events');
-      const snapshot = await getDocs(eventsCollection);
 
-      // Map through documents, casting each document's data as EventData
-      const eventsList = snapshot.docs.map(doc => ({
+  public async getEvents(filters: EventFilters): Promise<EventData[]> {
+    const { location, date } = filters;
+  
+    try {
+      const queryConstraints: QueryConstraint[] = [];
+  
+      // Filter by location if provided
+      if (location) {
+        queryConstraints.push(where('location', '==', location.toLowerCase()));
+      }
+  
+      // Filter by date range if provided
+      if (date) {
+        const now = new Date();
+        const todayStart = new Date(now.setHours(0, 0, 0, 0));
+        const tomorrowStart = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
+        const weekendStart = new Date(todayStart.getTime() + (5 - todayStart.getDay()) * 24 * 60 * 60 * 1000); // Friday
+        const weekendEnd = new Date(todayStart.getTime() + (7 - todayStart.getDay()) * 24 * 60 * 60 * 1000); // Sunday
+  
+        if (date === 'today') {
+          queryConstraints.push(where('eventDate', '>=', todayStart.toISOString()));
+          queryConstraints.push(where('eventDate', '<', tomorrowStart.toISOString()));
+        } else if (date === 'tomorrow') {
+          queryConstraints.push(where('eventDate', '>=', tomorrowStart.toISOString()));
+          queryConstraints.push(where('eventDate', '<', new Date(tomorrowStart.getTime() + 24 * 60 * 60 * 1000).toISOString()));
+        } else if (date === 'weekend') {
+          queryConstraints.push(where('eventDate', '>=', weekendStart.toISOString()));
+          queryConstraints.push(where('eventDate', '<=', weekendEnd.toISOString()));
+        }
+      }
+  
+      const eventsQuery = query(this.eventsRef, ...queryConstraints);
+      const snapshot = await getDocs(eventsQuery);
+  
+      return snapshot.docs.map(doc => ({
         ...(doc.data() as EventData),
         id: doc.id,
       }));
-      return eventsList;
     } catch (error) {
-      console.error('Error retrieving events:', error);
-      return [];
-    }
-  };
-
-  /**
-   * Performs query and return a list of events
-   * @param filters
-   * @returns
-   */
-  public async getEvents(filters: EventFilters): Promise<EventData[]> {
-    const { location, date } = filters;
-
-    try {
-
-      const eventsQueryClauses = [
-        where('location', '==', location.toLowerCase()),
-      ];
-      const eventsQuery = query(this.eventsRef, ...eventsQueryClauses);
-      const eventsQuerySnapshot = await getDocs(eventsQuery);
-
-      const filteredEventsRefs: DocumentReference<DocumentData>[] = [];
-
-      eventsQuerySnapshot.forEach(async document => {
-        // const event = { ...(document.data() as EventData), id: document.id };
-
-        if (date) {
-          // const isOpenInRequiredDates = getDaysArray(dateStart, dateEnd).every(
-          //   (day) => {
-          //     if (!requiredTimeSlot)
-          //       return openingDays[getWeekDayName(day, "it-IT")].length > 0;
-          //     else {
-          //       return isRequiredSlotCompatibleWithOpeningTime(
-          //         day,
-          //         requiredTimeSlot,
-          //         openingDays
-          //       );
-          //     }
-          //   }
-          // );
-
-          // isOpenInRequiredDates && filteredEventsRefs.push(document.ref);
-          filteredEventsRefs.push(document.ref);
-        } else {
-          filteredEventsRefs.push(document.ref);
-        }
-      });
-
-      let availableEvents: EventData[] = [];
-
-      return availableEvents;
-    } catch (error) {
+      console.error('Error filtering events:', error);
       throw error;
     }
   }

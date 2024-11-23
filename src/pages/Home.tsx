@@ -9,10 +9,15 @@ import Spinner from '../components/shared/Spinner';
 import { EventFilters } from '../types/event.model';
 
 const EventListWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
   padding: 20px;
+  width: 100%;
+
+  @media (max-width: 700px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const NoEventsMessage = styled.div`
@@ -22,10 +27,12 @@ const NoEventsMessage = styled.div`
   margin-top: 50px;
 `;
 function Home() {
-  const { events, loading  } = useEventContext();
+  const { events, loading, fetchEvents } = useEventContext();
 
   const handleFilterChange = (newFilters: EventFilters) => {
     console.log("New filters:", newFilters);
+
+    fetchEvents(newFilters);
   };
 
   const eventsToDisplay = events.length > 0 ? events : [];

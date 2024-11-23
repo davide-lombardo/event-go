@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-// import { addEventToFirestore, getEventsFromFirestore } from '../config/firebase';
-import { EventData } from '../types/event.model';
+import { EventData, EventFilters } from '../types/event.model';
 import EventsService from '../services/events.service';
 
 interface EventContextProps {
   events: EventData[];
   loading: boolean;
-  fetchEvents: () => Promise<void>;
+  fetchEvents: (filters?: EventFilters) => Promise<void>;
   addEvent: (event: EventData) => Promise<void>;
 }
 
@@ -27,13 +26,14 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (filters: EventFilters = { location: '', date: '' }) => {
     setLoading(true);
     try {
-      const fetchedEvents = await eventsService.getEventsFromFirestore();
+      console.log('Fetching events with filters:', filters);
+      const fetchedEvents = await eventsService.getEvents(filters);
       setEvents(fetchedEvents);
     } catch (error) {
-      console.error("Error fetching events:", error);
+      console.error('Error fetching events:', error);
     } finally {
       setLoading(false);
     }
