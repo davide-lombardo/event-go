@@ -11,9 +11,15 @@ type FilterProps = {
 const FilterWrapper = styled.div`
   display: flex;
   justify-content: center;
+  flex-direction: row;
   gap: var(--10px);
   margin-bottom: var(--20px);
   margin-top: var(--20px);
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const InputsWrapper = styled.div`

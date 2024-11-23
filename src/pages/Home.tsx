@@ -11,6 +11,7 @@ import { EventFilters } from '../types/event.model';
 const EventListWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
   gap: 20px;
   padding: 20px;
   width: 100%;
