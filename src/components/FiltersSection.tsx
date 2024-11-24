@@ -16,7 +16,7 @@ const FilterWrapper = styled.div`
   margin-bottom: var(--20px);
   margin-top: var(--20px);
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     flex-direction: column;
     align-items: center;
   }
@@ -25,6 +25,10 @@ const FilterWrapper = styled.div`
 const InputsWrapper = styled.div`
   display: flex;
   gap: var(--10px);
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const Select = styled.select`

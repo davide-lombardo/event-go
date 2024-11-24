@@ -41,7 +41,7 @@ function Home() {
   return (
     <React.Fragment>
       <Hero
-        title="Welcome to Event Go"
+        title="Welcome to EventGo"
         subtitle="Search and discover events happening near you. Explore upcoming events, and find both free and paid experiences tailored to your location."
       />
       <FilterSection onFilterChange={handleFilterChange} />

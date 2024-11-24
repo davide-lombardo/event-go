@@ -145,6 +145,8 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
   const { addEvent } = useEventContext();
   const [user] = useAuthState(auth);
 
+  const [loading, setLoading] = useState(false);
+
   const [eventData, setEventData] = useState<EventData>({
     id: Date.now().toString(),
     name: '',
@@ -188,10 +190,6 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
       newErrors.date = 'Date cannot be earlier than today.';
     }
 
-    if (eventData.location.length < 3 || eventData.location.length > 50) {
-      newErrors.location = 'Location must be between 3 and 50 characters.';
-    }
-
     setErrors(newErrors);
     return Object.values(newErrors).every(error => error === '');
   };
@@ -217,6 +215,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateInput()) {
+      setLoading(true);
       const eventToSave = {
         ...eventData,
         userImage: user?.photoURL || '',
@@ -229,7 +228,9 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
         onClose();
       } catch (error) {
         console.error('Failed to add event:', error);
-        toast.error('Failed to add event. Please try again.');
+        toast.error(`Failed to add event: ${error || 'Unknown error'}`);
+      } finally {
+        setLoading(false);
       }
     }
   };
