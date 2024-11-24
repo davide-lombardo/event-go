@@ -1,50 +1,127 @@
-# React + TypeScript + Vite
+# Event Go
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+Event Go is a web application that helps users discover and explore events happening around them. Users can filter events by different criteria, including location, paid or free events, and more.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Live Demo
 
-- Configure the top-level `parserOptions` property like this:
+Check out the live version of the app [here](https://event-go-e3bd3.web.app/).
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Technologies Used
+
+- **React**: A JavaScript library for building user interfaces. [Link](https://reactjs.org)
+- **Styled-components**: A library for writing CSS in JavaScript. [Link](https://styled-components.com)
+- **Firebase**: A platform for backend services like authentication and data storage. [Link](https://firebase.google.com)
+- **React Router**: For routing and navigation. [Link](https://reactrouter.com)
+- **React Firebase Hooks**: React hooks for Firebase integration. [Link](https://github.com/CSFrequency/react-firebase-hooks)
+- **React Hot Toast**: For displaying toast notifications. [Link](https://react-hot-toast.com)
+- **Lodash**: A utility library for JavaScript. [Link](https://lodash.com)
+- **Vite**: A next-generation, fast build tool for modern web development. [Link](https://vitejs.dev)
+- **TypeScript**: A statically typed superset of JavaScript. [Link](https://www.typescriptlang.org)
+
+## Features
+
+- **Event Discovery**: Users can explore a variety of events near them based on different filters.
+- **Filters**: Filter events by criteria such as locationand date.
+- **Loading State**: A loading spinner is displayed while events are being fetched.
+- **Responsive Design**: The application is responsive, optimized for both mobile and desktop devices.
+- **Event Cards**: Events are displayed as cards with essential details such as title, description, location, and more.
+- **Dynamic Content**: The event list is dynamically updated based on filter selection.
+- **Firebase Integration**: User data and event information are stored and managed using Firebase.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Setup and Development
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/davide-lombardo/event-go.git
+cd event-go
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Running the Application
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Once the dependencies are installed, you can start the development server using the following command:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+npm run dev
+
+This will start the application in development mode and you can access it by navigating to `http://localhost:3000/` in your browser.
+
+### Building the Application
+
+To build the application for production, use the following command:
+
+npm run build
+
+This will compile and bundle your application into optimized static files in the `dist/` directory.
+
+### Preview the Build
+
+To preview the production build locally, use the following command:
+
+npm run preview
+
+This will run a preview server, which you can access in your browser to test the production version of the app.
+
+### Linting
+
+To run the ESLint linter and check for issues in the code, use the following command:
+
+npm run lint
+
+If there are any linting issues, you can fix them automatically using:
+
+npm run lint:fix
+
+This will fix any auto-fixable linting problems in the codebase.
+
+## Testing
+
+To run the tests (if any tests are implemented), use your preferred testing library (e.g., Jest, React Testing Library). Ensure that the tests are set up and configured properly to run them. No specific tests are included in this project yet, but consider adding them to improve quality and coverage.
+
+## Deployment
+
+This project can be deployed to Firebase Hosting or any other static hosting provider. Here are the basic steps for deploying to Firebase Hosting:
+
+1. **Install Firebase CLI** (if not installed):
+
+    npm install -g firebase-tools
+
+2. **Login to Firebase**:
+
+    firebase login
+
+3. **Initialize Firebase in your project**:
+
+    firebase init
+
+    Choose Firebase Hosting and configure the public directory as `dist` for production builds.
+
+4. **Deploy the app**:
+
+    firebase deploy
+
+For more information on deploying to Firebase Hosting, refer to the [official Firebase documentation](https://firebase.google.com/docs/hosting).
+
+## Contributing
+
+Feel free to fork this project, submit issues, or create pull requests for any improvements or bug fixes. Contributions are always welcome!
+
+## Acknowledgments
+
+- **React Community**: For the amazing ecosystem and resources.
+- **Firebase**: For providing an easy-to-use backend solution.
+- **Styled Components**: For making styling in React components a breeze.
+- **Vite**: For its fast development server and build tool.
+- **Open Source Contributors**: Special thanks to all the open-source libraries and contributors used in this project.
+
+---
+
+Enjoy using **Event Go** and discover events near you! 🚀
