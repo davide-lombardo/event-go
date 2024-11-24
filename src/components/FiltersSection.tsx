@@ -54,8 +54,8 @@ const FilterSection = ({ onFilterChange }: FilterProps) => {
 
   const handleClear = () => {
     setLocation('');
-    setDateFilter('today');
-    onFilterChange({ location: '', date: 'today' });
+    setDateFilter('all');
+    onFilterChange({ location: '', date: 'all' });
   };
 
   return (
@@ -69,6 +69,7 @@ const FilterSection = ({ onFilterChange }: FilterProps) => {
           value={date}
           onChange={e => setDateFilter(e.target.value as EventFilters['date'])}
         >
+          <option value="all">All Dates</option>
           <option value="today">Today</option>
           <option value="tomorrow">Tomorrow</option>
           <option value="weekend">This Weekend</option>

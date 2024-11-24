@@ -13,5 +13,5 @@ export interface EventData {
 
 export interface EventFilters {
   location: string;
-  date: '' | 'today' | 'tomorrow' | 'weekend';
+  date: 'all' | 'today' | 'tomorrow' | 'weekend' | '';
 }
