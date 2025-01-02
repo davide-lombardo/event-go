@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { EventData } from '../../types/event.model';
 import toast from 'react-hot-toast';
@@ -12,6 +12,7 @@ interface EventModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (eventData: EventData) => void;
+  eventData?: EventData; // Optional prop for editing
 }
 
 interface ModalOverlayProps {
@@ -56,6 +57,24 @@ const ModalContent = styled.div`
     margin-bottom: 1rem;
     font-size: 1.5rem;
     color: black;
+  }
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: black;
+
+  &:hover {
+    color: var(--color-primary);
   }
 `;
 
@@ -141,7 +160,11 @@ const ButtonRow = styled.div`
   margin-top: 1rem;
 `;
 
-const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
+const EventModal: React.FC<EventModalProps> = ({
+  isOpen,
+  onClose,
+  eventData: initialEventData,
+}) => {
   const { addEvent } = useEventContext();
   const [user] = useAuthState(auth);
 
@@ -166,6 +189,26 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
     location: '',
     link: '',
   });
+
+  // Reset state when modal is opened with new data
+  useEffect(() => {
+    if (isOpen) {
+      setEventData(
+        initialEventData || {
+          id: Date.now().toString(),
+          name: '',
+          location: '',
+          description: '',
+          link: '',
+          tags: [],
+          paid: false,
+          userImage: '',
+          userName: '',
+          eventDate: '',
+        }
+      );
+    }
+  }, [isOpen, initialEventData]);
 
   const validateInput = () => {
     const newErrors = {
@@ -238,7 +281,12 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
   return (
     <ModalOverlay $isOpen={isOpen}>
       <ModalContent>
-        <h2 style={{ textAlign: 'center' }}>Add New Event</h2>
+        <ModalHeader>
+          <h2 style={{ textAlign: 'center' }}>
+            {initialEventData ? 'Edit Event' : 'Add New Event'}
+          </h2>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+        </ModalHeader>
         <Form onSubmit={handleSubmit}>
           <Label htmlFor="name" required>
             Event Name
@@ -265,7 +313,9 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
           />
           {errors.date && <ErrorText>{errors.date}</ErrorText>}
 
-          <Label htmlFor="location" required>Location</Label>
+          <Label htmlFor="location" required>
+            Location
+          </Label>
           <AutocompleteInput
             placeholder="Enter the location of the event"
             onPlaceSelected={handleLocationChange}
@@ -287,7 +337,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose }) => {
           </Label>
           <Input
             name="link"
-            type='url'
+            type="url"
             placeholder="https://example.com"
             value={eventData.link}
             onChange={handleChange}

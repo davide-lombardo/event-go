@@ -6,6 +6,9 @@ import {
   orderBy,
   addDoc,
   QueryConstraint,
+  deleteDoc,
+  doc,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { EventData, EventFilters } from '../types/event.model';
@@ -93,6 +96,48 @@ export default class EventsService {
     try {
       await addDoc(this.eventsRef, eventData);
     } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Delete an event by its ID.
+   * @param eventId - The ID of the event to be deleted.
+   * @returns A promise that resolves when the event is deleted.
+   */
+  public async deleteEvent(eventId: string): Promise<void> {
+    try {
+      // Get a reference to the event document
+      const eventDocRef = doc(this.eventsRef, eventId);
+
+      // Delete the event document
+      await deleteDoc(eventDocRef);
+
+      console.log(`Event with ID ${eventId} has been deleted.`);
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update an event by its ID.
+   * @param eventId - The ID of the event to be updated.
+   * @param eventData - The new data for the event.
+   * @returns A promise that resolves when the event is updated.
+   */
+  // Assuming eventData is of type EventData
+  public async updateEvent(eventData: EventData): Promise<void> {
+    try {
+      const { id } = eventData;
+      const eventDocRef = doc(this.eventsRef, id);
+  
+      // Overwrite the document entirely
+      await updateDoc(eventDocRef, { eventData });
+  
+      console.log(`Event with ID ${id} has been updated.`);
+    } catch (error) {
+      console.error('Error updating event:', error);
       throw error;
     }
   }

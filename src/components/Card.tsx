@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import LinkIcon from './shared/LinkIcon';
 import LinkIconImage from '/src/assets/external-link.svg';
 import UserIconImage from '/src/assets/user.svg';
 import MapPinIconImage from '/src/assets/map-pin.svg';
+import { useUserContext } from '../context/UserContext';
+import { EventData } from '../types/event.model';
+import EventModal from './dialogs/AddEvent';
+import { useEventContext } from '../context/EventContext';
+import ConfirmDelete from './dialogs/ConfirmDelete';
 
 interface CardProps {
   title: string;
+  eventId: string;
   link: string;
   description: string;
   tags: string[];
@@ -15,6 +21,8 @@ interface CardProps {
   userName: string;
   eventDate: string;
   location: string;
+  onDelete?: () => void;
+  onEdit?: () => void;
 }
 
 const CardContainer = styled.div`
@@ -180,8 +188,29 @@ const LocationIconImg = styled.img`
   height: 14px;
 `;
 
+const AdminActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: var(--10px) var(--20px);
+`;
+
+const ActionButton = styled.button`
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: var(--5px) var(--10px);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-primary-dark);
+  }
+`;
+
 const Card: React.FC<CardProps> = ({
   title,
+  eventId,
   link,
   description,
   tags,
@@ -191,48 +220,126 @@ const Card: React.FC<CardProps> = ({
   eventDate,
   location,
 }) => {
+  const { deleteEvent, updateEvent } = useEventContext();
+  const { role } = useUserContext();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalEventData, setModalEventData] = useState<EventData | null>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+
+  const handleEdit = () => {
+    setModalEventData({
+      id: Date.now().toString(),
+      name: title,
+      location,
+      description,
+      link,
+      tags,
+      paid,
+      userImage,
+      userName,
+      eventDate,
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteEvent(eventId);
+      setIsDeleteConfirmOpen(false);
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteConfirmOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalEventData(null);
+  };
+
+  const saveEvent = async (updatedEventData: EventData) => {
+    if (updatedEventData && updatedEventData.id) {
+      try {
+        await updateEvent(updatedEventData);
+        closeModal();
+      } catch (error) {
+        console.error('Error updating event:', error);
+      }
+    }
+  };
+
   return (
-    <CardContainer>
-      <TitleSection>
-        <Title>{title}</Title>
-        <LinkContainer>
-          <Link href={link} target="_blank">
-            view event
-            <LinkIcon src={LinkIconImage} alt="link" />
-          </Link>
-        </LinkContainer>
-      </TitleSection>
-      <Label $paid={paid}>
-        <LabelDot $paid={paid} />
-        {paid ? 'Paid' : 'Free'}
-      </Label>
-      <TagsContainer>
-        {tags.map((tag, index) => (
-          <Tag key={index}>{tag}</Tag>
-        ))}
-      </TagsContainer>
+    <>
+      <CardContainer>
+        <TitleSection>
+          <Title>{title}</Title>
+          <LinkContainer>
+            <Link href={link} target="_blank">
+              view event
+              <LinkIcon src={LinkIconImage} alt="link" />
+            </Link>
+          </LinkContainer>
+        </TitleSection>
+        <Label $paid={paid}>
+          <LabelDot $paid={paid} />
+          {paid ? 'Paid' : 'Free'}
+        </Label>
+        <TagsContainer>
+          {tags.map((tag, index) => (
+            <Tag key={index}>{tag}</Tag>
+          ))}
+        </TagsContainer>
 
-      <Description>{description}</Description>
+        <Description>{description}</Description>
 
-      <Footer>
-        <UserImage
-          src={userImage ? userImage : UserIconImage}
-          onError={e => (e.currentTarget.src = UserIconImage)}
-          alt="User Avatar"
+        <Footer>
+          <UserImage
+            src={userImage ? userImage : UserIconImage}
+            onError={e => (e.currentTarget.src = UserIconImage)}
+            alt="User Avatar"
+          />
+          <UserInfo>
+            <UserName>{userName}</UserName>
+            <EventDate>{new Date(eventDate).toLocaleDateString()}</EventDate>
+            <LocationContainer>
+              <LocationIconImg src={MapPinIconImage} alt="Location icon" />
+              <Location>{location}</Location>
+            </LocationContainer>
+          </UserInfo>
+        </Footer>
+
+        {role === 'admin' && (
+          <AdminActions>
+            <ActionButton onClick={handleEdit}>Edit</ActionButton>
+            <ActionButton onClick={handleDelete}>Delete</ActionButton>
+          </AdminActions>
+        )}
+      </CardContainer>
+
+      {isModalOpen && modalEventData && (
+        <EventModal
+          eventData={modalEventData}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onSave={saveEvent}
         />
-        <UserInfo>
-          <UserName>{userName}</UserName>
-          <EventDate>{new Date(eventDate).toLocaleDateString()}</EventDate>
-          <LocationContainer>
-            <LocationIconImg
-              src={MapPinIconImage}
-              alt="Location icon"
-            />
-            <Location>{location}</Location>
-          </LocationContainer>
-        </UserInfo>
-      </Footer>
-    </CardContainer>
+      )}
+
+      <ConfirmDelete
+        isOpen={isDeleteConfirmOpen}
+        message="Are you sure you want to delete this event?"
+        onConfirm={confirmDelete}
+        onCancel={closeDeleteModal}
+      />
+    </>
   );
 };
 

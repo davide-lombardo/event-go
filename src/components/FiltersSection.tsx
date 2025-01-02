@@ -46,7 +46,7 @@ const Select = styled.select`
 
 const FilterSection = ({ onFilterChange }: FilterProps) => {
   const [location, setLocation] = useState('');
-  const [date, setDateFilter] = useState<EventFilters['date']>('today');
+  const [date, setDateFilter] = useState<EventFilters['date']>('all');
 
   const handleSubmit = () => {
     onFilterChange({ location, date });
