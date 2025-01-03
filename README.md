@@ -36,6 +36,30 @@ Check out the live version of the app [here](https://event-go-e3bd3.web.app/).
 
 This project is open source and available under the [MIT License](LICENSE).
 
+### Run with Docker
+
+You can run **Event Go** locally using Docker. Follow the steps below:
+
+#### Prerequisites
+1. Install [Docker](https://docs.docker.com/get-started/get-docker/) on your machine.  
+   - Follow the instructions on the Docker website to download and install Docker for your operating system.
+
+#### Pull the Docker Image
+Download the Docker image from Docker Hub by running the following command:
+
+```bash
+docker pull davelombdev/event-go:latest
+```
+
+#### Run the Application
+Run the application using the following command:
+
+```bash
+docker run -p 5000:5000 davelombdev/event-go:latest
+```
+
+This will start the application, making it accessible at `http://localhost:5000` in your browser.
+
 ## Setup and Development
 
 Clone the repository and install dependencies:
@@ -58,7 +82,9 @@ This will start the application in development mode and you can access it by nav
 
 To build the application for production, use the following command:
 
+```bash
 npm run build
+```
 
 This will compile and bundle your application into optimized static files in the `dist/` directory.
 
@@ -66,7 +92,10 @@ This will compile and bundle your application into optimized static files in the
 
 To preview the production build locally, use the following command:
 
+
+```bash
 npm run preview
+```
 
 This will run a preview server, which you can access in your browser to test the production version of the app.
 
@@ -74,17 +103,21 @@ This will run a preview server, which you can access in your browser to test the
 
 To run the ESLint linter and check for issues in the code, use the following command:
 
+```bash
 npm run lint
+```
 
 If there are any linting issues, you can fix them automatically using:
 
+```bash
 npm run lint:fix
+```
 
 This will fix any auto-fixable linting problems in the codebase.
 
 ## Testing
 
-To run the tests (if any tests are implemented), use your preferred testing library (e.g., Jest, React Testing Library). Ensure that the tests are set up and configured properly to run them. No specific tests are included in this project yet, but consider adding them to improve quality and coverage.
+To run the tests use your preferred testing library (e.g., Jest, React Testing Library). Ensure that the tests are set up and configured properly to run them. No specific tests are included in this project yet, but consider adding them to improve quality and coverage.
 
 ## Deployment
 
@@ -92,21 +125,31 @@ This project can be deployed to Firebase Hosting or any other static hosting pro
 
 1. **Install Firebase CLI** (if not installed):
 
-    npm install -g firebase-tools
+```bash
+npm install -g firebase-tools
+```
+
+    
 
 2. **Login to Firebase**:
+```bash
+firebase login
+```
 
-    firebase login
 
 3. **Initialize Firebase in your project**:
+```bash
+firebase init
+```
 
-    firebase init
+Choose Firebase Hosting and configure the public directory as `dist` for production builds.
 
-    Choose Firebase Hosting and configure the public directory as `dist` for production builds.
+**Deploy the app**:
 
-4. **Deploy the app**:
+```bash
+firebase deploy
+```
 
-    firebase deploy
 
 For more information on deploying to Firebase Hosting, refer to the [official Firebase documentation](https://firebase.google.com/docs/hosting).
 
