@@ -221,7 +221,7 @@ const Card: React.FC<CardProps> = ({
   location,
 }) => {
   const { deleteEvent, updateEvent } = useEventContext();
-  const { role } = useUserContext();
+  const { user, role } = useUserContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalEventData, setModalEventData] = useState<EventData | null>(null);
@@ -276,6 +276,8 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
+  const isEventCreator = user?.displayName === userName;
+
   return (
     <>
       <CardContainer>
@@ -316,7 +318,7 @@ const Card: React.FC<CardProps> = ({
           </UserInfo>
         </Footer>
 
-        {role === 'admin' && (
+        {(role === 'admin' || isEventCreator) && (
           <AdminActions>
             <ActionButton onClick={handleEdit}>Edit</ActionButton>
             <ActionButton onClick={handleDelete}>Delete</ActionButton>
