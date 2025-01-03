@@ -65,6 +65,7 @@ const FilterSection = ({ onFilterChange }: FilterProps) => {
           placeholder="Enter a location"
           onPlaceSelected={setLocation}
         />
+        
         <Select
           value={date}
           onChange={e => setDateFilter(e.target.value as EventFilters['date'])}

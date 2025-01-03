@@ -13,9 +13,11 @@ interface EventContextProps {
   events: EventData[];
   loading: boolean;
   fetchEvents: (filters?: EventFilters) => Promise<void>;
+  fetchNextPage: () => Promise<void>;
   addEvent: (event: EventData) => Promise<void>;
   deleteEvent: (eventId: string) => Promise<void>;
   updateEvent: (updatedData: EventData) => Promise<void>;
+  lastVisible: any;
 }
 
 const EventContext = createContext<EventContextProps | undefined>(undefined);
@@ -36,17 +38,36 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [lastVisible, setLastVisible] = useState<any>(null);
+  const [filters, setFilters] = useState<EventFilters>({ location: '', date: '' });
 
   const fetchEvents = async (
     filters: EventFilters = { location: '', date: '' }
   ) => {
     setLoading(true);
+    setFilters(filters);
     try {
       console.log('Fetching events with filters:', filters);
-      const fetchedEvents = await eventsService.getEvents(filters);
+      const { events: fetchedEvents, lastVisible: lastDoc } = await eventsService.getEvents(filters);
       setEvents(fetchedEvents);
+      setLastVisible(lastDoc);
     } catch (error) {
       console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
+  const fetchNextPage = async () => {
+    if (!lastVisible) return;
+    setLoading(true);
+    try {
+      const { events: nextEvents, lastVisible: lastDoc } = await eventsService.getEvents(filters, lastVisible);
+      setEvents(prevEvents => [...prevEvents, ...nextEvents]);
+      setLastVisible(lastDoc);
+    } catch (error) {
+      console.error('Error fetching next page of events:', error);
     } finally {
       setLoading(false);
     }
@@ -88,9 +109,11 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
         events,
         loading,
         fetchEvents,
+        fetchNextPage,
         addEvent,
         updateEvent,
         deleteEvent,
+        lastVisible
       }}
     >
       {children}

@@ -7,6 +7,7 @@ import Hero from '../components/Hero';
 import { useEventContext } from '../context/EventContext';
 import Spinner from '../components/shared/Spinner';
 import { EventFilters } from '../types/event.model';
+import Pagination from '../components/Pagination';
 
 const EventListWrapper = styled.div`
   display: grid;
@@ -37,7 +38,7 @@ const NoEventsMessage = styled.div`
   margin-top: 50px;
 `;
 function Home() {
-  const { events, loading, fetchEvents } = useEventContext();
+  const { events, loading, fetchEvents, lastVisible } = useEventContext();
 
   const handleFilterChange = (newFilters: EventFilters) => {
     console.log('New filters:', newFilters);
@@ -80,6 +81,7 @@ function Home() {
           </NoEventsMessage>
         )}
       </EventListWrapper>
+      {events.length > 0 && <Pagination hasMore={!!lastVisible} />}
     </React.Fragment>
   );
 }

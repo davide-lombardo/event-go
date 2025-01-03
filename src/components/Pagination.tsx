@@ -1,61 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useEventContext } from '../context/EventContext';
+import Button from './Button';
 
-type PaginationProps = {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-};
+interface PaginationProps {
+  hasMore: boolean;
+}
 
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-  gap: 10px;
+  margin-top: 2rem;
 `;
 
-const Button = styled.button<{ disabled?: boolean }>`
-  padding: 10px 15px;
-  font-size: 1rem;
-  border: none;
-  background: ${({ disabled }) => (disabled ? '#ccc' : 'var(--color-primary)')};
-  color: white;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  border-radius: 4px;
+const Pagination: React.FC<PaginationProps> = ({ hasMore }) => {
+  const { fetchNextPage, loading } = useEventContext();
 
-  &:hover {
-    background: ${({ disabled }) =>
-      disabled ? '#ccc' : 'var(--color-primary-dark)'};
-  }
-`;
+  const handleLoadMore = () => {
+    fetchNextPage();
+  };
 
-const PageIndicator = styled.span`
-  font-size: 1rem;
-  color: #333;
-`;
-
-const Pagination: React.FC<PaginationProps> = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
   return (
     <PaginationWrapper>
-      <Button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        Previous
-      </Button>
-      <PageIndicator>
-        Page {currentPage} of {totalPages}
-      </PageIndicator>
-      <Button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        Next
+      <Button onClick={handleLoadMore} disabled={loading || !hasMore}>
+        {loading ? 'Loading...' : 'Load More'}
       </Button>
     </PaginationWrapper>
   );

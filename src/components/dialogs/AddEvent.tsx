@@ -168,7 +168,7 @@ const EventModal: React.FC<EventModalProps> = ({
   const { addEvent } = useEventContext();
   const [user] = useAuthState(auth);
 
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [eventData, setEventData] = useState<EventData>({
     id: Date.now().toString(),
@@ -258,7 +258,7 @@ const EventModal: React.FC<EventModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateInput()) {
-      // setLoading(true);
+      setLoading(true);
       const eventToSave = {
         ...eventData,
         userImage: user?.photoURL || '',
@@ -273,7 +273,7 @@ const EventModal: React.FC<EventModalProps> = ({
         console.error('Failed to add event:', error);
         toast.error(`Failed to add event: ${error || 'Unknown error'}`);
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     }
   };
@@ -373,7 +373,7 @@ const EventModal: React.FC<EventModalProps> = ({
             <Button onClick={onClose} variant={'danger'}>
               Cancel
             </Button>
-            <Button type="submit">Save Event</Button>
+            <Button type="submit" disabled={loading}>Save Event</Button>
           </ButtonRow>
         </Form>
       </ModalContent>

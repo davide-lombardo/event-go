@@ -9,6 +9,8 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  startAfter,
+  limit,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { EventData, EventFilters } from '../types/event.model';
@@ -16,7 +18,11 @@ import { EventData, EventFilters } from '../types/event.model';
 export default class EventsService {
   private eventsRef = collection(db, 'events');
 
-  public async getEvents(filters: EventFilters): Promise<EventData[]> {
+  public async getEvents(
+    filters: EventFilters,
+    lastVisible?: any,
+    pageSize: number = 10
+  ): Promise<{events: EventData[]; lastVisible: any}> {
     const { location, date } = filters;
 
     try {
@@ -74,13 +80,22 @@ export default class EventsService {
       // Sort in ascending order. Use 'desc' for descending order.
       queryConstraints.push(orderBy('eventDate', 'asc'));
 
+      if (lastVisible) {
+        queryConstraints.push(startAfter(lastVisible));
+      }
+
+      queryConstraints.push(limit(pageSize));
+
       const eventsQuery = query(this.eventsRef, ...queryConstraints);
       const snapshot = await getDocs(eventsQuery);
+      const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
 
-      return snapshot.docs.map(doc => ({
+      const events = snapshot.docs.map(doc => ({
         ...(doc.data() as EventData),
         id: doc.id,
       }));
+
+      return {events, lastVisible: lastVisibleDoc};
     } catch (error) {
       console.error('Error filtering events:', error);
       throw error;
@@ -131,10 +146,10 @@ export default class EventsService {
     try {
       const { id } = eventData;
       const eventDocRef = doc(this.eventsRef, id);
-  
+
       // Overwrite the document entirely
       await updateDoc(eventDocRef, { eventData });
-  
+
       console.log(`Event with ID ${id} has been updated.`);
     } catch (error) {
       console.error('Error updating event:', error);

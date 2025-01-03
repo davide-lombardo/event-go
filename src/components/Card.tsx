@@ -227,6 +227,8 @@ const Card: React.FC<CardProps> = ({
   const [modalEventData, setModalEventData] = useState<EventData | null>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
+  const isEventCreator = user?.displayName === userName;
+
   const handleEdit = () => {
     setModalEventData({
       id: Date.now().toString(),
@@ -276,7 +278,6 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
-  const isEventCreator = user?.displayName === userName;
 
   return (
     <>
