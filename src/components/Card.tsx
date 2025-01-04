@@ -220,7 +220,7 @@ const Card: React.FC<CardProps> = ({
   eventDate,
   location,
 }) => {
-  const { deleteEvent, updateEvent } = useEventContext();
+  const { deleteEvent } = useEventContext();
   const { user, role } = useUserContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
