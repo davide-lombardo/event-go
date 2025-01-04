@@ -8,7 +8,7 @@ import { useEventContext } from '../context/EventContext';
 import Spinner from '../components/shared/Spinner';
 import { EventFilters } from '../types/event.model';
 import Pagination from '../components/Pagination';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const EventListWrapper = styled.div`
   display: grid;
@@ -40,14 +40,7 @@ const NoEventsMessage = styled.div`
 `;
 function Home() {
   const { events, loading, fetchEvents, lastVisible } = useEventContext();
-  const [userLocation, setUserLocation] = React.useState<string>('');
-
-  // const handleFilterChange = (newFilters: EventFilters) => {
-  //   fetchEvents({
-  //     ...newFilters,
-  //     location: newFilters.location.trim(),
-  //   });
-  // };
+  const [userLocation, setUserLocation] = useState<string>('');
 
   const handleFilterChange = useCallback((newFilters: EventFilters) => {
     fetchEvents({
@@ -108,8 +101,6 @@ function Home() {
     fetchUserLocationAndEvents();
   }, []);
 
-  // const eventsToDisplay = events.length > 0 ? events : [];
-  // const isEmptyState = loading || eventsToDisplay.length === 0;
   const eventsToDisplay = useMemo(() => (events.length > 0 ? events : []), [events]);
   const isEmptyState = useMemo(() => loading || eventsToDisplay.length === 0, [loading, eventsToDisplay]);
 

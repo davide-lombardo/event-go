@@ -3,6 +3,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useMemo,
   ReactNode,
 } from 'react';
 import { EventData, EventFilters } from '../types/event.model';
@@ -101,18 +102,20 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     fetchEvents();
   }, []);
 
+  const contextValue = useMemo(() => ({
+    events,
+    loading,
+    fetchEvents,
+    fetchNextPage,
+    addEvent,
+    updateEvent,
+    deleteEvent,
+    lastVisible,
+  }), [events, loading, lastVisible]);
+
   return (
     <EventContext.Provider
-      value={{
-        events,
-        loading,
-        fetchEvents,
-        fetchNextPage,
-        addEvent,
-        updateEvent,
-        deleteEvent,
-        lastVisible
-      }}
+      value={contextValue}
     >
       {children}
     </EventContext.Provider>
