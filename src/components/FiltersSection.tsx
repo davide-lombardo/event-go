@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { EventFilters } from '../types/event.model';
 import AutocompleteInput from './AutocompleteInput';
@@ -6,6 +6,7 @@ import Button from './Button';
 
 interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
+  initialLocation: string;
 };
 
 const FilterWrapper = styled.div`
@@ -44,8 +45,12 @@ const Select = styled.select`
   }
 `;
 
-const FilterSection = ({ onFilterChange }: FilterProps) => {
+const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
   const [filters, setFilters] = useState<EventFilters>({ location: '', date: '' });
+
+  useEffect(() => {
+    setFilters(prevFilters => ({ ...prevFilters, location: initialLocation }));
+  }, [initialLocation]);
 
   const handleLocationChange = (location: string) => {
     setFilters(prevFilters => ({ ...prevFilters, location }));

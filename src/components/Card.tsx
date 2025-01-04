@@ -21,8 +21,6 @@ interface CardProps {
   userName: string;
   eventDate: string;
   location: string;
-  onDelete?: () => void;
-  onEdit?: () => void;
 }
 
 const CardContainer = styled.div`
@@ -208,7 +206,7 @@ const ActionButton = styled.button`
   }
 `;
 
-const Card: React.FC<CardProps> = ({
+const Card: React.FC<CardProps> = React.memo(({
   title,
   eventId,
   link,
@@ -343,6 +341,6 @@ const Card: React.FC<CardProps> = ({
       />
     </>
   );
-};
+});
 
 export default Card;

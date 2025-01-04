@@ -8,6 +8,7 @@ import { useEventContext } from '../context/EventContext';
 import Spinner from '../components/shared/Spinner';
 import { EventFilters } from '../types/event.model';
 import Pagination from '../components/Pagination';
+import { useCallback, useEffect, useMemo } from 'react';
 
 const EventListWrapper = styled.div`
   display: grid;
@@ -39,16 +40,78 @@ const NoEventsMessage = styled.div`
 `;
 function Home() {
   const { events, loading, fetchEvents, lastVisible } = useEventContext();
+  const [userLocation, setUserLocation] = React.useState<string>('');
 
-  const handleFilterChange = (newFilters: EventFilters) => {
+  // const handleFilterChange = (newFilters: EventFilters) => {
+  //   fetchEvents({
+  //     ...newFilters,
+  //     location: newFilters.location.trim(),
+  //   });
+  // };
+
+  const handleFilterChange = useCallback((newFilters: EventFilters) => {
     fetchEvents({
       ...newFilters,
       location: newFilters.location.trim(),
     });
+  }, [fetchEvents]);
+
+  const getUserLocation = (): Promise<GeolocationPosition> => {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      } else {
+        reject(new Error("Geolocation is not supported by this browser."));
+      }
+    });
   };
 
-  const eventsToDisplay = events.length > 0 ? events : [];
-  const isEmptyState = loading || eventsToDisplay.length === 0;
+  const getAddressFromCoordinates = async (lat: number, lng: number): Promise<string> => {
+    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
+
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+    );
+    const data = await response.json();
+    if (data.status === 'OK' && data.results.length > 0) {
+      return data.results[0].formatted_address;
+    } else {
+      throw new Error('Unable to retrieve address from coordinates');
+    }
+  };
+
+  const fetchEventsNearUser = async (lat: number, lng: number) => {
+    try {
+      const location = await getAddressFromCoordinates(lat, lng);
+      setUserLocation(location);
+      const filters: EventFilters = {
+        location,
+        date: 'all',
+      };
+      await fetchEvents(filters);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserLocationAndEvents = async () => {
+      try {
+        const position = await getUserLocation();
+        const { latitude, longitude } = position.coords;
+        await fetchEventsNearUser(latitude, longitude);
+      } catch (error) {
+        console.error("Error getting user location or fetching events:", error);
+      }
+    };
+
+    fetchUserLocationAndEvents();
+  }, []);
+
+  // const eventsToDisplay = events.length > 0 ? events : [];
+  // const isEmptyState = loading || eventsToDisplay.length === 0;
+  const eventsToDisplay = useMemo(() => (events.length > 0 ? events : []), [events]);
+  const isEmptyState = useMemo(() => loading || eventsToDisplay.length === 0, [loading, eventsToDisplay]);
 
   return (
     <React.Fragment>
@@ -56,7 +119,7 @@ function Home() {
         title="Welcome to EventGo"
         subtitle="Search and discover events happening near you. Explore upcoming events, and find both free and paid experiences tailored to your location."
       />
-      <FilterSection onFilterChange={handleFilterChange} />
+      <FilterSection onFilterChange={handleFilterChange} initialLocation={userLocation}/>
       <EventListWrapper className={isEmptyState ? 'empty-state' : ''}>
         {loading ? (
           <Spinner $size="15px" $gradient="var(--gradient-primary)" />
