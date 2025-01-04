@@ -41,8 +41,6 @@ function Home() {
   const { events, loading, fetchEvents, lastVisible } = useEventContext();
 
   const handleFilterChange = (newFilters: EventFilters) => {
-    console.log('New filters:', newFilters);
-
     fetchEvents({
       ...newFilters,
       location: newFilters.location.trim(),
@@ -63,7 +61,6 @@ function Home() {
         {loading ? (
           <Spinner $size="15px" $gradient="var(--gradient-primary)" />
         ) : eventsToDisplay.length > 0 ? (
-          console.log(eventsToDisplay),
           eventsToDisplay.map(event => (
             <Card
               key={event.id}

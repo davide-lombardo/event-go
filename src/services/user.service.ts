@@ -40,7 +40,6 @@ export default class UserService {
       // Check if the user already exists
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
-        console.log('User already exists in Firestore:', user.uid);
         return; // Don't save the user if they already exist
       }
 
@@ -53,7 +52,6 @@ export default class UserService {
         role: role,
         lastLogin: new Date(),
       });
-      console.log('User saved to Firestore with role:', user.uid, role);
     } catch (error) {
       console.error('Error saving user to Firestore:', error);
       toast.error('Error saving user to Firestore.');

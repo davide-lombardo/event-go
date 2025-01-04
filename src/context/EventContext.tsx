@@ -47,7 +47,6 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     setFilters(filters);
     try {
-      console.log('Fetching events with filters:', filters);
       const { events: fetchedEvents, lastVisible: lastDoc } = await eventsService.getEvents(filters);
       setEvents(fetchedEvents);
       setLastVisible(lastDoc);
@@ -81,7 +80,6 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
   const updateEvent = async (updatedData: EventData) => {
     try {
       await eventsService.updateEvent(updatedData);
-      toast.success('Event is successfully updated.');
       await fetchEvents();
     } catch (error) {
       console.error('Error updating event:', error);

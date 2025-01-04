@@ -270,7 +270,6 @@ const Card: React.FC<CardProps> = ({
   const saveEvent = async (updatedEventData: EventData) => {
     if (updatedEventData && updatedEventData.id) {
       try {
-        await updateEvent(updatedEventData);
         closeModal();
       } catch (error) {
         console.error('Error updating event:', error);

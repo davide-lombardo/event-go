@@ -166,8 +166,9 @@ const EventModal: React.FC<EventModalProps> = ({
   isOpen,
   onClose,
   eventData: initialEventData,
+  onSave
 }) => {
-  const { addEvent } = useEventContext();
+  const { addEvent, updateEvent } = useEventContext();
   const [user] = useAuthState(auth);
 
   const [loading, setLoading] = useState(false);
@@ -247,9 +248,10 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
     setEventData(prevData => ({
       ...prevData,
-      paid: e.target.value === 'paid',
+      paid: value === 'paid',
     }));
   };
 
@@ -268,12 +270,18 @@ const EventModal: React.FC<EventModalProps> = ({
       };
 
       try {
-        await addEvent(eventToSave);
-        toast.success('Event is successfully added.');
+        if (initialEventData) {
+          await updateEvent(eventToSave);
+          toast.success('Event is successfully updated.');
+        } else {
+          await addEvent(eventToSave);
+          toast.success('Event is successfully added.');
+        }
+        onSave(eventToSave);
         onClose();
       } catch (error) {
-        console.error('Failed to add event:', error);
-        toast.error(`Failed to add event: ${error || 'Unknown error'}`);
+        console.error('Failed to save event:', error);
+        toast.error(`Failed to save event: ${error || 'Unknown error'}`);
       } finally {
         setLoading(false);
       }

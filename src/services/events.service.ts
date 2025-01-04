@@ -124,13 +124,8 @@ export default class EventsService {
    */
   public async deleteEvent(eventId: string): Promise<void> {
     try {
-      // Get a reference to the event document
       const eventDocRef = doc(this.eventsRef, eventId);
-
-      // Delete the event document
       await deleteDoc(eventDocRef);
-
-      console.log(`Event with ID ${eventId} has been deleted.`);
     } catch (error) {
       console.error('Error deleting event:', error);
       throw error;
@@ -146,13 +141,11 @@ export default class EventsService {
   // Assuming eventData is of type EventData
   public async updateEvent(eventData: EventData): Promise<void> {
     try {
-      const { id } = eventData;
+      const { id, ...updatedData } = eventData;
       const eventDocRef = doc(this.eventsRef, id);
 
-      // Overwrite the document entirely
-      await updateDoc(eventDocRef, { eventData });
+      await updateDoc(eventDocRef, updatedData);
 
-      console.log(`Event with ID ${id} has been updated.`);
     } catch (error) {
       console.error('Error updating event:', error);
       throw error;
