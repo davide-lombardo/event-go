@@ -1,12 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Libraries, StandaloneSearchBox, useJsApiLoader } from '@react-google-maps/api';
 
 const libraries: Libraries = ["places"];
 
 interface AutocompleteInputProps {
+  initialValue?: string;
   placeholder?: string;
-  onPlaceSelected: (address: string) => void;
+  onLocationChange: (location: string) => void;
 }
 
 const Input = styled.input`
@@ -25,9 +26,12 @@ const Input = styled.input`
 
 const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   placeholder = "Enter a location",
-  onPlaceSelected,
+  initialValue = '',
+  onLocationChange,
 }) => {
-  const autocompleteRef = useRef<any>(null);
+  const [location, setLocation] = useState(initialValue);
+  // const autocompleteRef = useRef<any>(null);
+  const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -35,14 +39,23 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
     libraries: libraries,
   });
 
+  useEffect(() => {
+    setLocation(initialValue);
+  }, [initialValue]);
+
   const handlePlaceChange = () => {
-    const address = autocompleteRef.current?.getPlaces()[0].formatted_address;
-    onPlaceSelected(address || '');
+    const places = searchBoxRef.current?.getPlaces();
+    if (places && places.length > 0) {
+      const place = places[0];
+      const newLocation = place.formatted_address || place.name || '';
+      setLocation(newLocation);
+      onLocationChange(newLocation);
+    }
   };
 
   return isLoaded ? (
-    <StandaloneSearchBox onLoad={ref => (autocompleteRef.current = ref)} onPlacesChanged={handlePlaceChange}>
-      <Input type="text" placeholder={placeholder} />
+    <StandaloneSearchBox onLoad={ref => (searchBoxRef.current = ref)} onPlacesChanged={handlePlaceChange}>
+      <Input type="text" value={location} placeholder={placeholder} onChange={e => setLocation(e.target.value)}/>
     </StandaloneSearchBox>
   ) : (
     <Input type="text" placeholder="Loading..." disabled />

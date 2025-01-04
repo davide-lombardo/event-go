@@ -12,7 +12,7 @@ interface EventModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (eventData: EventData) => void;
-  eventData?: EventData; // Optional prop for editing
+  eventData?: EventData;
 }
 
 interface ModalOverlayProps {
@@ -38,6 +38,8 @@ const ModalContent = styled.div`
   padding: 2rem;
   width: 500px;
   max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.3s ease-in-out;
@@ -192,23 +194,23 @@ const EventModal: React.FC<EventModalProps> = ({
 
   // Reset state when modal is opened with new data
   useEffect(() => {
-    if (isOpen) {
-      setEventData(
-        initialEventData || {
-          id: Date.now().toString(),
-          name: '',
-          location: '',
-          description: '',
-          link: '',
-          tags: [],
-          paid: false,
-          userImage: '',
-          userName: '',
-          eventDate: '',
-        }
-      );
+    if (initialEventData) {
+      setEventData(initialEventData);
+    } else {
+      setEventData({
+        id: Date.now().toString(),
+        name: '',
+        location: '',
+        description: '',
+        link: '',
+        tags: [],
+        paid: false,
+        userImage: '',
+        userName: '',
+        eventDate: '',
+      });
     }
-  }, [isOpen, initialEventData]);
+  }, [initialEventData, isOpen]);
 
   const validateInput = () => {
     const newErrors = {
@@ -317,8 +319,9 @@ const EventModal: React.FC<EventModalProps> = ({
             Location
           </Label>
           <AutocompleteInput
+            initialValue={eventData.location}
             placeholder="Enter the location of the event"
-            onPlaceSelected={handleLocationChange}
+            onLocationChange={handleLocationChange}
           />
 
           {/* {errors.location && <ErrorText>{errors.location}</ErrorText>} */}
@@ -373,7 +376,9 @@ const EventModal: React.FC<EventModalProps> = ({
             <Button onClick={onClose} variant={'danger'}>
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>Save Event</Button>
+            <Button type="submit" disabled={loading}>
+              Save Event
+            </Button>
           </ButtonRow>
         </Form>
       </ModalContent>

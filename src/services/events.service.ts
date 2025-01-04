@@ -11,6 +11,8 @@ import {
   updateDoc,
   startAfter,
   limit,
+  QueryDocumentSnapshot,
+  DocumentData,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { EventData, EventFilters } from '../types/event.model';
@@ -20,7 +22,7 @@ export default class EventsService {
 
   public async getEvents(
     filters: EventFilters,
-    lastVisible?: any,
+    lastVisible: QueryDocumentSnapshot<DocumentData> | null = null,
     pageSize: number = 10
   ): Promise<{events: EventData[]; lastVisible: any}> {
     const { location, date } = filters;
@@ -30,7 +32,7 @@ export default class EventsService {
 
       // Filter by location if provided
       if (location) {
-        queryConstraints.push(where('location', '==', location.toLowerCase()));
+        queryConstraints.push(where('location', '==', location.trim()));
       }
 
       // Filter by date range if provided and not "all"
@@ -77,7 +79,6 @@ export default class EventsService {
         }
       }
 
-      // Sort in ascending order. Use 'desc' for descending order.
       queryConstraints.push(orderBy('eventDate', 'asc'));
 
       if (lastVisible) {
@@ -88,6 +89,7 @@ export default class EventsService {
 
       const eventsQuery = query(this.eventsRef, ...queryConstraints);
       const snapshot = await getDocs(eventsQuery);
+
       const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
 
       const events = snapshot.docs.map(doc => ({

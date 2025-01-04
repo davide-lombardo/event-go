@@ -4,7 +4,7 @@ import { EventFilters } from '../types/event.model';
 import AutocompleteInput from './AutocompleteInput';
 import Button from './Button';
 
-type FilterProps = {
+interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
 };
 
@@ -45,30 +45,41 @@ const Select = styled.select`
 `;
 
 const FilterSection = ({ onFilterChange }: FilterProps) => {
-  const [location, setLocation] = useState('');
-  const [date, setDateFilter] = useState<EventFilters['date']>('all');
+  const [filters, setFilters] = useState<EventFilters>({ location: '', date: '' });
 
-  const handleSubmit = () => {
-    onFilterChange({ location, date });
+  const handleLocationChange = (location: string) => {
+    setFilters(prevFilters => ({ ...prevFilters, location }));
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setFilters(prevFilters => ({ ...prevFilters, date: value as EventFilters['date'] }));
+  };
+
+  const handleApply = () => {
+    onFilterChange(filters);
   };
 
   const handleClear = () => {
-    setLocation('');
-    setDateFilter('all');
-    onFilterChange({ location: '', date: 'all' });
+    const clearedFilters: EventFilters = { location: '', date: '' };
+    setFilters(clearedFilters);
+    onFilterChange(clearedFilters);
   };
+
+
 
   return (
     <FilterWrapper>
       <InputsWrapper>
         <AutocompleteInput
+          initialValue={filters.location}
+          onLocationChange={handleLocationChange}
           placeholder="Enter a location"
-          onPlaceSelected={setLocation}
         />
         
         <Select
-          value={date}
-          onChange={e => setDateFilter(e.target.value as EventFilters['date'])}
+          value={filters.date}
+          onChange={handleDateChange}
         >
           <option value="all">All Dates</option>
           <option value="today">Today</option>
@@ -78,7 +89,7 @@ const FilterSection = ({ onFilterChange }: FilterProps) => {
       </InputsWrapper>
 
       <div style={{ display: 'flex', gap: '10px' }}>
-        <Button type="submit" onClick={handleSubmit}>
+        <Button type="submit" onClick={handleApply}>
           Apply
         </Button>
 
