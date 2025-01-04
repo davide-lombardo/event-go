@@ -43,7 +43,10 @@ function Home() {
   const handleFilterChange = (newFilters: EventFilters) => {
     console.log('New filters:', newFilters);
 
-    fetchEvents(newFilters);
+    fetchEvents({
+      ...newFilters,
+      location: newFilters.location.trim(),
+    });
   };
 
   const eventsToDisplay = events.length > 0 ? events : [];
@@ -60,6 +63,7 @@ function Home() {
         {loading ? (
           <Spinner $size="15px" $gradient="var(--gradient-primary)" />
         ) : eventsToDisplay.length > 0 ? (
+          console.log(eventsToDisplay),
           eventsToDisplay.map(event => (
             <Card
               key={event.id}

@@ -22,7 +22,7 @@ const Pagination: React.FC<PaginationProps> = ({ hasMore }) => {
 
   return (
     <PaginationWrapper>
-      <Button onClick={handleLoadMore} disabled={loading || !hasMore}>
+      <Button onClick={handleLoadMore} disabled={loading || !hasMore} tooltip="No more events available">
         {loading ? 'Loading...' : 'Load More'}
       </Button>
     </PaginationWrapper>

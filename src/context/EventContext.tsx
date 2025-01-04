@@ -8,21 +8,21 @@ import React, {
 import { EventData, EventFilters } from '../types/event.model';
 import EventsService from '../services/events.service';
 import toast from 'react-hot-toast';
+import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 
 interface EventContextProps {
   events: EventData[];
   loading: boolean;
+  lastVisible: QueryDocumentSnapshot<DocumentData> | null;
   fetchEvents: (filters?: EventFilters) => Promise<void>;
   fetchNextPage: () => Promise<void>;
   addEvent: (event: EventData) => Promise<void>;
   deleteEvent: (eventId: string) => Promise<void>;
   updateEvent: (updatedData: EventData) => Promise<void>;
-  lastVisible: any;
 }
 
 const EventContext = createContext<EventContextProps | undefined>(undefined);
 
-// Initialize EventService
 const eventsService = new EventsService();
 
 export const useEventContext = () => {

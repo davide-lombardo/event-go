@@ -231,7 +231,7 @@ const Card: React.FC<CardProps> = ({
 
   const handleEdit = () => {
     setModalEventData({
-      id: Date.now().toString(),
+      id: eventId,
       name: title,
       location,
       description,
