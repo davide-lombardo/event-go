@@ -5,21 +5,27 @@ import React, {
   useEffect,
   useMemo,
   ReactNode,
+  useCallback,
 } from 'react';
 import { EventData, EventFilters } from '../types/event.model';
 import EventsService from '../services/events.service';
 import toast from 'react-hot-toast';
-import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 
 interface EventContextProps {
   events: EventData[];
   loading: boolean;
-  lastVisible: QueryDocumentSnapshot<DocumentData> | null;
-  fetchEvents: (filters?: EventFilters) => Promise<void>;
+  fetchEvents: (filters?: EventFilters, page?: number, pageSize?: number) => Promise<void>;
   fetchNextPage: () => Promise<void>;
   addEvent: (event: EventData) => Promise<void>;
   deleteEvent: (eventId: string) => Promise<void>;
   updateEvent: (updatedData: EventData) => Promise<void>;
+  pagination: {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
+  
 }
 
 const EventContext = createContext<EventContextProps | undefined>(undefined);
@@ -39,39 +45,38 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [lastVisible, setLastVisible] = useState<any>(null);
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    pageSize: 10,
+    totalPages: 0,
+  });
   const [filters, setFilters] = useState<EventFilters>({ location: '', date: '' });
 
   const fetchEvents = async (
-    filters: EventFilters = { location: '', date: '' }
+    filters: EventFilters = { location: '', date: '' },
+    page: number = 1,
+    pageSize: number = 10,
   ) => {
     setLoading(true);
     setFilters(filters);
     try {
-      const { events: fetchedEvents, lastVisible: lastDoc } = await eventsService.getEvents(filters);
+      const { events: fetchedEvents, pagination } = await eventsService.getEvents(filters, page, pageSize);
       setEvents(fetchedEvents);
-      setLastVisible(lastDoc);
+      setPagination(pagination);
     } catch (error) {
       console.error('Error fetching events:', error);
+      setEvents([]);
     } finally {
       setLoading(false);
     }
   };
 
-  
-  const fetchNextPage = async () => {
-    if (!lastVisible) return;
-    setLoading(true);
-    try {
-      const { events: nextEvents, lastVisible: lastDoc } = await eventsService.getEvents(filters, lastVisible);
-      setEvents(prevEvents => [...prevEvents, ...nextEvents]);
-      setLastVisible(lastDoc);
-    } catch (error) {
-      console.error('Error fetching next page of events:', error);
-    } finally {
-      setLoading(false);
+  const fetchNextPage = useCallback(async () => {
+    if (pagination.page < pagination.totalPages) {
+      await fetchEvents(filters, pagination.page + 1, pagination.pageSize);
     }
-  };
+  }, [fetchEvents, pagination]);
 
   const addEvent = async (event: EventData) => {
     await eventsService.addEvent(event);
@@ -107,11 +112,11 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     loading,
     fetchEvents,
     fetchNextPage,
+    pagination,
     addEvent,
     updateEvent,
     deleteEvent,
-    lastVisible,
-  }), [events, loading, lastVisible]);
+  }), [events, loading]);
 
   return (
     <EventContext.Provider

@@ -39,7 +39,7 @@ const NoEventsMessage = styled.div`
   margin-top: 50px;
 `;
 function Home() {
-  const { events, loading, fetchEvents, lastVisible } = useEventContext();
+  const { events, loading, fetchEvents, pagination } = useEventContext();
   const [userLocation, setUserLocation] = useState<string>('');
 
   const handleFilterChange = useCallback((newFilters: EventFilters) => {
@@ -107,7 +107,6 @@ function Home() {
   return (
     <React.Fragment>
       <Hero
-        title="Welcome to EventGo"
         subtitle="Search and discover events happening near you. Explore upcoming events, and find both free and paid experiences tailored to your location."
       />
       <FilterSection onFilterChange={handleFilterChange} initialLocation={userLocation}/>
@@ -136,7 +135,7 @@ function Home() {
           </NoEventsMessage>
         )}
       </EventListWrapper>
-      {events.length > 0 && <Pagination hasMore={!!lastVisible} />}
+      {events.length > 0 && <Pagination hasMore={pagination.page < pagination.totalPages} />}
     </React.Fragment>
   );
 }

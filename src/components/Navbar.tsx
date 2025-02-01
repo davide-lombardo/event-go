@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import Button from './Button';
-import { auth } from '../config/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useRef, useState } from 'react';
 import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';
 import { useUserContext } from '../context/UserContext';
+import AuthModal from './dialogs/Authentication';
+import UserService from '../services/user.service';
 
 const NavbarWrapper = styled.nav`
   display: flex;
@@ -75,15 +75,18 @@ const WelcomeMessage = styled.div`
 `;
 
 const Nav = () => {
-  const [user] = useAuthState(auth);
-  const { signInWithGoogle, signOut } = useUserContext(); 
-
+  const userService = new UserService();
   const { fetchEvents } = useEventContext();
+  const { user, setUser } = useUserContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleOpenAuthModal = () => setIsAuthModalOpen(true);
+  const handleCloseAuthModal = () => setIsAuthModalOpen(false);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -117,6 +120,11 @@ const Nav = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    await userService.signOut();
+    setUser(null);
+  };
+
   return (
     <NavbarWrapper>
       <Logo>EventGo</Logo>
@@ -147,23 +155,25 @@ const Nav = () => {
 
         {user ? (
           <>
-            {user.photoURL && (
+            
               <>
                 <UserProfileImage
-                  src={user?.photoURL || 'src/assets/user.svg'}
-                  onError={(e) => (e.currentTarget.src = 'src/assets/user.svg')}
+                  src={user.photoURL || 'src/assets/user.svg'}
+                  onError={e => (e.currentTarget.src = 'src/assets/user.svg')}
                   alt="User profile"
                   onClick={handleProfileImageClick}
                 />
                 <Dropdown $show={dropdownOpen} ref={dropdownRef}>
-                  <WelcomeMessage>Welcome, {user.displayName}</WelcomeMessage>
-                  <DropdownOption onClick={signOut}>Logout</DropdownOption>
+                  <WelcomeMessage>Welcome, {user.username}</WelcomeMessage>
+                  <DropdownOption onClick={handleSignOut}>
+                    Logout
+                  </DropdownOption>
                 </Dropdown>
               </>
-            )}
+            
           </>
         ) : (
-          <Button onClick={signInWithGoogle} variant={'primary'}>
+          <Button onClick={handleOpenAuthModal} variant={'primary'}>
             Sign In
           </Button>
         )}
@@ -172,6 +182,26 @@ const Nav = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSave={handleSaveEvent}
+      />
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={handleCloseAuthModal}
+        onAuth={async (email, password, username, mode) => {
+          try {
+            let userData;
+            if (mode === 'signin') {
+              await userService.signIn(email, password);
+              userData = await userService.getUserProfile(localStorage.getItem('token'));
+            } else if (mode === 'signup') {
+              await userService.signUp(username, email, password);
+              userData = await userService.getUserProfile(localStorage.getItem('token'));
+            }
+            setUser(userData.data);
+            handleCloseAuthModal();
+          } catch (error) {
+            console.error('Authentication error:', error);
+          }
+        }}
       />
     </NavbarWrapper>
   );

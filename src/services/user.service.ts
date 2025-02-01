@@ -1,72 +1,69 @@
-import { auth, db } from '../config/firebase';
-import {
-  browserLocalPersistence,
-  GoogleAuthProvider,
-  setPersistence,
-  signInWithPopup,
-  signOut,
-  User,
-} from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default class UserService {
-  private googleProvider: GoogleAuthProvider;
+  private apiUrl: string;
 
   constructor() {
-    this.googleProvider = new GoogleAuthProvider();
+    this.apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   }
 
-  async signInWithGoogle(): Promise<User | null> {
+  async signUp(username: string, email: string, password: string): Promise<void> {
     try {
-      await setPersistence(auth, browserLocalPersistence);
-      const result = await signInWithPopup(auth, this.googleProvider);
-      const user = result.user;
-      const role = 'user';
-      // Save the user to Firestore
-      await this.saveUserToFirestore(user, role);
+      const response = await axios.post(`${this.apiUrl}/user`, {
+        username,
+        email,
+        password,
+      });
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+      toast.success('Signed up successfully.');
+    } catch (error) {
+      console.error('Error signing up:', error);
+      toast.error('Error signing up.');
+    }
+  }
+
+  async signIn(email: string, password: string): Promise<void> {
+    try {
+      const response = await axios.post(`${this.apiUrl}/signin`, {
+        email,
+        password,
+      });
+      const { token } = response.data;
+      localStorage.setItem('token', token);
       toast.success('Signed in successfully.');
-      return result.user;
     } catch (error) {
       console.error('Error signing in:', error);
       toast.error('Error signing in.');
-      return null;
-    }
-  }
-  async saveUserToFirestore(user: User, role: string) {
-    try {
-      const userRef = doc(db, 'users', user.uid);
-      
-      // Check if the user already exists
-      const userDoc = await getDoc(userRef);
-      if (userDoc.exists()) {
-        return; // Don't save the user if they already exist
-      }
-
-      // If the user doesn't exist, save them to Firestore
-      await setDoc(userRef, {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        role: role,
-        lastLogin: new Date(),
-      });
-    } catch (error) {
-      console.error('Error saving user to Firestore:', error);
-      toast.error('Error saving user to Firestore.');
     }
   }
 
+  
   async signOut(): Promise<void> {
     try {
-      await signOut(auth);
+      localStorage.removeItem('token');
       toast.success('Signed out successfully.');
     } catch (error) {
       console.error('Error signing out:', error);
       toast.error('Error signing out.');
     }
   }
-}
 
-export { auth };
+  async getUserProfile(token: string | null): Promise<any> {
+    if (!token) {
+      throw new Error('No token found');
+    }
+    try {
+      const response = await axios.get(`${this.apiUrl}/user/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      throw error;
+    }
+  }
+}

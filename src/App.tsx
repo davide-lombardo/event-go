@@ -11,6 +11,8 @@ import { UserProvider } from './context/UserContext';
 
 const GlobalStyle = createGlobalStyle`
 :root {
+  /* COLORS */
+
   /* Grey shades */
   --color-gray-0: #f9f9f9;
   --color-gray-05: #f6f6f6;
@@ -95,6 +97,9 @@ const GlobalStyle = createGlobalStyle`
   --scrollbar-color: var(--color-blue-light);
   --scrollbar-track: var(--color-blue-medium);
 
+
+  /* SHADOWS */
+
   /* Box Shadow */
   --shadow-color-hex: var(--color-gray-8);
 
@@ -118,6 +123,8 @@ const GlobalStyle = createGlobalStyle`
     25.2px 28.4px 42.7px -2.1px rgba(var(--shadow-color-hex), 0.36),
     39.7px 44.8px 67.3px -2.5px rgba(var(--shadow-color-hex), 0.36);
 
+  /* FONTS */
+
   /* Font colors */
   --font-color-base: var(--color-gray-1);
   --font-color-muted: var(--color-blue-light-medium);
@@ -130,7 +137,14 @@ const GlobalStyle = createGlobalStyle`
   --button-background-color: var(--color-blue-light);
   --button-font-color: var(--color-primary);
 
-  /* Sizes */
+  /* SIZES */
+  --border-radius: 12px;
+  --border-radius-small: 8px;
+
+  --spacing-small: 8px;
+  --spacing-medium: 12px;
+  --spacing-large: 24px;
+
   --content-width: 860px;
   --content-width-small: 560px;
   --content-width-medium: 700px;
@@ -138,6 +152,7 @@ const GlobalStyle = createGlobalStyle`
 
   /* Font Sizes */
   --font-size-small: 0.8rem;
+  --font-size-medium: 1rem;
 
   /* Breakpoints */
   --breakpoint-small: 700px;

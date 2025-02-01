@@ -21,6 +21,7 @@ interface CardProps {
   userName: string;
   eventDate: string;
   location: string;
+  category: string;
 }
 
 const CardContainer = styled.div`
@@ -194,15 +195,15 @@ const AdminActions = styled.div`
 `;
 
 const ActionButton = styled.button`
-  background-color: var(--color-primary);
-  color: white;
+  background-color: var(--color-gray-8);
+  color: var(--color-gray-1);
   border: none;
   padding: var(--5px) var(--10px);
   border-radius: var(--border-radius);
   cursor: pointer;
 
   &:hover {
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-primary);
   }
 `;
 
@@ -217,6 +218,7 @@ const Card: React.FC<CardProps> = React.memo(({
   userName,
   eventDate,
   location,
+  category
 }) => {
   const { deleteEvent } = useEventContext();
   const { user, role } = useUserContext();
@@ -225,7 +227,7 @@ const Card: React.FC<CardProps> = React.memo(({
   const [modalEventData, setModalEventData] = useState<EventData | null>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
-  const isEventCreator = user?.displayName === userName;
+  const isEventCreator = user?.username === userName;
 
   const handleEdit = () => {
     setModalEventData({
@@ -239,6 +241,7 @@ const Card: React.FC<CardProps> = React.memo(({
       userImage,
       userName,
       eventDate,
+      category,
     });
     setIsModalOpen(true);
   };
@@ -331,6 +334,8 @@ const Card: React.FC<CardProps> = React.memo(({
           onClose={closeModal}
           onSave={saveEvent}
         />
+
+        
       )}
 
       <ConfirmDelete

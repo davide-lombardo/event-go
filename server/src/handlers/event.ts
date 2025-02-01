@@ -149,11 +149,6 @@ export const updateEvent = async (req: Request, res: Response) => {
     });
 
     // @ts-ignore
-
-    console.log("userId", req.user?.id);
-
-
-    // @ts-ignore
     if (!event || event.userId !== req.user?.id) {
       res.status(404).json({ error: 'Event not found or not authorized' });
       return;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { EventData } from '../../types/event.model';
+import { EventCategory, EventData } from '../../types/event.model';
 import toast from 'react-hot-toast';
 import Button from '../Button';
 import { useEventContext } from '../../context/EventContext';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../config/firebase';
 import AutocompleteInput from '../AutocompleteInput';
+import { useUserContext } from '../../context/UserContext';
+import { formatDate } from '../../utils/date.utils';
 
 interface EventModalProps {
   isOpen: boolean;
@@ -68,6 +68,20 @@ const ModalHeader = styled.div`
   align-items: flex-start;
 `;
 
+const GroupContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const Divider = styled.hr`
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  margin-top: 1rem;
+`;
+
 const CloseButton = styled.button`
   background: none;
   border: none;
@@ -87,6 +101,20 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid black;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s;
+  min-width: 100%;
+
+  &:focus {
+    border-color: var(--color-blue);
+  }
+`;
+
+const CategorySelect = styled.select`
   padding: 0.8rem;
   font-size: 1rem;
   border: 1px solid black;
@@ -166,10 +194,10 @@ const EventModal: React.FC<EventModalProps> = ({
   isOpen,
   onClose,
   eventData: initialEventData,
-  onSave
+  onSave,
 }) => {
   const { addEvent, updateEvent } = useEventContext();
-  const [user] = useAuthState(auth);
+  const { user } = useUserContext();
 
   const [loading, setLoading] = useState(false);
 
@@ -184,6 +212,7 @@ const EventModal: React.FC<EventModalProps> = ({
     userImage: '',
     userName: '',
     eventDate: '',
+    category: '',
   });
 
   const [errors, setErrors] = useState({
@@ -196,7 +225,10 @@ const EventModal: React.FC<EventModalProps> = ({
   // Reset state when modal is opened with new data
   useEffect(() => {
     if (initialEventData) {
-      setEventData(initialEventData);
+      setEventData({
+        ...initialEventData,
+        eventDate: formatDate(initialEventData.eventDate),
+      });
     } else {
       setEventData({
         id: Date.now().toString(),
@@ -209,6 +241,7 @@ const EventModal: React.FC<EventModalProps> = ({
         userImage: '',
         userName: '',
         eventDate: '',
+        category: '',
       });
     }
   }, [initialEventData, isOpen]);
@@ -259,6 +292,11 @@ const EventModal: React.FC<EventModalProps> = ({
     setEventData(prevData => ({ ...prevData, location }));
   };
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setEventData(prevData => ({ ...prevData, category: value }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateInput()) {
@@ -266,7 +304,7 @@ const EventModal: React.FC<EventModalProps> = ({
       const eventToSave = {
         ...eventData,
         userImage: user?.photoURL || '',
-        userName: user?.displayName || 'Anonymous',
+        userName: user?.username || 'Anonymous',
       };
 
       try {
@@ -298,87 +336,109 @@ const EventModal: React.FC<EventModalProps> = ({
           <CloseButton onClick={onClose}>&times;</CloseButton>
         </ModalHeader>
         <Form onSubmit={handleSubmit}>
-          <Label htmlFor="name" required>
-            Event Name
-          </Label>
-          <Input
-            name="name"
-            placeholder="Enter the name of the event"
-            value={eventData.name}
-            onChange={handleChange}
-            required
-          />
-          {errors.name && <ErrorText>{errors.name}</ErrorText>}
+          <GroupContainer>
+            <Label htmlFor="name" required>
+              Event Name
+            </Label>
+            <Input
+              name="name"
+              placeholder="Enter the name of the event"
+              value={eventData.name}
+              onChange={handleChange}
+              required
+            />
+            {errors.name && <ErrorText>{errors.name}</ErrorText>}
 
-          <Label htmlFor="date" required>
-            Event Date
-          </Label>
-          <Input
-            type="date"
-            name="eventDate"
-            placeholder="Event Date"
-            value={eventData.eventDate}
-            onChange={handleChange}
-            required
-          />
-          {errors.date && <ErrorText>{errors.date}</ErrorText>}
+            <Label htmlFor="date" required>
+              Event Date
+            </Label>
+            <Input
+              type="date"
+              name="eventDate"
+              placeholder="Event Date"
+              value={eventData.eventDate}
+              onChange={handleChange}
+              required
+            />
+            {errors.date && <ErrorText>{errors.date}</ErrorText>}
 
-          <Label htmlFor="location" required>
-            Location
-          </Label>
-          <AutocompleteInput
-            initialValue={eventData.location}
-            placeholder="Enter the location of the event"
-            onLocationChange={handleLocationChange}
-          />
+            <Label htmlFor="location" required>
+              Location
+            </Label>
+            <AutocompleteInput
+              initialValue={eventData.location}
+              placeholder="Enter the location of the event"
+              onLocationChange={handleLocationChange}
+            />
+            <Divider />
+          </GroupContainer>
 
-          {/* {errors.location && <ErrorText>{errors.location}</ErrorText>} */}
+          <GroupContainer>
+            <Label htmlFor="category" required>
+              Category
+            </Label>
+            <CategorySelect
+              name="category"
+              value={eventData.category}
+              onChange={handleCategoryChange}
+            >
+              {Object.values(EventCategory).map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </CategorySelect>
 
-          <Label htmlFor="description">Description</Label>
-          <TextArea
-            name="description"
-            placeholder="Add a brief description of the event"
-            value={eventData.description}
-            onChange={handleChange}
-            rows={4}
-          />
+            <Label htmlFor="description">Description</Label>
+            <TextArea
+              name="description"
+              placeholder="Add a brief description of the event"
+              value={eventData.description}
+              onChange={handleChange}
+              rows={4}
+            />
 
-          <Label htmlFor="link" required>
-            Event link
-          </Label>
-          <Input
-            name="link"
-            type="url"
-            placeholder="https://example.com"
-            value={eventData.link}
-            onChange={handleChange}
-            required
-          />
-          {errors.link && <ErrorText>{errors.link}</ErrorText>}
+            <Divider />
+          </GroupContainer>
 
-          <Label>Payment Type</Label>
-          <RadioGroup>
-            <RadioLabel>
-              <input
-                type="radio"
-                name="paid"
-                value="free"
-                checked={!eventData.paid}
-                onChange={handleRadioChange}
-              />
-              Free
-            </RadioLabel>
-            <RadioLabel>
-              <input
-                type="radio"
-                name="paid"
-                value="paid"
-                checked={eventData.paid}
-                onChange={handleRadioChange}
-              />
-              Paid
-            </RadioLabel>
-          </RadioGroup>
+          <GroupContainer>
+            <Label htmlFor="link" required>
+              Event link
+            </Label>
+            <Input
+              name="link"
+              type="url"
+              placeholder="https://example.com"
+              value={eventData.link}
+              onChange={handleChange}
+              required
+            />
+            {errors.link && <ErrorText>{errors.link}</ErrorText>}
+
+            <Label>Payment Type</Label>
+            <RadioGroup>
+              <RadioLabel>
+                <input
+                  type="radio"
+                  name="paid"
+                  value="free"
+                  checked={!eventData.paid}
+                  onChange={handleRadioChange}
+                />
+                Free
+              </RadioLabel>
+              <RadioLabel>
+                <input
+                  type="radio"
+                  name="paid"
+                  value="paid"
+                  checked={eventData.paid}
+                  onChange={handleRadioChange}
+                />
+                Paid
+              </RadioLabel>
+            </RadioGroup>
+          </GroupContainer>
 
           <ButtonRow>
             <Button onClick={onClose} variant={'danger'}>
