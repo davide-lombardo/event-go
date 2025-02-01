@@ -127,6 +127,7 @@ function Home() {
               userName={event.userName}
               eventDate={event.eventDate}
               location={event.location}
+              category={event.category}
             />
           ))
         ) : (
