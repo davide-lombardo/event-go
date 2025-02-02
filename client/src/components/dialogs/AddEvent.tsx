@@ -212,7 +212,7 @@ const EventModal: React.FC<EventModalProps> = ({
     userImage: '',
     userName: '',
     eventDate: '',
-    category: '',
+    category: EventCategory.Music,
   });
 
   const [errors, setErrors] = useState({
@@ -293,8 +293,9 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setEventData(prevData => ({ ...prevData, category: value }));
+    const selectedCategory = e.target.value as EventCategory;
+
+    setEventData(prevData => ({ ...prevData, category: selectedCategory }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

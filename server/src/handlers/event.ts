@@ -1,3 +1,4 @@
+import { EventCategory } from "@prisma/client";
 import prisma from "../db";
 import { Request, Response } from "express";
 
@@ -111,6 +112,10 @@ export const createEvent = async (req: Request, res: Response) => {
       eventDate, 
       category, 
     } = req.body;
+
+    if (!Object.values(EventCategory).includes(category)) {
+      return res.status(400).json({ message: 'Invalid category' });
+    }
 
     const event = await prisma.event.create({
       data: {
