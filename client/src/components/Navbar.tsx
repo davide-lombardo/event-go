@@ -6,6 +6,7 @@ import { useEventContext } from '../context/EventContext';
 import { useUserContext } from '../context/UserContext';
 import AuthModal from './dialogs/Authentication';
 import UserService from '../services/user.service';
+import UserIcon from '/src/assets/user.svg';
 
 const NavbarWrapper = styled.nav`
   display: flex;
@@ -157,12 +158,13 @@ const Nav = () => {
           <>
             
               <>
-                <UserProfileImage
-                  src={user.photoURL || 'src/assets/user.svg'}
-                  onError={e => (e.currentTarget.src = 'src/assets/user.svg')}
-                  alt="User profile"
-                  onClick={handleProfileImageClick}
-                />
+              
+                  <UserProfileImage
+                    src={user.photoURL || UserIcon}
+                    onError={e => (e.currentTarget.src = UserIcon)}
+                    alt="User profile"
+                    onClick={handleProfileImageClick}
+                  />
                 <Dropdown $show={dropdownOpen} ref={dropdownRef}>
                   <WelcomeMessage>Welcome, {user.username}</WelcomeMessage>
                   <DropdownOption onClick={handleSignOut}>
