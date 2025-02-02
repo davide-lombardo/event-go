@@ -230,7 +230,7 @@ const EventModal: React.FC<EventModalProps> = ({
         eventDate: formatDate(initialEventData.eventDate),
       });
     } else {
-      setEventData({
+      const data = {
         id: Date.now().toString(),
         name: '',
         location: '',
@@ -241,8 +241,9 @@ const EventModal: React.FC<EventModalProps> = ({
         userImage: '',
         userName: '',
         eventDate: '',
-        category: '',
-      });
+        category: EventCategory.Music,
+      }
+      setEventData(data);
     }
   }, [initialEventData, isOpen]);
 
@@ -294,9 +295,10 @@ const EventModal: React.FC<EventModalProps> = ({
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = e.target.value as EventCategory;
-
+  
     setEventData(prevData => ({ ...prevData, category: selectedCategory }));
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
