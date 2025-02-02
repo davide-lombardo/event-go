@@ -52,12 +52,14 @@ const Pagination: React.FC<PaginationProps> = ({ hasMore }) => {
   const handleNextPage = () => {
     if (pagination.page < pagination.totalPages) {
       fetchEvents({} as any, pagination.page + 1, pagination.pageSize);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handlePrevPage = () => {
     if (pagination.page > 1) {
       fetchEvents({} as any, pagination.page - 1, pagination.pageSize);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
