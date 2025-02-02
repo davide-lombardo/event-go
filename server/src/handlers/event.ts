@@ -113,10 +113,6 @@ export const createEvent = async (req: Request, res: Response) => {
       category, 
     } = req.body;
 
-    if (!Object.values(EventCategory).includes(category)) {
-      return res.status(400).json({ message: 'Invalid category' });
-    }
-
     const event = await prisma.event.create({
       data: {
         name,
