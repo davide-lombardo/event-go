@@ -3,8 +3,6 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { protect } from './modules/auth';
 import { createNewUser, getUserProfile, signin } from './handlers/user';
-import { body } from "express-validator";
-import { handleInputErrors } from './modules/middleware';
 import router from './router';
 import { getEvents } from './handlers/event';
 
