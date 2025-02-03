@@ -23,7 +23,6 @@ model Event {
   location    String
   description String
   link        String
-  tags        String[]
   paid        Boolean
   userImage   String
   userName    String

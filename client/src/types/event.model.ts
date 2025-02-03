@@ -4,7 +4,6 @@ export interface EventData {
   location: string;
   description: string;
   link: string;
-  tags: string[];
   paid: boolean;
   userImage: string
   userName: string;
