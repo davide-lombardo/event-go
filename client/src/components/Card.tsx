@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import LinkIcon from './shared/LinkIcon';
 import LinkIconImage from '/src/assets/external-link.svg';
@@ -15,7 +15,6 @@ interface CardProps {
   eventId: string;
   link: string;
   description: string;
-  tags: string[];
   paid: boolean;
   userImage: string;
   userName: string;
@@ -23,6 +22,27 @@ interface CardProps {
   location: string;
   category: string;
 }
+
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
+const useEllipsisTooltip = (ref: React.RefObject<HTMLParagraphElement>) => {
+  const [isEllipsed, setIsEllipsed] = useState(false);
+
+  useEffect(() => {
+    if (ref.current) {
+      setIsEllipsed(ref.current.scrollHeight > ref.current.clientHeight);
+    }
+  }, [ref]);
+
+  return isEllipsed;
+};
 
 const CardContainer = styled.div`
   position: relative;
@@ -72,18 +92,20 @@ const TitleSection = styled.div`
   gap: var(--10px);
 `;
 
-const Title = styled.h2`
-  font-size: var(--font-size-title);
+const Title = styled.span`
+  font-size: var(--font-size-medium);
   color: var(--color-heading);
-  margin: 0;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   flex-grow: 1;
-  overflow-wrap: break-word;
+  margin: 0;
 `;
 
 const LinkContainer = styled.div`
   display: flex;
   align-items: center;
-  min-width: fit-content;
 `;
 
 const Link = styled.a`
@@ -103,8 +125,7 @@ const Label = styled.span<{ $paid: boolean }>`
   align-items: center;
   font-size: var(--font-size-small);
   font-weight: bold;
-  margin-top: var(--10px);
-  padding-left: var(--20px);
+  padding-left: var(--5px);
   color: ${props => (props.$paid ? 'var(--color-pink)' : 'var(--color-green)')};
 `;
 
@@ -117,25 +138,16 @@ const LabelDot = styled.span<{ $paid: boolean }>`
     props.$paid ? 'var(--color-pink)' : 'var(--color-green)'};
 `;
 
-const TagsContainer = styled.div`
-  margin-top: var(--10px);
-  padding-left: var(--10px);
-`;
-
-const Tag = styled.span`
-  background-color: transparent;
-  color: var(--color-primary);
-  font-size: var(--font-size-small);
-  border: 1px solid var(--color-primary);
-  padding: var(--5px) var(--10px);
-  margin-right: var(--10px);
-  border-radius: 100px;
-`;
-
 const Description = styled.p`
   padding: var(--20px);
-  font-size: var(--font-size-text);
+  font-size: var(--font-size-small);
   line-height: 1.5;
+  max-height: 4.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `;
 
 const Footer = styled.div`
@@ -146,22 +158,31 @@ const Footer = styled.div`
 `;
 
 const UserImage = styled.img`
-  width: var(--40px);
-  height: var(--40px);
+  width: var(--30px);
+  height: var(--30px);
   border-radius: 50%;
   object-fit: cover;
-  margin-right: var(--15px);
 `;
 
 const UserInfo = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  gap: 10px;
 `;
 
 const UserName = styled.span`
   font-weight: bold;
-  color: var(--color-heading);
+  font-size: var(--font-size-small);
+  color: var(--font-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const EventInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `;
 
 const EventDate = styled.span`
@@ -172,19 +193,16 @@ const EventDate = styled.span`
 const LocationContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px; // Adjust spacing as needed
-  margin-top: 4px;
+  gap: 4px;
 `;
 
 const Location = styled.span`
   font-size: var(--font-size-small);
   color: var(--color-grey-7);
-  margin-top: 4px;
-`;
-
-const LocationIconImg = styled.img`
-  width: 14px; // Adjust size as needed
-  height: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 `;
 
 const AdminActions = styled.div`
@@ -207,145 +225,181 @@ const ActionButton = styled.button`
   }
 `;
 
-const Card: React.FC<CardProps> = React.memo(({
-  title,
-  eventId,
-  link,
-  description,
-  tags,
-  paid,
-  userImage,
-  userName,
-  eventDate,
-  location,
-  category
-}) => {
-  const { deleteEvent } = useEventContext();
-  const { user, role } = useUserContext();
+const LabelContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: var(--10px) var(--20px);
+`;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalEventData, setModalEventData] = useState<EventData | null>(null);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+const CategoryTag = styled.span`
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: var(--font-size-small);
+  border: 1px solid var(--color-primary);
+  padding: var(--5px) var(--10px);
+  margin-right: var(--10px);
+  border-radius: 100px;
+`;
 
-  const isEventCreator = user?.username === userName;
+const Card: React.FC<CardProps> = React.memo(
+  ({
+    title,
+    eventId,
+    link,
+    description,
+    paid,
+    userImage,
+    userName,
+    eventDate,
+    location,
+    category,
+  }) => {
+    const { deleteEvent } = useEventContext();
+    const { user, role } = useUserContext();
 
-  const handleEdit = () => {
-    setModalEventData({
-      id: eventId,
-      name: title,
-      location,
-      description,
-      link,
-      tags,
-      paid,
-      userImage,
-      userName,
-      eventDate,
-      category,
-    });
-    setIsModalOpen(true);
-  };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalEventData, setModalEventData] = useState<EventData | null>(
+      null
+    );
+    const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
-  const handleDelete = async () => {
-    setIsDeleteConfirmOpen(true);
-  };
+    const titleRef = useRef<HTMLSpanElement>(null);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
+    const locationRef = useRef<HTMLSpanElement>(null);
 
-  const confirmDelete = async () => {
-    try {
-      await deleteEvent(eventId);
-      setIsDeleteConfirmOpen(false);
-    } catch (error) {
-      console.error('Error deleting event:', error);
-    }
-  };
+    const isEllipsed = useEllipsisTooltip(descriptionRef);
 
-  const closeDeleteModal = () => {
-    setIsDeleteConfirmOpen(false);
-  };
+    const isEventCreator = user?.username === userName;
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setModalEventData(null);
-  };
+    const handleEdit = () => {
+      setModalEventData({
+        id: eventId,
+        name: title,
+        location,
+        description,
+        link,
+        paid,
+        userImage,
+        userName,
+        eventDate,
+        category,
+      });
+      setIsModalOpen(true);
+    };
 
-  const saveEvent = async (updatedEventData: EventData) => {
-    if (updatedEventData && updatedEventData.id) {
+    const handleDelete = async () => {
+      setIsDeleteConfirmOpen(true);
+    };
+
+    const confirmDelete = async () => {
       try {
-        closeModal();
+        await deleteEvent(eventId);
+        setIsDeleteConfirmOpen(false);
       } catch (error) {
-        console.error('Error updating event:', error);
+        console.error('Error deleting event:', error);
       }
-    }
-  };
+    };
 
+    const closeDeleteModal = () => {
+      setIsDeleteConfirmOpen(false);
+    };
 
-  return (
-    <>
-      <CardContainer>
-        <TitleSection>
-          <Title>{title}</Title>
-          <LinkContainer>
-            <Link href={link} target="_blank">
-              view event
-              <LinkIcon src={LinkIconImage} alt="link" />
-            </Link>
-          </LinkContainer>
-        </TitleSection>
-        <Label $paid={paid}>
-          <LabelDot $paid={paid} />
-          {paid ? 'Paid' : 'Free'}
-        </Label>
-        <TagsContainer>
-          {tags.map((tag, index) => (
-            <Tag key={index}>{tag}</Tag>
-          ))}
-        </TagsContainer>
+    const closeModal = () => {
+      setIsModalOpen(false);
+      setModalEventData(null);
+    };
 
-        <Description>{description}</Description>
+    const saveEvent = async (updatedEventData: EventData) => {
+      if (updatedEventData && updatedEventData.id) {
+        try {
+          closeModal();
+        } catch (error) {
+          console.error('Error updating event:', error);
+        }
+      }
+    };
 
-        <Footer>
-          <UserImage
-            src={userImage ? userImage : UserIconImage}
-            onError={e => (e.currentTarget.src = UserIconImage)}
-            alt="User Avatar"
+    return (
+      <>
+        <CardContainer>
+          <TitleSection>
+            <Title ref={titleRef} title={title}>
+              {title}
+            </Title>
+            <LinkContainer>
+              <Link href={link} target="_blank">
+                view event
+                <LinkIcon src={LinkIconImage} alt="link" />
+              </Link>
+            </LinkContainer>
+          </TitleSection>
+          <LabelContainer>
+            <CategoryTag>{category}</CategoryTag>
+            <Label $paid={paid}>
+              <LabelDot $paid={paid} />
+              {paid ? 'Paid' : 'Free'}
+            </Label>
+          </LabelContainer>
+
+          <Description
+            ref={descriptionRef}
+            title={isEllipsed ? description : ''}
+          >
+            {description}
+          </Description>
+
+          <Footer>
+            <UserInfo>
+              <UserImage
+                src={userImage ? userImage : UserIconImage}
+                onError={e => (e.currentTarget.src = UserIconImage)}
+                alt="User Avatar"
+              />
+              <UserName title={userName}>@{userName}</UserName>
+            </UserInfo>
+
+            <EventInfo>
+              <EventDate>{formatDate(eventDate)}</EventDate>
+              <LocationContainer>
+                <img
+                  src={MapPinIconImage}
+                  alt="Location icon"
+                  width={14}
+                  height={14}
+                />
+                <Location ref={locationRef} title={location}>
+                  {location}
+                </Location>
+              </LocationContainer>
+            </EventInfo>
+          </Footer>
+
+          {(role === 'admin' || isEventCreator) && (
+            <AdminActions>
+              <ActionButton onClick={handleEdit}>Edit</ActionButton>
+              <ActionButton onClick={handleDelete}>Delete</ActionButton>
+            </AdminActions>
+          )}
+        </CardContainer>
+
+        {isModalOpen && modalEventData && (
+          <EventModal
+            eventData={modalEventData}
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            onSave={saveEvent}
           />
-          <UserInfo>
-            <UserName>{userName}</UserName>
-            <EventDate>{new Date(eventDate).toLocaleDateString()}</EventDate>
-            <LocationContainer>
-              <LocationIconImg src={MapPinIconImage} alt="Location icon" />
-              <Location>{location}</Location>
-            </LocationContainer>
-          </UserInfo>
-        </Footer>
-
-        {(role === 'admin' || isEventCreator) && (
-          <AdminActions>
-            <ActionButton onClick={handleEdit}>Edit</ActionButton>
-            <ActionButton onClick={handleDelete}>Delete</ActionButton>
-          </AdminActions>
         )}
-      </CardContainer>
 
-      {isModalOpen && modalEventData && (
-        <EventModal
-          eventData={modalEventData}
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          onSave={saveEvent}
+        <ConfirmDelete
+          isOpen={isDeleteConfirmOpen}
+          message="Are you sure you want to delete this event?"
+          onConfirm={confirmDelete}
+          onCancel={closeDeleteModal}
         />
-
-        
-      )}
-
-      <ConfirmDelete
-        isOpen={isDeleteConfirmOpen}
-        message="Are you sure you want to delete this event?"
-        onConfirm={confirmDelete}
-        onCancel={closeDeleteModal}
-      />
-    </>
-  );
-});
+      </>
+    );
+  }
+);
 
 export default Card;

@@ -121,7 +121,6 @@ function Home() {
               title={event.name}
               link={event.link}
               description={event.description}
-              tags={event.tags}
               paid={event.paid}
               userImage={event.userImage}
               userName={event.userName}
