@@ -9,6 +9,7 @@ import { EventData } from '../types/event.model';
 import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';
 import ConfirmDelete from './dialogs/ConfirmDelete';
+import { formatDateCustom } from '../utils/date.utils';
 
 interface CardProps {
   title: string;
@@ -22,15 +23,6 @@ interface CardProps {
   location: string;
   category: string;
 }
-
-const formatDate = (dateString: string) => {
-  const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
 
 const useEllipsisTooltip = (ref: React.RefObject<HTMLParagraphElement>) => {
   const [isEllipsed, setIsEllipsed] = useState(false);
@@ -125,7 +117,6 @@ const Label = styled.span<{ $paid: boolean }>`
   align-items: center;
   font-size: var(--font-size-small);
   font-weight: bold;
-  padding-left: var(--5px);
   color: ${props => (props.$paid ? 'var(--color-pink)' : 'var(--color-green)')};
 `;
 
@@ -136,6 +127,23 @@ const LabelDot = styled.span<{ $paid: boolean }>`
   margin-right: 5px;
   background-color: ${props =>
     props.$paid ? 'var(--color-pink)' : 'var(--color-green)'};
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: var(--10px) var(--20px);
+`;
+
+const CategoryTag = styled.span`
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: var(--font-size-small);
+  border: 1px solid var(--color-primary);
+  padding: var(--5px) var(--10px);
+  margin-right: var(--10px);
+  border-radius: 100px;
+  margin-left: var(--10px);
 `;
 
 const Description = styled.p`
@@ -223,22 +231,6 @@ const ActionButton = styled.button`
   &:hover {
     background-color: var(--color-primary);
   }
-`;
-
-const LabelContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: var(--10px) var(--20px);
-`;
-
-const CategoryTag = styled.span`
-  background-color: transparent;
-  color: var(--color-primary);
-  font-size: var(--font-size-small);
-  border: 1px solid var(--color-primary);
-  padding: var(--5px) var(--10px);
-  margin-right: var(--10px);
-  border-radius: 100px;
 `;
 
 const Card: React.FC<CardProps> = React.memo(
@@ -334,11 +326,11 @@ const Card: React.FC<CardProps> = React.memo(
             </LinkContainer>
           </TitleSection>
           <LabelContainer>
-            <CategoryTag>{category}</CategoryTag>
             <Label $paid={paid}>
               <LabelDot $paid={paid} />
               {paid ? 'Paid' : 'Free'}
             </Label>
+            <CategoryTag>{category}</CategoryTag>
           </LabelContainer>
 
           <Description
@@ -359,7 +351,7 @@ const Card: React.FC<CardProps> = React.memo(
             </UserInfo>
 
             <EventInfo>
-              <EventDate>{formatDate(eventDate)}</EventDate>
+              <EventDate>{formatDateCustom(eventDate)}</EventDate>
               <LocationContainer>
                 <img
                   src={MapPinIconImage}

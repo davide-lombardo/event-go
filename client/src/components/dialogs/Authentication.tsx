@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
+import EyeIcon from '/src/assets/eye.svg';
+import EyeOffIcon from '/src/assets/eye-off.svg';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -54,7 +56,7 @@ const ModalContent = styled.div`
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
     text-align: center;
-    color: black; /* Ensure the text color is black */
+    color: black;
   }
 `;
 
@@ -64,6 +66,12 @@ const Form = styled.form`
   gap: 1rem;
 `;
 
+const InputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
 const Input = styled.input`
   padding: 0.8rem;
   font-size: 1rem;
@@ -71,6 +79,7 @@ const Input = styled.input`
   border-radius: 6px;
   outline: none;
   transition: border-color 0.2s;
+  width: 100%;
 
   &:focus {
     border-color: var(--color-blue);
@@ -80,7 +89,7 @@ const Input = styled.input`
 const Label = styled.label`
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  color: black; /* Ensure the text color is black */
+  color: black;
 `;
 
 const ButtonRow = styled.div`
@@ -92,8 +101,8 @@ const ButtonRow = styled.div`
 const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Align items to the center vertically */
-  position: relative; /* Ensure the close button is positioned relative to the header */
+  align-items: center;
+  position: relative;
 `;
 
 const CloseButton = styled.button`
@@ -103,8 +112,8 @@ const CloseButton = styled.button`
   font-size: 1.5rem;
   color: black;
   position: absolute;
-  top: 0; /* Align to the top */
-  right: 0; /* Align to the right */
+  top: 0;
+  right: 0;
 
   &:hover {
     color: var(--color-primary);
@@ -117,11 +126,20 @@ const ErrorText = styled.span`
   margin-top: -8px;
 `;
 
+const TogglePasswordIcon = styled.span`
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: black;
+`;
+
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const validateInput = () => {
@@ -160,7 +178,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
                 type="text"
                 placeholder="Username"
                 value={username}
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={e => setUserName(e.target.value)}
                 required
               />
             </>
@@ -171,18 +189,37 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             required
           />
           <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <InputWrapper>
+            <Input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+            <TogglePasswordIcon onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? (
+                <img
+                  src={EyeOffIcon}
+                  alt="hide password icon"
+                  width={14}
+                  height={14}
+                />
+              ) : (
+                <img
+                  src={EyeIcon}
+                  alt="show password icon"
+                  width={14}
+                  height={14}
+                />
+              )}
+            </TogglePasswordIcon>
+          </InputWrapper>
           {error && <ErrorText>{error}</ErrorText>}
           <ButtonRow>
             <Button type="submit" variant="primary">
@@ -192,19 +229,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
         </Form>
         <div style={{ textAlign: 'center', marginTop: '1rem', color: 'black' }}>
           {mode === 'signin' ? (
-            <>
-              <p>
-                Don't have an account?{' '}
-                <span
-                  style={{ color: 'red', cursor: 'pointer' }}
-                  onClick={() => setMode('signup')}
-                >
-                  Sign Up
-                </span>
-              </p>
-            </>
+            <p>
+              Don't have an account?{' '}
+              <span
+                style={{ color: 'red', cursor: 'pointer' }}
+                onClick={() => setMode('signup')}
+              >
+                Sign Up
+              </span>
+            </p>
           ) : (
-            <>
+            <p>
               Already have an account?{' '}
               <span
                 style={{ color: 'red', cursor: 'pointer' }}
@@ -212,7 +247,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
               >
                 Sign In
               </span>
-            </>
+            </p>
           )}
         </div>
       </ModalContent>
