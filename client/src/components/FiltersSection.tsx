@@ -59,7 +59,6 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
   }, [initialLocation]);
 
   const handleLocationChange = (location: string, lat: number, lng: number) => {
-    console.log(location, lat, lng);
     setFilters((prevFilters) => ({
       ...prevFilters,
       location: { searchText: location, lat, lng },

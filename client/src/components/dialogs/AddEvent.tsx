@@ -220,8 +220,8 @@ const EventModal: React.FC<EventModalProps> = ({
     name: '',
     date: '',
     location: '',
-    latitude: 0,
-    longitude: 0,
+    latitude: '',
+    longitude: '',
     link: '',
   });
 
@@ -256,8 +256,8 @@ const EventModal: React.FC<EventModalProps> = ({
       name: '',
       date: '',
       location: '',
-      latitude: 0,
-      longitude: 0,
+      latitude: '',
+      longitude: '',
       link: '',
     };
 
@@ -299,6 +299,14 @@ const EventModal: React.FC<EventModalProps> = ({
     setEventData(prevData => ({ ...prevData, location, latitude: lat, longitude: lng }));
   };
 
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Updates the event data with the selected category.
+ *
+ * @param e - The change event from the category select input.
+ */
+
+/******  807f0b5d-736a-49b7-bbd9-7f976ff30bc3  *******/
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = e.target.value as EventCategory;
   
@@ -308,7 +316,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (true) {
+    if (validateInput()) {
       setLoading(true);
       const eventToSave = {
         ...eventData,

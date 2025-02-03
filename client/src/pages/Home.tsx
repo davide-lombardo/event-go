@@ -123,7 +123,6 @@ function Home() {
           <Spinner $size="15px" $gradient="var(--gradient-primary)" />
         ) : eventsToDisplay.length > 0 ? (
           eventsToDisplay.map(event => (
-            console.log('searchText', event.location),
             <Card
               key={event.id}
               eventId={event.id}
@@ -135,6 +134,8 @@ function Home() {
               userName={event.userName}
               eventDate={event.eventDate}
               location={event.location}
+              latitude={event.latitude}
+              longitude={event.longitude}
               category={event.category}
             />
           ))

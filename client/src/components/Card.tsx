@@ -22,6 +22,8 @@ interface CardProps {
   eventDate: string;
   location: string;
   category: string;
+  latitude: number;
+  longitude: number;
 }
 
 const useEllipsisTooltip = (ref: React.RefObject<HTMLParagraphElement>) => {
@@ -244,6 +246,8 @@ const Card: React.FC<CardProps> = React.memo(
     userName,
     eventDate,
     location,
+    latitude,
+    longitude,
     category,
   }) => {
     const { deleteEvent } = useEventContext();
@@ -268,6 +272,8 @@ const Card: React.FC<CardProps> = React.memo(
         id: eventId,
         name: title,
         location,
+        latitude,
+        longitude,
         description,
         link,
         paid,
