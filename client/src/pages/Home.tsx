@@ -45,7 +45,11 @@ function Home() {
   const handleFilterChange = useCallback((newFilters: EventFilters) => {
     fetchEvents({
       ...newFilters,
-      location: newFilters.location.trim(),
+      location: {
+        searchText: newFilters.location.searchText.trim(),
+        lat: newFilters.location.lat,
+        lng: newFilters.location.lng,
+      }
     });
   }, [fetchEvents]);
 
@@ -78,7 +82,11 @@ function Home() {
       const location = await getAddressFromCoordinates(lat, lng);
       setUserLocation(location);
       const filters: EventFilters = {
-        location,
+        location: {
+          searchText: location,
+          lat,
+          lng,
+        },
         date: 'all',
       };
       await fetchEvents(filters);
@@ -115,6 +123,7 @@ function Home() {
           <Spinner $size="15px" $gradient="var(--gradient-primary)" />
         ) : eventsToDisplay.length > 0 ? (
           eventsToDisplay.map(event => (
+            console.log('searchText', event.location),
             <Card
               key={event.id}
               eventId={event.id}

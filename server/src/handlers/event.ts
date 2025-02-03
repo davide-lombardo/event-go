@@ -1,4 +1,3 @@
-import { EventCategory } from "@prisma/client";
 import prisma from "../db";
 import { Request, Response } from "express";
 
@@ -15,12 +14,27 @@ export const getEvents = async (req: Request, res: Response) => {
   try {
     const whereConditions: any = {};
 
-    // Add location filter if provided
-    if (location && location !== '') {
-      whereConditions.location = {
-        contains: String(location),
-        mode: 'insensitive'
-      };
+    if (location && typeof location === 'object' && 'searchText' in location) {
+      const locationObj = location as { searchText: string, lat: string, lng: string };
+    
+      if (locationObj.searchText && locationObj.searchText !== '') {
+    
+        if (locationObj.lat && locationObj.lng) {
+          const lat = Number(locationObj.lat);
+          const lng = Number(locationObj.lng);
+          const radius = 30; // Default radius in km
+    
+          // Calculate the range for latitude and longitude
+          whereConditions.latitude = {
+            gte: lat - radius / 111.32,  // Approximate km-to-lat conversion
+            lte: lat + radius / 111.32,
+          };
+          whereConditions.longitude = {
+            gte: lng - radius / (111.32 * Math.cos(lat * (Math.PI / 180))),
+            lte: lng + radius / (111.32 * Math.cos(lat * (Math.PI / 180))),
+          };
+        }
+      }
     }
 
     // Add date filtering if provided
@@ -103,6 +117,8 @@ export const createEvent = async (req: Request, res: Response) => {
     const { 
       name, 
       location, 
+      latitude,
+      longitude,
       description, 
       link, 
       paid, 
@@ -112,10 +128,13 @@ export const createEvent = async (req: Request, res: Response) => {
       category, 
     } = req.body;
 
+
     const event = await prisma.event.create({
       data: {
         name,
         location,
+        latitude,
+        longitude,
         description,
         link,
         paid,

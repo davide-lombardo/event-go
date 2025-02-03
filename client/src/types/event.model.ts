@@ -2,6 +2,8 @@ export interface EventData {
   id: string;
   name: string;
   location: string;
+  latitude: number;
+  longitude: number;
   description: string;
   link: string;
   paid: boolean;
@@ -12,7 +14,11 @@ export interface EventData {
 }
 
 export interface EventFilters {
-  location: string;
+  location: {
+    searchText: string;
+    lat: number;
+    lng: number;
+  };
   date: 'all' | 'today' | 'tomorrow' | 'weekend' | '';
 }
 

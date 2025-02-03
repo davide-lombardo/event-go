@@ -205,6 +205,8 @@ const EventModal: React.FC<EventModalProps> = ({
     id: Date.now().toString(),
     name: '',
     location: '',
+    latitude: 0,
+    longitude: 0,
     description: '',
     link: '',
     paid: false,
@@ -218,6 +220,8 @@ const EventModal: React.FC<EventModalProps> = ({
     name: '',
     date: '',
     location: '',
+    latitude: 0,
+    longitude: 0,
     link: '',
   });
 
@@ -233,6 +237,8 @@ const EventModal: React.FC<EventModalProps> = ({
         id: Date.now().toString(),
         name: '',
         location: '',
+        latitude: 0,
+        longitude: 0,
         description: '',
         link: '',
         paid: false,
@@ -250,6 +256,8 @@ const EventModal: React.FC<EventModalProps> = ({
       name: '',
       date: '',
       location: '',
+      latitude: 0,
+      longitude: 0,
       link: '',
     };
 
@@ -287,8 +295,8 @@ const EventModal: React.FC<EventModalProps> = ({
     }));
   };
 
-  const handleLocationChange = (location: string) => {
-    setEventData(prevData => ({ ...prevData, location }));
+  const handleLocationChange = (location: string, lat: number, lng: number) => {
+    setEventData(prevData => ({ ...prevData, location, latitude: lat, longitude: lng }));
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -300,7 +308,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateInput()) {
+    if (true) {
       setLoading(true);
       const eventToSave = {
         ...eventData,

@@ -46,14 +46,24 @@ const Select = styled.select`
 `;
 
 const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
-  const [filters, setFilters] = useState<EventFilters>({ location: '', date: '' });
+  const [filters, setFilters] = useState<EventFilters>({
+    location: { searchText: '', lat: 0, lng: 0 },
+    date: '',
+  });
 
   useEffect(() => {
-    setFilters(prevFilters => ({ ...prevFilters, location: initialLocation }));
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      location: { searchText: initialLocation, lat: 0, lng: 0 },
+    }));
   }, [initialLocation]);
 
-  const handleLocationChange = (location: string) => {
-    setFilters(prevFilters => ({ ...prevFilters, location }));
+  const handleLocationChange = (location: string, lat: number, lng: number) => {
+    console.log(location, lat, lng);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      location: { searchText: location, lat, lng },
+    }));
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,7 +76,7 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
   };
 
   const handleClear = () => {
-    const clearedFilters: EventFilters = { location: '', date: '' };
+    const clearedFilters: EventFilters = { location: {searchText: '', lat: 0, lng: 0}, date: '' };
     setFilters(clearedFilters);
     onFilterChange(clearedFilters);
   };
@@ -77,7 +87,7 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
     <FilterWrapper>
       <InputsWrapper>
         <AutocompleteInput
-          initialValue={filters.location}
+          initialValue={filters.location.searchText}
           onLocationChange={handleLocationChange}
           placeholder="Enter a location"
         />

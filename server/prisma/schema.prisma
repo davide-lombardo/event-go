@@ -11,6 +11,8 @@ model Event {
   id          String        @id @default(uuid())
   name        String
   location    String
+  latitude    Float
+  longitude   Float
   description String
   link        String
   paid        Boolean

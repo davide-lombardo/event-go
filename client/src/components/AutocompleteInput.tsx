@@ -7,7 +7,7 @@ const libraries: Libraries = ["places"];
 interface AutocompleteInputProps {
   initialValue?: string;
   placeholder?: string;
-  onLocationChange: (location: string) => void;
+  onLocationChange: (location: string, lat: number, lng: number) => void;
 }
 
 const Input = styled.input`
@@ -29,8 +29,8 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   initialValue = '',
   onLocationChange,
 }) => {
-  const [location, setLocation] = useState(initialValue);
-  // const autocompleteRef = useRef<any>(null);
+  const [location, setLocation] = useState({location: initialValue, lat: 0, lng: 0});
+
   const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
 
   const { isLoaded } = useJsApiLoader({
@@ -40,7 +40,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   });
 
   useEffect(() => {
-    setLocation(initialValue);
+    setLocation({location: initialValue, lat: 0, lng: 0});
   }, [initialValue]);
 
   const handlePlaceChange = () => {
@@ -48,14 +48,18 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
     if (places && places.length > 0) {
       const place = places[0];
       const newLocation = place.formatted_address || place.name || '';
-      setLocation(newLocation);
-      onLocationChange(newLocation);
+      const newLat = place.geometry?.location?.lat() || 0;
+      const newLng = place.geometry?.location?.lng() || 0;
+
+      setLocation({ location: newLocation, lat: newLat, lng: newLng });
+      onLocationChange(newLocation, newLat, newLng);
     }
   };
 
+
   return isLoaded ? (
     <StandaloneSearchBox onLoad={ref => (searchBoxRef.current = ref)} onPlacesChanged={handlePlaceChange}>
-      <Input type="text" value={location} placeholder={placeholder} onChange={e => setLocation(e.target.value)}/>
+      <Input type="text" value={location.location} placeholder={placeholder} onChange={e => setLocation({ ...location, location: e.target.value })}/>
     </StandaloneSearchBox>
   ) : (
     <Input type="text" placeholder="Loading..." disabled />
