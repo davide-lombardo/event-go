@@ -149,7 +149,7 @@ export const updateEvent = async (req: Request, res: Response) => {
     });
 
     // @ts-ignore
-    if (!event || event.userId !== req.user?.id) {
+    if (!event || (event.userId !== req.user?.id && req.user?.role !== 'admin')) {
       res.status(404).json({ error: 'Event not found or not authorized' });
       return;
     }
@@ -189,11 +189,10 @@ export const deleteEvent = async (req: Request, res: Response) => {
     });
 
     // @ts-ignore
-    if (!event || event.userId !== req.user?.id) {
+    if (!event || (event.userId !== req.user?.id && req.user?.role !== 'admin')) {
       res.status(404).json({ error: 'Event not found or not authorized' });
       return;
     }
-
 
     const deletedEvent = await prisma.event.delete({
       where: {
