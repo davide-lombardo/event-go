@@ -8,19 +8,22 @@ Event Go is a web application that helps users discover and explore events happe
 
 ## Live Demo
 
-Check out the live version of the app [here](https://event-go-e3bd3.web.app/).
+Check out the live version of the app [here](https://event-go-frontend.onrender.com).
 
 ## Technologies Used
 
 - **React**: A JavaScript library for building user interfaces. [Link](https://reactjs.org)
 - **Styled-components**: A library for writing CSS in JavaScript. [Link](https://styled-components.com)
-- **Firebase**: A platform for backend services like authentication and data storage. [Link](https://firebase.google.com)
 - **React Router**: For routing and navigation. [Link](https://reactrouter.com)
-- **React Firebase Hooks**: React hooks for Firebase integration. [Link](https://github.com/CSFrequency/react-firebase-hooks)
 - **React Hot Toast**: For displaying toast notifications. [Link](https://react-hot-toast.com)
 - **Lodash**: A utility library for JavaScript. [Link](https://lodash.com)
 - **Vite**: A next-generation, fast build tool for modern web development. [Link](https://vitejs.dev)
-- **TypeScript**: A statically typed superset of JavaScript. [Link](https://www.typescriptlang.org)
+- **Node.js**: A JavaScript runtime environment for building server-side applications.[Link](https://nodejs.org/en)
+- **Express**: A popular Node.js web framework for building RESTful APIs.[Link](https://expressjs.com/)
+- **TypeScript**: A statically typed superset of JavaScript.[Link](https://www.typescriptlang.org)
+- **PostgreSQL**: A powerful, open-source relational database.[Link](https://www.postgresql.org/)
+- **Prisma**: A modern ORM for Node.js and TypeScript.[Link](https://www.prisma.io/)
+- **Render**: A cloud platform for building and deploying modern web applications.[Link](https://render.com/)
 
 ## Features
 
@@ -30,11 +33,14 @@ Check out the live version of the app [here](https://event-go-e3bd3.web.app/).
 - **Responsive Design**: The application is responsive, optimized for both mobile and desktop devices.
 - **Event Cards**: Events are displayed as cards with essential details such as title, description, location, and more.
 - **Dynamic Content**: The event list is dynamically updated based on filter selection.
-- **Firebase Integration**: User data and event information are stored and managed using Firebase.
 
-## License
+### Folder Structure
 
-This project is open source and available under the [MIT License](LICENSE).
+The project is organized into two main directories:
+
+client: Contains the React frontend application.
+server: Contains the Node.js and Express backend application.
+
 
 ### Run with Docker
 
@@ -66,7 +72,9 @@ Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/davide-lombardo/event-go.git
-cd event-go
+cd event-go/client
+npm install
+cd event-go/server
 npm install
 ```
 
@@ -74,7 +82,9 @@ npm install
 
 Once the dependencies are installed, you can start the development server using the following command:
 
+```bash
 npm run dev
+```
 
 This will start the application in development mode and you can access it by navigating to `http://localhost:3000/` in your browser.
 
@@ -118,40 +128,6 @@ This will fix any auto-fixable linting problems in the codebase.
 ## Testing
 
 To run the tests use your preferred testing library (e.g., Jest, React Testing Library). Ensure that the tests are set up and configured properly to run them. No specific tests are included in this project yet, but consider adding them to improve quality and coverage.
-
-## Deployment
-
-This project can be deployed to Firebase Hosting or any other static hosting provider. Here are the basic steps for deploying to Firebase Hosting:
-
-1. **Install Firebase CLI** (if not installed):
-
-```bash
-npm install -g firebase-tools
-```
-
-    
-
-2. **Login to Firebase**:
-```bash
-firebase login
-```
-
-
-3. **Initialize Firebase in your project**:
-```bash
-firebase init
-```
-
-Choose Firebase Hosting and configure the public directory as `dist` for production builds.
-
-**Deploy the app**:
-
-```bash
-firebase deploy
-```
-
-
-For more information on deploying to Firebase Hosting, refer to the [official Firebase documentation](https://firebase.google.com/docs/hosting).
 
 ## Contributing
 
