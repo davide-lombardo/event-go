@@ -7,6 +7,7 @@ import { useUserContext } from '../context/UserContext';
 import AuthModal from './dialogs/Authentication';
 import UserService from '../services/user.service';
 import UserIcon from '/src/assets/user.svg';
+import { Link } from 'react-router-dom';
 
 const NavbarWrapper = styled.nav`
   display: flex;
@@ -128,7 +129,9 @@ const Nav = () => {
 
   return (
     <NavbarWrapper>
-      <Logo>EventGo</Logo>
+      <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Logo>EventGo</Logo>
+      </Link>
 
       <ButtonGroup>
         {user && (
@@ -156,23 +159,28 @@ const Nav = () => {
 
         {user ? (
           <>
-            
-              <>
-              
-                  <UserProfileImage
-                    src={user.photoURL || UserIcon}
-                    onError={e => (e.currentTarget.src = UserIcon)}
-                    alt="User profile"
-                    onClick={handleProfileImageClick}
-                  />
-                <Dropdown $show={dropdownOpen} ref={dropdownRef}>
-                  <WelcomeMessage>Welcome, {user.username}</WelcomeMessage>
-                  <DropdownOption onClick={handleSignOut}>
-                    Logout
-                  </DropdownOption>
-                </Dropdown>
-              </>
-            
+            <>
+              <UserProfileImage
+                src={user.photoURL || UserIcon}
+                onError={e => (e.currentTarget.src = UserIcon)}
+                alt="User profile"
+                onClick={handleProfileImageClick}
+              />
+              <Dropdown $show={dropdownOpen} ref={dropdownRef}>
+                <WelcomeMessage>Welcome, {user.username}</WelcomeMessage>
+
+                {/* TODO : add user profile */}
+                {/* <DropdownOption>
+                  <Link
+                    to="/user"
+                    style={{ textDecoration: 'none', color: 'black' }}
+                  >
+                    <b>Profile</b>
+                  </Link>
+                </DropdownOption> */}
+                <DropdownOption onClick={handleSignOut}>Logout</DropdownOption>
+              </Dropdown>
+            </>
           </>
         ) : (
           <Button onClick={handleOpenAuthModal} variant={'primary'}>
@@ -193,10 +201,14 @@ const Nav = () => {
             let userData;
             if (mode === 'signin') {
               await userService.signIn(email, password);
-              userData = await userService.getUserProfile(localStorage.getItem('token'));
+              userData = await userService.getUserProfile(
+                localStorage.getItem('token')
+              );
             } else if (mode === 'signup') {
               await userService.signUp(username, email, password);
-              userData = await userService.getUserProfile(localStorage.getItem('token'));
+              userData = await userService.getUserProfile(
+                localStorage.getItem('token')
+              );
             }
             setUser(userData.data);
             handleCloseAuthModal();

@@ -10,14 +10,13 @@ const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: var(--spacing-large);
   background: var(--color-gray-2);
   padding: var(--spacing-medium) var(--spacing-large);
   border-radius: var(--border-radius);
-  width: 100%;
+  width: max-content;
   gap: 1rem;
+  margin: 0 auto;
 `;
-
 
 const PageInfo = styled.span`
   font-size: var(--font-size-small);
@@ -27,7 +26,8 @@ const PageInfo = styled.span`
 `;
 
 const IconButton = styled.button`
-  background: ${({ disabled }) => (disabled ? 'var(--color-gray-4)' : 'var(--color-gray-8)')};
+  background: ${({ disabled }) =>
+    disabled ? 'var(--color-gray-4)' : 'var(--color-gray-8)'};
   color: var(--color-gray-1);
   padding: var(--spacing-small);
   min-width: 40px;

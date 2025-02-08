@@ -8,6 +8,7 @@ import { createGlobalStyle } from 'styled-components';
 import { Toaster } from 'react-hot-toast';
 import { EventProvider } from './context/EventContext';
 import { UserProvider } from './context/UserContext';
+import UserProfile from './pages/UserProfile';
 
 const GlobalStyle = createGlobalStyle`
 :root {
@@ -174,6 +175,7 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/user" element={<UserProfile />} />
             </Routes>
           </Layout>
           <Footer />
