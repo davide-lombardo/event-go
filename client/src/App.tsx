@@ -29,21 +29,8 @@ const GlobalStyle = createGlobalStyle`
   --color-gray-9: #1f1f1f;
   --color-gray-10: #181818;
 
-  /* Blue shades */
-  --color-blue-dark: #0F172A;
-  --color-blue-medium: #1E293B;
-  --color-blue-dark-medium: #183656;
-  --color-blue-light: #475569;
-  --color-blue-light-medium: #64748B;
-  --color-blue-very-light: #94A3B8;
-
-  /* Green shades */
-  --color-teal: #4DC0C5;
-  --color-green-medium: #2DD4BF;
-  --color-green-light: #5EEAD4;
-  --color-green: #5eddac;
-
   /* Misc colors */
+  --color-white: #FFFFFF;
   --color-red: #FE436C;
   --color-orange: #ff7e22;
   --color-yellow: #fca62a;
@@ -89,8 +76,8 @@ const GlobalStyle = createGlobalStyle`
   --border-radius: 12px;
 
   /* Background colors */
-  --background-color: var(--color-lavender);
-  --card-background-color: var(--color-blue-light);
+  --background-color: var(--color-white);
+  --card-background-color: var(--color-grey-7);
 
   /* Links and Misc */
   --color-link: var(--color-green-light);
@@ -128,7 +115,7 @@ const GlobalStyle = createGlobalStyle`
 
   /* Font colors */
   --font-color-base: var(--color-gray-1);
-  --font-color-muted: var(--color-blue-light-medium);
+  --font-color-muted: var(--color-gray-5);
   --font-color-heading: var(--color-blue-very-light);
   --font-color-bright: var(--color-gray-1);
 

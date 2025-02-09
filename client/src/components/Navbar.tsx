@@ -5,7 +5,7 @@ import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';
 import { useUserContext } from '../context/UserContext';
 import AuthModal from './dialogs/Authentication';
-import UserService from '../services/user.service';
+import { useUserService } from '../services/user.service';
 import UserIcon from '/src/assets/user.svg';
 import { Link } from 'react-router-dom';
 
@@ -77,7 +77,8 @@ const WelcomeMessage = styled.div`
 `;
 
 const Nav = () => {
-  const userService = new UserService();
+  const userService = useUserService();
+
   const { fetchEvents } = useEventContext();
   const { user, setUser } = useUserContext();
 
@@ -169,15 +170,14 @@ const Nav = () => {
               <Dropdown $show={dropdownOpen} ref={dropdownRef}>
                 <WelcomeMessage>Welcome, {user.username}</WelcomeMessage>
 
-                {/* TODO : add user profile */}
-                {/* <DropdownOption>
+                <DropdownOption>
                   <Link
                     to="/user"
                     style={{ textDecoration: 'none', color: 'black' }}
                   >
                     <b>Profile</b>
                   </Link>
-                </DropdownOption> */}
+                </DropdownOption>
                 <DropdownOption onClick={handleSignOut}>Logout</DropdownOption>
               </Dropdown>
             </>

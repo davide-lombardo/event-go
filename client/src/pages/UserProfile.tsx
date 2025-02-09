@@ -2,34 +2,31 @@ import styled from 'styled-components';
 import UserIconImage from '/src/assets/user.svg';
 
 import { useUserContext } from '../context/UserContext';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from '../components/Button';
+import { useUserService } from '../services/user.service';
+import { formatDateCustom } from '../utils/date.utils';
 import { EventData } from '../types/event.model';
 
 const UserProfileContainer = styled.div`
   display: flex;
-  align-items: flex-start;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 30px;
-  margin: 30px;
-  border-radius: 16px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-  color: #333;
-  gap: 2rem;
+  margin: var(--spacing-large);
+  box-shadow: var(--shadow-elevation-medium);
+  gap: var(--spacing-large);
 `;
+
 
 const UserProfileHeader = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  flex-direction: row;
+  padding: var(--spacing-medium);
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-elevation-medium);
   justify-content: space-between;
-  gap: 40px;
+  gap: var(--spacing-large);
 `;
 
 const ProfileImageContainer = styled.div`
@@ -39,7 +36,14 @@ const ProfileImageContainer = styled.div`
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  &:hover {
+
+  &:hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 255, 0.3);
   }
 `;
@@ -54,32 +58,32 @@ const HiddenFileInput = styled.input`
   display: none;
 `;
 
-const UserProfileStats = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
-
 const UserProfileStat = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
+const UserProfileStats = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  padding: var(--spacing-medium);
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-small);
+  box-shadow: var(--shadow-elevation-medium);
+`;
+
 const UserProfileStatLabel = styled.span`
-  font-size: 14px;
-  color: #666;
+  font-size: var(--font-size-small);
+  color: var(--font-color-muted);
 `;
 
 const UserProfileStatValue = styled.span`
-  font-size: 18px;
+  font-size: var(--font-size-medium);
   font-weight: bold;
-  color: hsl(347deg 99% 63%);
+  color: var(--color-gray-7);
 `;
 
 const UserProfileEvents = styled.div`
@@ -100,14 +104,6 @@ const UserProfileEvent = styled.div`
   margin-bottom: 10px;
 `;
 
-const UserProfileEventImage = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
-`;
-
 const UserProfileEventInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -126,11 +122,11 @@ const UserProfileEventDate = styled.span`
 `;
 
 const Label = styled.label<{ required?: boolean }>`
-  font-size: 1rem;
-  color: black;
+  font-size: var(--font-size-medium);
+  color: var(--font-color-gray-7);
   &::after {
     content: ${({ required }) => (required ? "' *'" : '')};
-    color: red;
+    color: var(--color-red);
     margin-left: 4px;
   }
 `;
@@ -149,64 +145,124 @@ const Input = styled.input`
   }
 `;
 
-const UserProfile = () => {
-  const { user } = useUserContext();
+interface UserProfileData {
+  username: string;
+  events: EventData[];
+}
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [userImage, setUserImage] = useState(UserIconImage);
-  const [userData, setUserData] = useState({
-    username: user?.username || '',
-    events: [] as EventData[],
+const UserProfile = () => {
+  const userService = useUserService();
+
+  const { user, updateUser } = useUserContext();
+  const [loading, setLoading] = useState(false);
+  const [userImage, setUserImage] = useState<string>(UserIconImage);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [userData, setUserData] = useState<UserProfileData>({
+    username: '',
+    events: [],
   });
 
-  const handleEdit = () => {
-    setIsEditing(!isEditing);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        username: user.username || '',
+        events: user.events || [],
+      });
+      setUserImage(user.photoURL || UserIconImage);
+    }
+  }, [user]);
+
+
+  useEffect(() => {
+    return () => {
+      if (userImage.startsWith('blob:')) {
+        URL.revokeObjectURL(userImage);
+      }
+    };
+  }, [userImage]);
+
+  const handleSave = () => {
+    handleUpdateProfile();
   };
 
-  const handleImageUpload = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setUserImage(imageUrl);
+  const handleUpdateProfile = async () => {
+    setLoading(true);
+    try {
+      let imageUrl = userImage;
+
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append('profileImage', selectedFile);
+        const response = await userService.uploadProfileImage(formData);
+        imageUrl = response.imageUrl;
+      }
+
+      const updatedUser = await userService.updateProfile({
+        username: userData.username,
+        profileImage: imageUrl,
+      });
+
+      // Update both local state and context
+      setUserData(prev => ({ ...prev, ...updatedUser }));
+      updateUser(prev => prev ? { ...prev, ...updatedUser } : null);
+
+      setSelectedFile(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+
+    if (files && files.length > 0) {
+      const file = files[0];
+
+      const imageUrl = URL.createObjectURL(file);
+      setUserImage(imageUrl);
+      setSelectedFile(file);
+    }
+  };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <UserProfileContainer>
+      <h2>User Profile</h2>
       <UserProfileHeader>
-        <ProfileImageContainer
-          onClick={() => {
-            const fileInput = document.getElementById('fileInput');
-            if (fileInput) fileInput.click();
-          }}
-        >
+        <ProfileImageContainer onClick={() => fileInputRef.current?.click()}>
           <ProfileImage src={userImage} alt={userData.username} />
         </ProfileImageContainer>
 
         <HiddenFileInput
-          id="fileInput"
+          ref={fileInputRef}
           type="file"
           accept="image/*"
+          style={{ display: 'none' }}
           onChange={handleImageUpload}
         />
         <div>
-          {isEditing ? (
             <>
               <Label>Username</Label>
               <Input
                 placeholder="Enter username"
                 value={userData.username}
                 onChange={e =>
-                  setUserData({ ...userData, username: e.target.value })
+                  setUserData(prev => ({ ...prev, username: e.target.value }))
                 }
               />
             </>
-          ) : (
-            <h2>@{userData.username}</h2>
-          )}
         </div>
 
-        <Button onClick={handleEdit}>{isEditing ? 'Save' : 'Edit'}</Button>
+        <Button onClick={handleSave} disabled={loading}>
+          {loading ? 'Saving...' : 'Save'}
+        </Button>
       </UserProfileHeader>
       <UserProfileStats>
         <UserProfileStat>
@@ -218,10 +274,11 @@ const UserProfile = () => {
         {userData.events.length > 0 ? (
           userData.events.map(event => (
             <UserProfileEvent key={event.id}>
-              <UserProfileEventImage src={UserIconImage} alt={event.name} />
               <UserProfileEventInfo>
                 <UserProfileEventName>{event.name}</UserProfileEventName>
-                <UserProfileEventDate>{event.eventDate}</UserProfileEventDate>
+                <UserProfileEventDate>
+                  {formatDateCustom(event.eventDate)}
+                </UserProfileEventDate>
               </UserProfileEventInfo>
             </UserProfileEvent>
           ))
