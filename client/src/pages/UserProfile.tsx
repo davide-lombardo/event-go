@@ -235,9 +235,6 @@ const UserProfile = () => {
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <UserProfileContainer>

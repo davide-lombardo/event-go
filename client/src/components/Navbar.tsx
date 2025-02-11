@@ -7,6 +7,8 @@ import { useUserContext } from '../context/UserContext';
 import AuthModal from './dialogs/Authentication';
 import { useUserService } from '../services/user.service';
 import UserIcon from '/src/assets/user.svg';
+import LogoutIcon from '/src/assets/log-out.svg';
+
 import { Link } from 'react-router-dom';
 
 const NavbarWrapper = styled.nav`
@@ -50,30 +52,60 @@ const UserProfileImage = styled.img`
 
 const Dropdown = styled.div<{ $show: boolean }>`
   position: absolute;
-  top: var(--50px);
+  top: 50px;
   right: 0;
-  background-color: var(--color-gray-1);
-  border: 1px solid var(--color-gray-2);
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  min-width: 250px;
-  padding: var(--10px);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  padding: 12px 0;
   display: ${({ $show }) => ($show ? 'block' : 'none')};
-  z-index: 10;
+  transform: ${({ $show }) => ($show ? 'translateY(0)' : 'translateY(-10px)')};
+  opacity: ${({ $show }) => ($show ? 1 : 0)};
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+  z-index: 1000;
+`;
+
+const StyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
 `;
 
 const DropdownOption = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between icon and text */
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #333;
   cursor: pointer;
-  color: red;
+  transition: background 0.2s ease-in-out;
+
   &:hover {
-    background-color: var(--color-gray-1);
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  img {
+    width: 16px;
+    height: 16px;
   }
 `;
 
+const DropdownDivider = styled.div`
+  height: 1px;
+  background: #eee;
+  margin: 8px 0;
+`;
+
 const WelcomeMessage = styled.div`
-  font-size: 1rem;
-  margin-bottom: var(--10px);
-  color: var(--color-gray-6);
+  font-size: 14px;
+  padding: 12px 16px;
+  color: #555;
+  font-weight: 600;
 `;
 
 const Nav = () => {
@@ -168,17 +200,24 @@ const Nav = () => {
                 onClick={handleProfileImageClick}
               />
               <Dropdown $show={dropdownOpen} ref={dropdownRef}>
-                <WelcomeMessage>Welcome, {user.username}</WelcomeMessage>
+                <WelcomeMessage>
+                  Welcome, <b>{user.username}</b>
+                </WelcomeMessage>
+
+                <DropdownDivider />
 
                 <DropdownOption>
-                  <Link
-                    to="/user"
-                    style={{ textDecoration: 'none', color: 'black' }}
-                  >
-                    <b>Profile</b>
-                  </Link>
+                  <StyledLink to="/user">
+                    <img src={UserIcon} alt="user icon" />
+                    Profile
+                  </StyledLink>
                 </DropdownOption>
-                <DropdownOption onClick={handleSignOut}>Logout</DropdownOption>
+
+                <DropdownDivider />
+                <DropdownOption onClick={handleSignOut}>
+                  <img src={LogoutIcon} alt="logout icon" />
+                  Logout
+                </DropdownOption>
               </Dropdown>
             </>
           </>

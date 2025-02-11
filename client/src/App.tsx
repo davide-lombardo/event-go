@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import { EventProvider } from './context/EventContext';
 import { UserProvider } from './context/UserContext';
 import UserProfile from './pages/UserProfile';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const GlobalStyle = createGlobalStyle`
 :root {
@@ -162,7 +163,11 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/user" element={<UserProfile />} />
+               {/* Protect /user route */}
+  <Route element={<ProtectedRoute />}>
+    <Route path="/user" element={<UserProfile />} />
+  </Route>
+              {/* <Route path="/user" element={<UserProfile />} /> */}
             </Routes>
           </Layout>
           <Footer />
