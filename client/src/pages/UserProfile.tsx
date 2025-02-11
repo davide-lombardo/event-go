@@ -27,6 +27,13 @@ const UserProfileHeader = styled.div`
   box-shadow: var(--shadow-elevation-medium);
   justify-content: space-between;
   gap: var(--spacing-large);
+
+  @media (max-width: 768px) {
+    flex-direction: column; 
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-medium);
+  }
 `;
 
 const ProfileImageContainer = styled.div`
@@ -264,12 +271,16 @@ const UserProfile = () => {
           {loading ? 'Saving...' : 'Save'}
         </Button>
       </UserProfileHeader>
-      <UserProfileStats>
-        <UserProfileStat>
-          <UserProfileStatLabel>Events Inserted</UserProfileStatLabel>
-          <UserProfileStatValue>{userData.events.length}</UserProfileStatValue>
-        </UserProfileStat>
-      </UserProfileStats>
+
+      {userData.events.length > 0 && (
+        <UserProfileStats>
+          <UserProfileStat>
+            <UserProfileStatLabel>Events Inserted</UserProfileStatLabel>
+            <UserProfileStatValue>{userData.events.length}</UserProfileStatValue>
+          </UserProfileStat>
+        </UserProfileStats>
+      )}
+    
       <UserProfileEvents>
         {userData.events.length > 0 ? (
           userData.events.map(event => (
