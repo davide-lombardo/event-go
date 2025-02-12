@@ -28,9 +28,11 @@ export const createNewUser = async (req: Request, res: Response) => {
 
     const token = createJWT(user);
     res.json({ token });
-  } catch (error) {
+  } catch (error: any) {
     console.error('User creation failed:', error);
-    res.status(500).json({ error: 'User creation failed' });
+
+    // Generic error response
+    res.status(500).json({ error: 'User creation failed. Please try again.' });
   }
 };
 
@@ -65,7 +67,7 @@ export const signin = async (req: Request, res: Response) => {
 export const getUserProfile = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
-    // @ts-ignore
+      // @ts-ignore
       where: { id: req.user.id },
       include: {
         events: true,
@@ -102,10 +104,13 @@ export const updateUserProfile = async (req: Request, res: Response) => {
   }
 };
 
-export const uploadProfileImage = async (req: MulterRequest, res: Response): Promise<void> => {
+export const uploadProfileImage = async (
+  req: MulterRequest,
+  res: Response
+): Promise<void> => {
   try {
     const userId = req.user?.id;
-    
+
     if (!userId) {
       res.status(401).json({ error: 'Unauthorized' });
       return;
@@ -119,19 +124,25 @@ export const uploadProfileImage = async (req: MulterRequest, res: Response): Pro
     // Get the existing user to check if they have a previous profile image
     const existingUser = await prisma.user.findUnique({
       where: { id: userId },
-      select: { photoURL: true }
+      select: { photoURL: true },
     });
 
     // If there's an existing profile image, delete it
     if (existingUser?.photoURL) {
-      const oldImagePath = path.join(__dirname, '../../uploads', path.basename(existingUser.photoURL));
+      const oldImagePath = path.join(
+        __dirname,
+        '../../uploads',
+        path.basename(existingUser.photoURL)
+      );
       if (fs.existsSync(oldImagePath)) {
         fs.unlinkSync(oldImagePath);
       }
     }
 
     // Create the new image URL
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${
+      req.file.filename
+    }`;
 
     // Update user with new image URL
     const updatedUser = await prisma.user.update({
@@ -143,8 +154,8 @@ export const uploadProfileImage = async (req: MulterRequest, res: Response): Pro
         email: true,
         photoURL: true,
         role: true,
-        events: true
-      }
+        events: true,
+      },
     });
 
     res.json(updatedUser);
@@ -158,9 +169,9 @@ export const uploadProfileImage = async (req: MulterRequest, res: Response): Pro
     }
 
     console.error('Error uploading profile image:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       message: 'Error uploading profile image',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 };

@@ -119,7 +119,7 @@ const Label = styled.span<{ $paid: boolean }>`
   align-items: center;
   font-size: var(--font-size-small);
   font-weight: bold;
-  color: ${props => (props.$paid ? 'var(--color-pink)' : 'var(--color-green)')};
+  color: ${props => (props.$paid ? 'var(--color-pink)' : 'var(--color-green-light)')};
 `;
 
 const LabelDot = styled.span<{ $paid: boolean }>`
@@ -128,7 +128,7 @@ const LabelDot = styled.span<{ $paid: boolean }>`
   border-radius: 50%;
   margin-right: 5px;
   background-color: ${props =>
-    props.$paid ? 'var(--color-pink)' : 'var(--color-green)'};
+    props.$paid ? 'var(--color-pink)' : 'var(--color-green-light)'};
 `;
 
 const LabelContainer = styled.div`
@@ -266,6 +266,15 @@ const Card: React.FC<CardProps> = React.memo(
     const isEllipsed = useEllipsisTooltip(descriptionRef);
 
     const isEventCreator = user?.username === userName;
+
+      // Add debug logging
+      console.log('Event Debug Info:', {
+        role,
+        userUsername: user?.username,
+        eventUserName: userName,
+        isEventCreator,
+        canEdit: role === 'admin' || isEventCreator
+      });
 
     const handleEdit = () => {
       setModalEventData({

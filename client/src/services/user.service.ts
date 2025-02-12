@@ -14,15 +14,16 @@ const userService = {
       const { token } = response.data;
       localStorage.setItem('token', token);
       toast.success('Signed up successfully.');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error signing up:', error);
-      toast.error('Error signing up.');
+      console.log(error);
+      toast.error('Error signing up:', error.message);
     }
   },
 
   async signIn(email: string, password: string): Promise<void> {
     try {
-      const response = await axios.post(`${apiUrl}/signin`, {
+      const response = await axios.post(`${apiUrl}/user/signin`, {
         email,
         password,
       });

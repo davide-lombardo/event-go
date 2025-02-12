@@ -1,15 +1,22 @@
 import { Router } from 'express';
-import { body } from "express-validator";
-import { handleInputErrors } from './modules/middleware';
-import { createEvent, deleteEvent, getEvents, updateEvent } from './handlers/event';
+import { body } from 'express-validator';
+import { handleInputErrors } from '../modules/middleware';
+import {
+  getEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent
+} from '../handlers/event';
 
-const router = Router();
+const publicRouter = Router();
+const protectedRouter = Router();
 
-/**
- * Protected Event Routes
- */
-router.post(
-  '/events',
+// Public routes
+publicRouter.get('/', getEvents);
+
+// Protected routes
+protectedRouter.post(
+  '/',
   body('name').isString(),
   body('location').optional().isString(),
   body('latitude').optional().isFloat(),
@@ -24,8 +31,9 @@ router.post(
   handleInputErrors,
   createEvent
 );
-router.put(
-  '/events/:id',
+
+protectedRouter.put(
+  '/:id',
   body('name').optional().isString(),
   body('location').optional().isString(),
   body('latitude').optional().isFloat(),
@@ -40,6 +48,10 @@ router.put(
   handleInputErrors,
   updateEvent
 );
-router.delete('/events/:id', deleteEvent);
 
-export default router
+protectedRouter.delete('/:id', deleteEvent);
+
+export default {
+  publicRoutes: publicRouter,
+  protectedRoutes: protectedRouter
+};

@@ -34,6 +34,7 @@ const GlobalStyle = createGlobalStyle`
   --color-white: #FFFFFF;
   --color-red: #FE436C;
   --color-orange: #ff7e22;
+  --color-green-light: #00d1b2;
   --color-yellow: #fca62a;
   --color-light-yellow: #F6EB61;
   --color-pink: #f57ad0;
@@ -50,9 +51,6 @@ const GlobalStyle = createGlobalStyle`
 
   /* Primary colors */
   --color-primary: var(--color-red);
-  --color-primary-light: var(--color-green-light);
-  --color-primary-dark: var(--color-green-medium);
-  --color-primary-muted: var(--color-indigo-muted);
 
   --gradient-primary: linear-gradient(
     45deg,
@@ -163,11 +161,9 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
-               {/* Protect /user route */}
-  <Route element={<ProtectedRoute />}>
-    <Route path="/user" element={<UserProfile />} />
-  </Route>
-              {/* <Route path="/user" element={<UserProfile />} /> */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/user" element={<UserProfile />} />
+              </Route>
             </Routes>
           </Layout>
           <Footer />
