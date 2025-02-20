@@ -267,15 +267,6 @@ const Card: React.FC<CardProps> = React.memo(
 
     const isEventCreator = user?.username === userName;
 
-      // Add debug logging
-      console.log('Event Debug Info:', {
-        role,
-        userUsername: user?.username,
-        eventUserName: userName,
-        isEventCreator,
-        canEdit: role === 'admin' || isEventCreator
-      });
-
     const handleEdit = () => {
       setModalEventData({
         id: eventId,
