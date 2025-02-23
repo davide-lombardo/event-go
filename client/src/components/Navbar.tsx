@@ -8,7 +8,6 @@ import AuthModal from './dialogs/Authentication';
 import { useUserService } from '../services/user.service';
 import UserIcon from '/src/assets/user.svg';
 import LogoutIcon from '/src/assets/log-out.svg';
-
 import { Link } from 'react-router-dom';
 
 const NavbarWrapper = styled.nav`
@@ -18,13 +17,23 @@ const NavbarWrapper = styled.nav`
   padding: var(--20px);
   background-color: transparent;
   color: var(--color-gray-1);
+
+  @media (min-width: 1024px) {
+    background: radial-gradient(ellipse at 50% 100px, rgba(250, 247, 244, 0.3), rgba(250, 247, 244, 1));
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-radius: var(--border-radius);
+    box-shadow: 0px 4px 4px 0px rgba(153, 126, 152, 1), 0px 15px 25px 0px rgba(0, 0, 0, 0.15);
+    border: 1px solid #faf7f4;
+    transition: all 0.8s ease-in-out;
+    margin: 3rem 0;
+  }
 `;
 
 const Logo = styled.div`
   font-size: var(--30px);
   font-weight: bold;
   background-image: var(--gradient-primary);
-
   background-size: 100%;
   background-repeat: repeat;
 
@@ -110,7 +119,6 @@ const WelcomeMessage = styled.div`
 
 const Nav = () => {
   const userService = useUserService();
-
   const { fetchEvents } = useEventContext();
   const { user, setUser } = useUserContext();
 
@@ -124,14 +132,10 @@ const Nav = () => {
   const handleCloseAuthModal = () => setIsAuthModalOpen(false);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setDropdownOpen(false);
     }
   };
@@ -192,34 +196,32 @@ const Nav = () => {
 
         {user ? (
           <>
-            <>
-              <UserProfileImage
-                src={user.photoURL || UserIcon}
-                onError={e => (e.currentTarget.src = UserIcon)}
-                alt="User profile"
-                onClick={handleProfileImageClick}
-              />
-              <Dropdown $show={dropdownOpen} ref={dropdownRef}>
-                <WelcomeMessage>
-                  Welcome, <b>{user.username}</b>
-                </WelcomeMessage>
+            <UserProfileImage
+              src={user.photoURL || UserIcon}
+              onError={e => (e.currentTarget.src = UserIcon)}
+              alt="User profile"
+              onClick={handleProfileImageClick}
+            />
+            <Dropdown $show={dropdownOpen} ref={dropdownRef}>
+              <WelcomeMessage>
+                Welcome, <b>{user.username}</b>
+              </WelcomeMessage>
 
-                <DropdownDivider />
+              <DropdownDivider />
 
-                <DropdownOption>
-                  <StyledLink to="/user">
-                    <img src={UserIcon} alt="user icon" />
-                    Profile
-                  </StyledLink>
-                </DropdownOption>
+              <DropdownOption>
+                <StyledLink to="/user">
+                  <img src={UserIcon} alt="user icon" />
+                  Profile
+                </StyledLink>
+              </DropdownOption>
 
-                <DropdownDivider />
-                <DropdownOption onClick={handleSignOut}>
-                  <img src={LogoutIcon} alt="logout icon" />
-                  Logout
-                </DropdownOption>
-              </Dropdown>
-            </>
+              <DropdownDivider />
+              <DropdownOption onClick={handleSignOut}>
+                <img src={LogoutIcon} alt="logout icon" />
+                Logout
+              </DropdownOption>
+            </Dropdown>
           </>
         ) : (
           <Button onClick={handleOpenAuthModal} variant={'primary'}>
@@ -227,6 +229,7 @@ const Nav = () => {
           </Button>
         )}
       </ButtonGroup>
+
       <EventModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -240,14 +243,10 @@ const Nav = () => {
             let userData;
             if (mode === 'signin') {
               await userService.signIn(email, password);
-              userData = await userService.getUserProfile(
-                localStorage.getItem('token')
-              );
+              userData = await userService.getUserProfile(localStorage.getItem('token'));
             } else if (mode === 'signup') {
               await userService.signUp(username, email, password);
-              userData = await userService.getUserProfile(
-                localStorage.getItem('token')
-              );
+              userData = await userService.getUserProfile(localStorage.getItem('token'));
             }
             setUser(userData.data);
             handleCloseAuthModal();

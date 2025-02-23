@@ -33,6 +33,7 @@ const GlobalStyle = createGlobalStyle`
   /* Misc colors */
   --color-white: #FFFFFF;
   --color-red: #FE436C;
+  --color-red-dark: #dc395c;
   --color-orange: #ff7e22;
   --color-green-light: #00d1b2;
   --color-yellow: #fca62a;
@@ -51,6 +52,7 @@ const GlobalStyle = createGlobalStyle`
 
   /* Primary colors */
   --color-primary: var(--color-red);
+  --color-primary-dark: var(--color-red-dark);
 
   --gradient-primary: linear-gradient(
     45deg,
