@@ -21,12 +21,11 @@ const NavbarWrapper = styled.nav`
   @media (min-width: 1024px) {
     background: radial-gradient(ellipse at 50% 100px, rgba(250, 247, 244, 0.3), rgba(250, 247, 244, 1));
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
     border-radius: var(--border-radius);
-    box-shadow: 0px 4px 4px 0px rgba(153, 126, 152, 1), 0px 15px 25px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-elevation-medium);
     border: 1px solid #faf7f4;
     transition: all 0.8s ease-in-out;
-    margin: 3rem 0;
+    margin-top: 3rem;
   }
 `;
 

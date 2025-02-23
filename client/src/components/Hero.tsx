@@ -9,8 +9,6 @@ const BaseHeroContainer = styled.div`
   position: relative;
   width: 100%;
   min-height: 80vh;
-  margin-top: -64px;
-  padding-top: 64px;
   overflow: hidden;
 `;
 

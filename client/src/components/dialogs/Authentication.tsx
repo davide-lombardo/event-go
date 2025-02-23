@@ -19,6 +19,7 @@ interface ModalOverlayProps {
   $isOpen: boolean;
 }
 
+
 const ModalOverlay = styled.div<ModalOverlayProps>`
   display: ${({ $isOpen }) => ($isOpen ? 'flex' : 'none')};
   position: fixed;
