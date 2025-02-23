@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import FilterSection from '../components/FiltersSection';
-import Hero from '../components/Hero';
+import { Hero } from '../components/Hero';
 import { useEventContext } from '../context/EventContext';
 import Spinner from '../components/shared/Spinner';
 import { EventFilters } from '../types/event.model';
