@@ -17,6 +17,7 @@ const EventListWrapper = styled.div`
   gap: 20px;
   padding: 20px;
   width: 100%;
+  margin-top: 5rem;
 
   /* Center the content when no events or loading */
   &.empty-state {
@@ -42,28 +43,34 @@ function Home() {
   const { events, loading, fetchEvents, pagination } = useEventContext();
   const [userLocation, setUserLocation] = useState<string>('');
 
-  const handleFilterChange = useCallback((newFilters: EventFilters) => {
-    fetchEvents({
-      ...newFilters,
-      location: {
-        searchText: newFilters.location.searchText.trim(),
-        lat: newFilters.location.lat,
-        lng: newFilters.location.lng,
-      }
-    });
-  }, [fetchEvents]);
+  const handleFilterChange = useCallback(
+    (newFilters: EventFilters) => {
+      fetchEvents({
+        ...newFilters,
+        location: {
+          searchText: newFilters.location.searchText.trim(),
+          lat: newFilters.location.lat,
+          lng: newFilters.location.lng,
+        },
+      });
+    },
+    [fetchEvents]
+  );
 
   const getUserLocation = (): Promise<GeolocationPosition> => {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(resolve, reject);
       } else {
-        reject(new Error("Geolocation is not supported by this browser."));
+        reject(new Error('Geolocation is not supported by this browser.'));
       }
     });
   };
 
-  const getAddressFromCoordinates = async (lat: number, lng: number): Promise<string> => {
+  const getAddressFromCoordinates = async (
+    lat: number,
+    lng: number
+  ): Promise<string> => {
     const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
 
     const response = await fetch(
@@ -88,6 +95,7 @@ function Home() {
           lng,
         },
         date: 'all',
+        categories: [],
       };
       await fetchEvents(filters);
     } catch (error) {
@@ -102,22 +110,42 @@ function Home() {
         const { latitude, longitude } = position.coords;
         await fetchEventsNearUser(latitude, longitude);
       } catch (error) {
-        console.error("Error getting user location or fetching events:", error);
+        console.error('Error getting user location or fetching events:', error);
       }
     };
 
     fetchUserLocationAndEvents();
   }, []);
 
-  const eventsToDisplay = useMemo(() => (events.length > 0 ? events : []), [events]);
-  const isEmptyState = useMemo(() => loading || eventsToDisplay.length === 0, [loading, eventsToDisplay]);
+  const eventsToDisplay = useMemo(
+    () => (events.length > 0 ? events : []),
+    [events]
+  );
+  const isEmptyState = useMemo(
+    () => loading || eventsToDisplay.length === 0,
+    [loading, eventsToDisplay]
+  );
 
   return (
     <React.Fragment>
-      <Hero
-        subtitle="Search and discover events happening near you. Explore upcoming events, and find both free and paid experiences tailored to your location."
+      <Hero subtitle="Search and discover events happening near you. Explore upcoming events, and find both free and paid experiences tailored to your location." />
+      <FilterSection
+        onFilterChange={handleFilterChange}
+        initialLocation={userLocation}
       />
-      <FilterSection onFilterChange={handleFilterChange} initialLocation={userLocation}/>
+
+      {eventsToDisplay.length > 0 && (
+        <h2
+          style={{
+            textAlign: 'center',
+            marginTop: '5rem',
+            color: 'var(--color-gray-8)',
+          }}
+        >
+          Available Events
+        </h2>
+      )}
+
       <EventListWrapper className={isEmptyState ? 'empty-state' : ''}>
         {loading ? (
           <Spinner $size="15px" $gradient="var(--gradient-primary)" />
@@ -145,7 +173,9 @@ function Home() {
           </NoEventsMessage>
         )}
       </EventListWrapper>
-      {events.length > 0 && <Pagination hasMore={pagination.page < pagination.totalPages} />}
+      {events.length > 0 && (
+        <Pagination hasMore={pagination.page < pagination.totalPages} />
+      )}
     </React.Fragment>
   );
 }

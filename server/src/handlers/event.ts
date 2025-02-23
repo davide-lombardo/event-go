@@ -1,3 +1,4 @@
+import { EventCategory } from "@prisma/client";
 import prisma from "../db";
 import { Request, Response } from "express";
 
@@ -8,25 +9,28 @@ export const getEvents = async (req: Request, res: Response) => {
     pageSize = 10, 
     location, 
     date,
-    category 
+    categories 
   } = req.query;
 
   try {
     const whereConditions: any = {};
 
     if (location && typeof location === 'object' && 'searchText' in location) {
-      const locationObj = location as { searchText: string, lat: string, lng: string };
-    
+      const locationObj = location as {
+        searchText: string;
+        lat: string;
+        lng: string;
+      };
+
       if (locationObj.searchText && locationObj.searchText !== '') {
-    
         if (locationObj.lat && locationObj.lng) {
           const lat = Number(locationObj.lat);
           const lng = Number(locationObj.lng);
           const radius = 30; // Default radius in km
-    
+
           // Calculate the range for latitude and longitude
           whereConditions.latitude = {
-            gte: lat - radius / 111.32,  // Approximate km-to-lat conversion
+            gte: lat - radius / 111.32, // Approximate km-to-lat conversion
             lte: lat + radius / 111.32,
           };
           whereConditions.longitude = {
@@ -55,7 +59,7 @@ export const getEvents = async (req: Request, res: Response) => {
         case 'today':
           whereConditions.eventDate = {
             gte: todayStart.toISOString(),
-            lt: tomorrowStart.toISOString()
+            lt: tomorrowStart.toISOString(),
           };
           break;
         case 'tomorrow':
@@ -63,21 +67,30 @@ export const getEvents = async (req: Request, res: Response) => {
             gte: tomorrowStart.toISOString(),
             lt: new Date(
               tomorrowStart.getTime() + 24 * 60 * 60 * 1000
-            ).toISOString()
+            ).toISOString(),
           };
           break;
         case 'weekend':
           whereConditions.eventDate = {
             gte: weekendStart.toISOString(),
-            lte: weekendEnd.toISOString()
+            lte: weekendEnd.toISOString(),
           };
           break;
       }
     }
 
-    // Add category filter if provided
-    if (category) {
-      whereConditions.category = String(category);
+    // Add category filtering if categories are provided
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      // Ensure all categories are valid EventCategory values
+      const validCategories = categories.filter(cat =>
+        Object.values(EventCategory).includes(cat as EventCategory)
+      );
+
+      if (validCategories.length > 0) {
+        whereConditions.category = {
+          in: validCategories,
+        };
+      }
     }
 
     const events = await prisma.event.findMany({
@@ -93,7 +106,7 @@ export const getEvents = async (req: Request, res: Response) => {
     });
 
     const totalEvents = await prisma.event.count({
-      where: whereConditions
+      where: whereConditions,
     });
 
     res.json({

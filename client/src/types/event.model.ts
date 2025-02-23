@@ -20,6 +20,7 @@ export interface EventFilters {
     lng: number;
   };
   date: 'all' | 'today' | 'tomorrow' | 'weekend' | '';
+  categories: EventCategory[];
 }
 
 export enum EventCategory {

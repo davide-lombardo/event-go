@@ -25,6 +25,7 @@ export default class EventsService {
           pageSize,
           location: filters.location || '',
           date: filters.date || 'all',
+          categories: filters.categories || [],
         },
       });
 
