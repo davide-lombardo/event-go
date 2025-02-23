@@ -51,10 +51,10 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     pageSize: 10,
     totalPages: 0,
   });
-  const [filters, setFilters] = useState<EventFilters>({ location: { searchText: '', lat: 0, lng: 0 }, date: '' });
+  const [filters, setFilters] = useState<EventFilters>({ location: { searchText: '', lat: 0, lng: 0 }, date: '', categories: [] });
 
   const fetchEvents = async (
-    filters: EventFilters = { location: { searchText: '', lat: 0, lng: 0 }, date: '' },
+    filters: EventFilters = { location: { searchText: '', lat: 0, lng: 0 }, date: '', categories: [] },
     page: number = 1,
     pageSize: number = 10,
   ) => {
