@@ -74,14 +74,14 @@ const Dropdown = styled.div<{ $show: boolean }>`
   z-index: 1000;
 `;
 
-const StyledLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-`;
+// const StyledLink = styled(Link)`
+//   display: flex;
+//   align-items: center;
+//   gap: 8px;
+//   text-decoration: none;
+//   color: inherit;
+//   width: 100%;
+// `;
 
 const DropdownOption = styled.div`
   display: flex;

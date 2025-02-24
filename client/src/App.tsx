@@ -8,8 +8,6 @@ import { createGlobalStyle } from 'styled-components';
 import { Toaster } from 'react-hot-toast';
 import { EventProvider } from './context/EventContext';
 import { UserProvider } from './context/UserContext';
-import UserProfile from './pages/UserProfile';
-import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './pages/NotFound';
 
 const GlobalStyle = createGlobalStyle`
