@@ -208,14 +208,14 @@ const Nav = () => {
 
               <DropdownDivider />
 
-              <DropdownOption>
+              {/* <DropdownOption>
                 <StyledLink to="/user">
                   <img src={UserIcon} alt="user icon" />
                   Profile
                 </StyledLink>
               </DropdownOption>
 
-              <DropdownDivider />
+              <DropdownDivider /> */}
               <DropdownOption onClick={handleSignOut}>
                 <img src={LogoutIcon} alt="logout icon" />
                 Logout

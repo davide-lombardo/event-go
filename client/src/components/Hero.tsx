@@ -51,7 +51,7 @@ const MainContent = styled.div`
   h1 {
     font-size: var(--50px);
     line-height: 3.5rem;
-    font-weight: 400;
+    font-weight: 300;
     margin-bottom: 1.5rem;
     line-height: 1.1;
 
@@ -111,39 +111,6 @@ const ImageContainer = styled.div`
     opacity: 0.4;
   }
 `;
-
-// const ImageContainer = styled.div`
-//   position: relative;
-//   height: 100%;
-//   background: var(--gradient-primary);
-//   overflow: hidden;
-//   clip-path: polygon(
-//     20% 0%,
-//     0% 20%,
-//     30% 50%,
-//     0% 80%,
-//     20% 100%,
-//     50% 70%,
-//     80% 100%,
-//     100% 80%,
-//     70% 50%,
-//     100% 20%,
-//     80% 0%,
-//     50% 30%
-//   );
-
-//   &::before {
-//     content: '';
-//     position: absolute;
-//     width: 120%;
-//     height: 120%;
-//     top: -10%;
-//     left: -10%;
-//     background: url('https://images.unsplash.com/photo-1682447404920-4be1294c2854?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
-//       center/cover;
-//     opacity: 0.4;
-//   }
-// `;
 
 const Hero: React.FC<HeroProps> = ({ subtitle }) => (
   <SplitHeroWrapper>

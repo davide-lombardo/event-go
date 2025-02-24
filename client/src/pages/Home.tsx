@@ -17,7 +17,7 @@ const EventListWrapper = styled.div`
   gap: 20px;
   padding: 20px;
   width: 100%;
-  margin-top: 5rem;
+  margin-top: 3rem;
 
   /* Center the content when no events or loading */
   &.empty-state {

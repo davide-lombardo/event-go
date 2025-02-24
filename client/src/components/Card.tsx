@@ -327,7 +327,7 @@ const Card: React.FC<CardProps> = React.memo(
             <LinkContainer>
               <Link href={link} target="_blank">
                 view event
-                <LinkIcon src={LinkIconImage} alt="link" />
+                <LinkIcon src={LinkIconImage} alt="" />
               </Link>
             </LinkContainer>
           </TitleSection>
@@ -361,7 +361,7 @@ const Card: React.FC<CardProps> = React.memo(
               <LocationContainer>
                 <img
                   src={MapPinIconImage}
-                  alt="Location icon"
+                  alt=""
                   width={14}
                   height={14}
                 />

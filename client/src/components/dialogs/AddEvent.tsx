@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { EventCategory, EventData } from '../../types/event.model';
 import toast from 'react-hot-toast';
@@ -31,6 +31,7 @@ const ModalOverlay = styled.div<ModalOverlayProps>`
   justify-content: center;
   z-index: 1000;
   transition: opacity 0.3s ease-in-out;
+  overflow: hidden;
 `;
 
 const ModalContent = styled.div`
@@ -43,6 +44,20 @@ const ModalContent = styled.div`
   border-radius: 12px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.3s ease-in-out;
+  box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
   @keyframes fadeIn {
     from {
@@ -225,6 +240,27 @@ const EventModal: React.FC<EventModalProps> = ({
     link: '',
   });
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose]);
+
   // Reset state when modal is opened with new data
   useEffect(() => {
     if (initialEventData) {
@@ -246,7 +282,7 @@ const EventModal: React.FC<EventModalProps> = ({
         userName: '',
         eventDate: '',
         category: EventCategory.Music,
-      }
+      };
       setEventData(data);
     }
   }, [initialEventData, isOpen]);
@@ -296,15 +332,19 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   const handleLocationChange = (location: string, lat: number, lng: number) => {
-    setEventData(prevData => ({ ...prevData, location, latitude: lat, longitude: lng }));
+    setEventData(prevData => ({
+      ...prevData,
+      location,
+      latitude: lat,
+      longitude: lng,
+    }));
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = e.target.value as EventCategory;
-  
+
     setEventData(prevData => ({ ...prevData, category: selectedCategory }));
   };
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -337,7 +377,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   return (
     <ModalOverlay $isOpen={isOpen}>
-      <ModalContent>
+      <ModalContent ref={modalRef}>
         <ModalHeader>
           <h2 style={{ textAlign: 'center' }}>
             {initialEventData ? 'Edit Event' : 'Add New Event'}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
 import EyeIcon from '/src/assets/eye.svg';
@@ -143,6 +143,24 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose]);
+
   const validateInput = () => {
     if (!email.includes('@')) {
       setError('Please enter a valid email address.');
@@ -165,7 +183,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
 
   return (
     <ModalOverlay $isOpen={isOpen}>
-      <ModalContent>
+      <ModalContent ref={modalRef}>
         <ModalHeader>
           <h2>{mode === 'signin' ? 'Sign In' : 'Sign Up'}</h2>
           <CloseButton onClick={onClose}>&times;</CloseButton>
@@ -207,14 +225,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
               {showPassword ? (
                 <img
                   src={EyeOffIcon}
-                  alt="hide password icon"
+                  alt=""
                   width={14}
                   height={14}
                 />
               ) : (
                 <img
                   src={EyeIcon}
-                  alt="show password icon"
+                  alt=""
                   width={14}
                   height={14}
                 />

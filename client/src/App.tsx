@@ -10,6 +10,7 @@ import { EventProvider } from './context/EventContext';
 import { UserProvider } from './context/UserContext';
 import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
+import NotFound from './pages/NotFound';
 
 const GlobalStyle = createGlobalStyle`
 :root {
@@ -167,9 +168,10 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route element={<ProtectedRoute />}>
+              <Route path="*" element={<NotFound />} />
+              {/* <Route element={<ProtectedRoute />}>
                 <Route path="/user" element={<UserProfile />} />
-              </Route>
+              </Route> */}
             </Routes>
           </Layout>
           <Footer />
