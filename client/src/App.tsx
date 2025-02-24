@@ -14,6 +14,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 const GlobalStyle = createGlobalStyle`
 :root {
   /* COLORS */
+  --color-primary: #D63384;
+  --color-primary-dark: #9B287B;
+  --color-secondary: var(--color-blue);
+  --color-danger: var(--color-red);
+  --color-success: var(--color-green-light);
+  --color-warning: var(--color-orange);
 
   /* Grey shades */
   --color-gray-0: #f9f9f9;
@@ -21,8 +27,9 @@ const GlobalStyle = createGlobalStyle`
   --color-gray-1: #eee;
   --color-gray-2: #e6e6e6;
   --color-gray-3: #ccc;
-  --color-gray-4: #bbb;
-  --color-gray-5: #999;
+  --color-gray-4: #ddd;
+  --color-gray-7: #777;
+
 
   --color-gray-6: #575757;
   --color-gray-65: #525252;
@@ -51,9 +58,7 @@ const GlobalStyle = createGlobalStyle`
   --color-category-link: #dd4eb2;
   --color-highlight: var(--color-yellow);
 
-  /* Primary colors */
-  --color-primary: var(--color-red);
-  --color-primary-dark: var(--color-red-dark);
+
 
   --gradient-primary: linear-gradient(
     45deg,

@@ -5,7 +5,7 @@ interface ButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
   primary?: boolean;
-  variant?: 'primary' | 'danger' | 'transparent';
+  variant?: string;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   tooltip?: string;
@@ -16,22 +16,57 @@ const StyledButton = styled.button<ButtonProps>`
   border: none;
   border-radius: var(--8px);
   font-size: var(--16px);
-  background-color: ${({ variant, disabled }) =>
-    disabled
-      ? 'inherit'
-      : variant === 'primary'
-      ? 'var(--color-gray-7)'
-      : variant === 'danger'
-      ? 'var(--color-primary)'
-      : 'transparent'};
-  color: ${({ variant, disabled }) =>
-    disabled
-      ? 'inherit'
-      : variant === 'primary'
-      ? 'var(--color-gray-1)'
-      : variant === 'danger'
-      ? 'var(--color-gray-1)'
-      : 'var(--color-gray-7)'};
+  background-color: ${({ variant }) => {
+    switch (variant) {
+      case 'primary':
+        return 'var(--color-primary)';
+      case 'secondary':
+        return 'var(--color-secondary)';
+      case 'danger':
+        return 'var(--color-danger)';
+      case 'success':
+        return 'var(--color-success)';
+      case 'warning':
+        return 'var(--color-warning)';
+      case 'link':
+        return 'transparent';
+      case 'outline':
+        return 'transparent';
+      default:
+        return 'var(--color-primary)';
+    }
+  }};
+
+color: ${({ variant }) => {
+    switch (variant) {
+      case 'primary':
+        return 'var(--color-white)';
+      case 'secondary':
+        return 'var(--color-gray-7)';
+      case 'danger':
+        return 'var(--color-white)';
+      case 'success':
+        return 'var(--color-white)';
+      case 'warning':
+        return 'var(--color-white)';
+      case 'link':
+        return 'var(--color-blue)';
+      case 'outline':
+        return 'var(--color-gray-7)';
+      default:
+        return 'var(--color-white)';
+    }
+  }};
+
+  border: ${({ variant }) => {
+    switch (variant) {
+      case 'outline':
+        return '1px solid var(--color-gray-4)';
+      default:
+        return 'none';
+    }
+  }};
+  
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   transition: background-color 0.3s ease;
 
@@ -60,6 +95,7 @@ const StyledButton = styled.button<ButtonProps>`
     background-color: var(--color-gray-4);
     color: var(--color-gray-6);
   }
+    
 `;
 
 const Tooltip = styled.div`

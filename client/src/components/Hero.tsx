@@ -95,7 +95,7 @@ const ImageContainer = styled.div`
     50% 30%
   );
 
-  @media (max-width: var(--breakpoint-medium)) {
+  @media (max-width: 900px) {
     display: none;
   }
 

@@ -110,7 +110,7 @@ const Input = styled.input`
   min-width: 100%;
 
   &:focus {
-    border-color: var(--color-blue);
+    border-color: var(--color-primary);
   }
 `;
 
@@ -124,7 +124,7 @@ const CategorySelect = styled.select`
   min-width: 100%;
 
   &:focus {
-    border-color: var(--color-blue);
+    border-color: var(--color-primary);
   }
 `;
 
@@ -173,7 +173,7 @@ const TextArea = styled.textarea`
   transition: border-color 0.2s;
 
   &:focus {
-    border-color: var(--color-blue);
+    border-color: var(--color-primary);
   }
 `;
 
@@ -450,7 +450,7 @@ const EventModal: React.FC<EventModalProps> = ({
           </GroupContainer>
 
           <ButtonRow>
-            <Button onClick={onClose} variant={'danger'}>
+            <Button onClick={onClose} variant={'outline'}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>

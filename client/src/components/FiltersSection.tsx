@@ -9,6 +9,7 @@ interface FilterProps {
   initialLocation: string;
 }
 
+
 const FilterWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -52,7 +53,7 @@ const Select = styled.select`
   transition: border-color 0.2s;
 
   &:focus {
-    border-color: var(--color-blue);
+    border-color: var(--color-primary-dark);
   }
 `;
 
@@ -60,7 +61,7 @@ const CategoriesWrapper = styled.div`
   display: flex;
   margin: 0 auto;
   flex-wrap: wrap;
-  gap: var(--10px);
+  gap: var(--20px);
   margin-top: var(--20px);
   justify-content: center;
   max-width: 90vw;
@@ -70,18 +71,21 @@ const CategoryButton = styled.button<{ $isSelected: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
-  border-radius: 8px;
-  background: var(--color-white);
   border: 3px solid
-    ${props => (props.$isSelected ? 'var(--color-indigo-light)' : 'transparent')};
+    ${props => (props.$isSelected ? 'var(--color-primary)' : 'transparent')};
   cursor: pointer;
-  transition: all 0.2s;
   min-width: 80px;
   max-width: 80px;
+  padding: var(--10px);
+
+  background: radial-gradient(ellipse at 50% 100px, rgba(250, 247, 244, 0.3), rgba(250, 247, 244, 1));
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-elevation-medium);
+  transition: all 0.2s ease-in-out;
 
   &:hover {
-    background: var(--color-blue-light);
+    border-color: var(--color-gray-6);
   }
 `;
 
@@ -180,11 +184,11 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
         </InputsWrapper>
 
         <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
-          <Button type="submit" onClick={handleApply}>
+          <Button type="submit" variant='primary' onClick={handleApply}>
             Apply
           </Button>
 
-          <Button onClick={handleClear} variant={'transparent'}>
+          <Button onClick={handleClear} variant={'outline'}>
             Clear
           </Button>
         </div>

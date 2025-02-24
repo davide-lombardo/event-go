@@ -20,7 +20,7 @@ const Input = styled.input`
   min-width: 100%;
 
   &:focus {
-    border-color: var(--color-blue);
+    border-color: var(--color-primary);
   }
 `;
 

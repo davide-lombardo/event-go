@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Button from '../Button';
 
 interface ConfirmDeleteProps {
   isOpen: boolean;
@@ -36,26 +37,6 @@ const ButtonGroup = styled.div`
   margin-top: 20px;
 `;
 
-const Button = styled.button`
-  padding: 10px 20px;
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-
-  &:first-of-type {
-    background: var(--color-primary);
-    color: white;
-  }
-
-  &:last-of-type {
-    background: var(--color-grey-5);
-    color: black;
-  }
-
-  &:hover {
-    opacity: 0.9;
-  }
-`;
 
 const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
   isOpen,
@@ -70,8 +51,8 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
       <ModalContent>
         <p>{message}</p>
         <ButtonGroup>
-          <Button onClick={onConfirm}>Yes</Button>
-          <Button onClick={onCancel}>No</Button>
+          <Button variant="danger" onClick={onConfirm}>Delete</Button>
+          <Button variant="outline" onClick={onCancel}>No</Button>
         </ButtonGroup>
       </ModalContent>
     </ModalOverlay>

@@ -171,7 +171,7 @@ const Nav = () => {
 
       <ButtonGroup>
         {user && (
-          <Button onClick={handleOpenModal} variant={'transparent'}>
+          <Button onClick={handleOpenModal} variant={'outline'}>
             <span style={{ display: 'flex', alignItems: 'center' }}>
               Add Event
               <svg
