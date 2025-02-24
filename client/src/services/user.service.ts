@@ -1,5 +1,6 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { User } from '../types/user.model';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -46,7 +47,7 @@ const userService = {
     }
   },
 
-  async getUserProfile(token: string | null): Promise<any> {
+  async getUserProfile(token: string | null): Promise<User> {
     if (!token) {
       throw new Error('No token found');
     }
@@ -54,14 +55,14 @@ const userService = {
       const response = await axios.get(`${apiUrl}/user/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error fetching user profile:', error);
       throw error;
     }
   },
 
-  async updateProfile(data: { username: string; profileImage: string }): Promise<any> {
+  async updateProfile(data: { username: string; profileImage: string }): Promise<User> {
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('No token found');
@@ -77,7 +78,7 @@ const userService = {
     }
   },
 
-  async uploadProfileImage(data: FormData): Promise<any> {
+  async uploadProfileImage(data: FormData): Promise<User> {
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('No token found');
