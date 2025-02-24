@@ -84,6 +84,7 @@ color: ${({ variant }) => {
   }
 
   &:focus {
+    box-shadow: 0 0 0 2px var(--color-gray-8);
     outline: none;
   }
 

@@ -53,7 +53,7 @@ const Select = styled.select`
   transition: border-color 0.2s;
 
   &:focus {
-    border-color: var(--color-primary-dark);
+    box-shadow: 0 0 0 2px var(--color-primary);
   }
 `;
 

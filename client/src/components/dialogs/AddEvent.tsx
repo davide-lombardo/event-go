@@ -110,7 +110,7 @@ const Input = styled.input`
   min-width: 100%;
 
   &:focus {
-    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary);
   }
 `;
 
@@ -124,7 +124,7 @@ const CategorySelect = styled.select`
   min-width: 100%;
 
   &:focus {
-    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary);
   }
 `;
 
@@ -173,7 +173,7 @@ const TextArea = styled.textarea`
   transition: border-color 0.2s;
 
   &:focus {
-    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary);
   }
 `;
 
