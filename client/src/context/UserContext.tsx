@@ -41,8 +41,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (token) {
         try {
           const response = await userService.getUserProfile(token);
-          setUser(response.data);
-          setRole(response.data.role);
+          setUser(response);
+          setRole(response.role);
         } catch (error) {
           console.error('Error fetching user profile:', error);
           localStorage.removeItem('token'); // Clear invalid token

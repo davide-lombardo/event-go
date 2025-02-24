@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '../components/Button';
 import { useUserService } from '../services/user.service';
 import { formatDateCustom } from '../utils/date.utils';
-import { EventData } from '../types/event.model';
+import { User } from '../types/user.model';
 
 const UserProfileContainer = styled.div`
   display: flex;
@@ -152,10 +152,7 @@ const Input = styled.input`
   }
 `;
 
-interface UserProfileData {
-  username: string;
-  events: EventData[];
-}
+
 
 const UserProfile = () => {
   const userService = useUserService();
@@ -164,7 +161,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(false);
   const [userImage, setUserImage] = useState<string>(UserIconImage);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [userData, setUserData] = useState<UserProfileData>({
+  const [userData, setUserData] = useState<Pick<User, 'username' | 'events'>>({
     username: '',
     events: [],
   });
@@ -203,7 +200,11 @@ const UserProfile = () => {
         const formData = new FormData();
         formData.append('profileImage', selectedFile);
         const response = await userService.uploadProfileImage(formData);
-        imageUrl = response.imageUrl;
+        if (response.photoURL) {
+          imageUrl = response.photoURL;
+        } else {
+          console.error('Error uploading profile image:', response);
+        }
       }
 
       const updatedUser = await userService.updateProfile({

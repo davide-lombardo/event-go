@@ -30,7 +30,7 @@ const NavbarWrapper = styled.nav`
 `;
 
 const Logo = styled.div`
-  font-size: var(--30px);
+  font-size: var(--25px);
   font-weight: bold;
   background-image: var(--gradient-primary);
   background-size: 100%;
@@ -247,8 +247,13 @@ const Nav = () => {
               await userService.signUp(username, email, password);
               userData = await userService.getUserProfile(localStorage.getItem('token'));
             }
-            setUser(userData.data);
-            handleCloseAuthModal();
+
+            if (userData) {
+              setUser(userData);
+              handleCloseAuthModal();
+            } else {
+              console.error('User data not found.');
+            }
           } catch (error) {
             console.error('Authentication error:', error);
           }
