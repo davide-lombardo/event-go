@@ -1,14 +1,14 @@
 import * as React from 'react';
-
 import styled from 'styled-components';
 import Card from '../components/Card';
 import FilterSection from '../components/FiltersSection';
 import { Hero } from '../components/Hero';
 import { useEventContext } from '../context/EventContext';
-import Spinner from '../components/shared/Spinner';
+// import Spinner from '../components/shared/Spinner';
 import { EventFilters } from '../types/event.model';
 import Pagination from '../components/Pagination';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Skeleton from '../components/Skeleton';
 
 const EventListWrapper = styled.div`
   display: grid;
@@ -38,6 +38,7 @@ const NoEventsMessage = styled.div`
   text-align: center;
   margin-top: var(--50px);
 `;
+
 function Home() {
   const { events, loading, fetchEvents, pagination } = useEventContext();
   const [userLocation, setUserLocation] = useState<string>('');
@@ -145,9 +146,9 @@ function Home() {
         </h2>
       )}
 
-      <EventListWrapper className={isEmptyState ? 'empty-state' : ''}>
+      <EventListWrapper className={!loading && isEmptyState ? 'empty-state' : ''}>
         {loading ? (
-          <Spinner $size="15px" $gradient="var(--gradient-primary)" />
+          <Skeleton />
         ) : eventsToDisplay.length > 0 ? (
           eventsToDisplay.map(event => (
             <Card
