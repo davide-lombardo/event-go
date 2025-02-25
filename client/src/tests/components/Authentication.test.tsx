@@ -2,7 +2,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AuthModal from '../../components/dialogs/Authentication';
 
 
-// Mock the Button and Input components
 vi.mock('../../components/shared/Button.tsx', () => ({
   default: ({ children, ...props }: any) => (
     <button {...props}>{children}</button>
@@ -21,31 +20,31 @@ describe('AuthModal Component', () => {
     vi.clearAllMocks();
   });
 
-  // it('renders the modal when isOpen is true', () => {
-  //   render(
-  //     <AuthModal
-  //       isOpen={true}
-  //       onClose={mockOnClose}
-  //       onAuth={mockOnAuth}
-  //     />
-  //   );
+  it('renders the modal when isOpen is true', () => {
+    render(
+      <AuthModal
+        isOpen={true}
+        onClose={mockOnClose}
+        onAuth={mockOnAuth}
+      />
+    );
+  
+    expect(screen.getByRole('heading', { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
+  });
 
-  //   expect(screen.getByText(/sign in/i)).toBeInTheDocument();
-  //   expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
-  //   expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
-  // });
-
-  // it('does not render the modal when isOpen is false', () => {
-  //   render(
-  //     <AuthModal
-  //       isOpen={false}
-  //       onClose={mockOnClose}
-  //       onAuth={mockOnAuth}
-  //     />
-  //   );
-
-  //   expect(screen.queryByText(/sign in/i)).not.toBeInTheDocument();
-  // });
+  it('does not render the modal when isOpen is false', () => {
+    render(
+      <AuthModal
+        isOpen={false}
+        onClose={mockOnClose}
+        onAuth={mockOnAuth}
+      />
+    );
+  
+    expect(screen.queryByRole('heading', { name: /sign in/i })).not.toBeInTheDocument();
+  });
 
   // it('switches between signin and signup modes', () => {
   //   render(
@@ -55,21 +54,25 @@ describe('AuthModal Component', () => {
   //       onAuth={mockOnAuth}
   //     />
   //   );
-
-  //   // Initially in signin mode
-  //   expect(screen.getByText(/sign in/i)).toBeInTheDocument();
-
+  
+  //   // Initially, it should be in signin mode
+  //   expect(screen.queryByRole('heading', { name: /sign in/i })).toBeInTheDocument();
+  
   //   // Switch to signup mode
   //   const switchToSignUp = screen.getByText(/don't have an account/i);
   //   fireEvent.click(switchToSignUp);
-
+  
+  //   // After switching, it should be in signup mode
   //   expect(screen.getByText(/sign up/i)).toBeInTheDocument();
+  
+  //   // Check if the username input field is rendered
   //   expect(screen.getByPlaceholderText(/username/i)).toBeInTheDocument();
-
+  
   //   // Switch back to signin mode
   //   const switchToSignIn = screen.getByText(/already have an account/i);
   //   fireEvent.click(switchToSignIn);
-
+  
+  //   // After switching back, it should be in signin mode
   //   expect(screen.getByText(/sign in/i)).toBeInTheDocument();
   // });
 
@@ -171,8 +174,8 @@ describe('AuthModal Component', () => {
   //   fireEvent.click(submitButton);
   
   //   await waitFor(() => {
-  //     expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
-  //     expect(screen.getByText(/password must be at least 6 characters/i)).toBeInTheDocument();
+  //     expect(screen.getByText(/please enter a valid email address./i)).toBeInTheDocument();
+  //     expect(screen.getByText(/password must be at least 6 characters./i)).toBeInTheDocument();
   //   });
   // });
 

@@ -2,12 +2,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import FilterSection from '../../components/FiltersSection';
 import { EventCategory } from '../../types/event.model';
 
-// Mock the AutocompleteInput component
 vi.mock('../../components/AutocompleteInput', () => ({
   default: ({ onLocationChange, initialValue, placeholder }: any) => (
     <input
       data-testid="location-input"
-      id="location" // Add ID to match the label's 'for' attribute
+      id="location"
       value={initialValue || ''}
       onChange={(e) => onLocationChange(e.target.value, 40.7128, -74.0060)}
       placeholder={placeholder}
@@ -23,31 +22,27 @@ describe('FilterSection Component', () => {
     vi.clearAllMocks();
   });
 
-  // it('renders with all filter elements', () => {
-  //   render(
-  //     <FilterSection 
-  //       onFilterChange={mockOnFilterChange} 
-  //       initialLocation={initialLocation} 
-  //     />
-  //   );
+  it('renders with all filter elements', () => {
+    render(
+      <FilterSection
+        onFilterChange={mockOnFilterChange}
+        initialLocation={initialLocation}
+      />
+    );
+  
+    expect(screen.getByText(/location/i)).toBeInTheDocument();
+    expect(screen.getByTestId('location-input')).toBeInTheDocument();
+  
+    expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+  
+    expect(screen.getByRole('button', { name: /apply/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /clear/i })).toBeInTheDocument();
 
-  //   // Check for location label
-  //   expect(screen.getByText(/location/i)).toBeInTheDocument();
-  //   expect(screen.getByTestId('location-input')).toBeInTheDocument();
-    
-  //   // Check for date label and select
-  //   expect(screen.getByText(/date/i)).toBeInTheDocument();
-  //   expect(screen.getByRole('combobox')).toBeInTheDocument();
-    
-  //   // Check for buttons
-  //   expect(screen.getByRole('button', { name: /apply/i })).toBeInTheDocument();
-  //   expect(screen.getByRole('button', { name: /clear/i })).toBeInTheDocument();
-    
-  //   // Check for all category buttons
-  //   Object.values(EventCategory).forEach(category => {
-  //     expect(screen.getByText(category)).toBeInTheDocument();
-  //   });
-  // });
+    Object.values(EventCategory).forEach(category => {
+      expect(screen.getByText(category)).toBeInTheDocument();
+    });
+  });
 
   it('sets initial location from props ', () => {
     render(
@@ -111,7 +106,6 @@ describe('FilterSection Component', () => {
       />
     );
     
-    // Select a category
     const musicCategory = screen.getByText(EventCategory.Music);
     fireEvent.click(musicCategory);
     
@@ -131,14 +125,12 @@ describe('FilterSection Component', () => {
       />
     );
     
-    // Select two categories
     const musicCategory = screen.getByText(EventCategory.Music);
     const techCategory = screen.getByText(EventCategory.Tech);
     
     fireEvent.click(musicCategory);
     fireEvent.click(techCategory);
     
-    // Deselect one category
     fireEvent.click(musicCategory);
     
     const applyButton = screen.getByRole('button', { name: /apply/i });
@@ -157,14 +149,12 @@ describe('FilterSection Component', () => {
       />
     );
     
-    // Make some selections first
     const musicCategory = screen.getByText(EventCategory.Music);
     fireEvent.click(musicCategory);
     
     const dateSelect = screen.getByRole('combobox');
     fireEvent.change(dateSelect, { target: { value: 'weekend' } });
     
-    // Then clear them
     const clearButton = screen.getByRole('button', { name: /clear/i });
     fireEvent.click(clearButton);
     
@@ -183,21 +173,17 @@ describe('FilterSection Component', () => {
       />
     );
     
-    // Set location
     const locationInput = screen.getByTestId('location-input');
     fireEvent.change(locationInput, { target: { value: 'Seattle, WA' } });
     
-    // Set date
     const dateSelect = screen.getByRole('combobox');
     fireEvent.change(dateSelect, { target: { value: 'tomorrow' } });
     
-    // Select categories
     const sportsCategory = screen.getByText(EventCategory.Sports);
     const artCategory = screen.getByText(EventCategory.Art);
     fireEvent.click(sportsCategory);
     fireEvent.click(artCategory);
     
-    // Apply filters
     const applyButton = screen.getByRole('button', { name: /apply/i });
     fireEvent.click(applyButton);
     

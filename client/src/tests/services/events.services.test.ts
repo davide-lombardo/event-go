@@ -38,7 +38,7 @@ describe('EventsService', () => {
   //           userImage: 'http://user1.image',
   //           userName: 'User 1',
   //           eventDate: '2023-10-01T10:00:00Z',
-  //           category: EventCategory.Music,
+  //           category: 'Music',
   //         },
   //         {
   //           id: '2',
@@ -52,7 +52,7 @@ describe('EventsService', () => {
   //           userImage: 'http://user2.image',
   //           userName: 'User 2',
   //           eventDate: '2023-10-01T14:00:00Z',
-  //           category: EventCategory.Music,
+  //           category: 'Music',
   //         },
   //       ],
   //       pagination: {
@@ -64,16 +64,18 @@ describe('EventsService', () => {
   //     },
   //   };
 
-  //   moxios.stubRequest(`${eventsService['apiUrl']}/api/events`, {
+  //   moxios.stubRequest(`${eventsService.apiUrl}/api/events`, {
   //     status: 200,
   //     response: mockResponse,
   //   });
+
 
   //   const result = await eventsService.getEvents(filters, page, pageSize);
 
   //   expect(result.events).toHaveLength(2);
   //   expect(result.pagination.total).toBe(2);
-  // }, 20000);
+  // });
+
 
   // it('should add an event', async () => {
   //   const eventData: EventData = {
