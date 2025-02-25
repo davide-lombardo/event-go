@@ -4,18 +4,17 @@ import Card from '../components/Card';
 import FilterSection from '../components/FiltersSection';
 import { Hero } from '../components/Hero';
 import { useEventContext } from '../context/EventContext';
-// import Spinner from '../components/shared/Spinner';
 import { EventFilters } from '../types/event.model';
 import Pagination from '../components/Pagination';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Skeleton from '../components/Skeleton';
 
-const EventListWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+const EventListWrapper = styled.div<{ $isListView: boolean }>`
+  display: ${props => (props.$isListView ? 'flex' : 'grid')};
+  flex-direction: ${props => (props.$isListView ? 'column' : 'unset')};
+  grid-template-columns: ${props =>
+    props.$isListView ? '1fr' : 'repeat(2, 1fr)'};
   justify-items: center;
-  gap: var(--20px);
-  padding: var(--20px);
   width: 100%;
   margin-top: 3rem;
 
@@ -38,10 +37,68 @@ const NoEventsMessage = styled.div`
   text-align: center;
   margin-top: var(--50px);
 `;
+const SwitchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin: 1rem 1rem 0 0;
+  user-select: none;
+`;
+
+const SwitchLabels = styled.div`
+  display: flex;
+  position: relative;
+  background-color: var(--color-gray-2);
+  border-radius: 30px;
+  height: 36px;
+  width: 200px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+`;
+
+const SwitchLabel = styled.label<{ $active: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: ${props => (props.$active ? '600' : '400')};
+  color: ${props =>
+    props.$active ? 'var(--color-white)' : 'var(--color-gray-10)'};
+  transition: color 0.3s ease;
+  z-index: 1;
+`;
+
+const Slider = styled.div<{ $isListView: boolean }>`
+  position: absolute;
+  height: 36px;
+  width: 50%;
+  border-radius: 30px;
+  background-color: var(--color-primary, #3b82f6);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  transform: translateX(${props => (props.$isListView ? '0' : '100%')});
+`;
+
+const HiddenRadio = styled.input`
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+`;
+
+const ViewIcon = styled.span`
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+`;
 
 function Home() {
   const { events, loading, fetchEvents, pagination } = useEventContext();
   const [userLocation, setUserLocation] = useState<string>('');
+  const [isListView, setIsListView] = useState(false);
 
   const handleFilterChange = useCallback(
     (newFilters: EventFilters) => {
@@ -117,6 +174,10 @@ function Home() {
     fetchUserLocationAndEvents();
   }, []);
 
+  const toggleView = () => {
+    setIsListView(prev => !prev);
+  };
+
   const eventsToDisplay = useMemo(
     () => (events.length > 0 ? events : []),
     [events]
@@ -135,18 +196,49 @@ function Home() {
       />
 
       {eventsToDisplay.length > 0 && (
-        <h2
-          style={{
-            textAlign: 'center',
-            marginTop: '5rem',
-            color: 'var(--color-gray-8)',
-          }}
-        >
-          Available Events
-        </h2>
+        <>
+          <h2
+            style={{
+              textAlign: 'center',
+              marginTop: '5rem',
+              color: 'var(--color-gray-8)',
+              flexGrow: 1,
+            }}
+          >
+            Available Events
+          </h2>
+          <SwitchContainer>
+            <SwitchLabels>
+              <Slider $isListView={isListView} />
+
+              <SwitchLabel $active={isListView}>
+                <HiddenRadio
+                  type="radio"
+                  name="viewMode"
+                  checked={isListView}
+                  onChange={() => toggleView()}
+                />
+                <ViewIcon>≡</ViewIcon> List View
+              </SwitchLabel>
+
+              <SwitchLabel $active={!isListView}>
+                <HiddenRadio
+                  type="radio"
+                  name="viewMode"
+                  checked={!isListView}
+                  onChange={() => toggleView()}
+                />
+                <ViewIcon>⊞</ViewIcon> Grid View
+              </SwitchLabel>
+            </SwitchLabels>
+          </SwitchContainer>
+        </>
       )}
 
-      <EventListWrapper className={!loading && isEmptyState ? 'empty-state' : ''}>
+      <EventListWrapper
+        className={!loading && isEmptyState ? 'empty-state' : ''}
+        $isListView={isListView}
+      >
         {loading ? (
           <Skeleton />
         ) : eventsToDisplay.length > 0 ? (
@@ -165,6 +257,7 @@ function Home() {
               latitude={event.latitude}
               longitude={event.longitude}
               category={event.category}
+              isListView={isListView}
             />
           ))
         ) : (

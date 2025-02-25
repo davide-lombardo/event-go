@@ -24,6 +24,7 @@ interface CardProps {
   category: string;
   latitude: number;
   longitude: number;
+  isListView?: boolean;
 }
 
 const useEllipsisTooltip = (ref: React.RefObject<HTMLParagraphElement>) => {
@@ -38,15 +39,19 @@ const useEllipsisTooltip = (ref: React.RefObject<HTMLParagraphElement>) => {
   return isEllipsed;
 };
 
-const CardContainer = styled.div`
+const CardContainer = styled.div<{ $isListView: boolean }>`
   position: relative;
   border-radius: var(--border-radius);
   overflow: hidden;
-  width: 100%;
-  max-width: 25rem;
+  width: ${props => (props.$isListView ? 'auto' : '25rem')};
+  max-width: 100%;
   margin: var(--20px);
   transition: transform 0.3s ease;
   box-shadow: var(--shadow-elevation-medium);
+  display: ${props => (props.$isListView ? 'flex' : 'block')};
+  flex-direction: ${props => (props.$isListView ? 'row' : 'column')};
+  align-items: ${props => (props.$isListView ? 'center' : 'flex-start')};
+  justify-content: ${props => (props.$isListView ? 'space-between' : 'unset')};
 
   // Gradient Border
   &::before {
@@ -72,6 +77,9 @@ const CardContainer = styled.div`
     border-radius: calc(
       var(--border-radius) - 5px
     );
+    display: ${props => (props.$isListView ? 'flex' : 'block')};
+    flex-direction: ${props => (props.$isListView ? 'column' : 'row')};
+    align-items: ${props => (props.$isListView ? 'flex-start' : 'center')};
   }
 
   &:hover {
@@ -79,11 +87,12 @@ const CardContainer = styled.div`
   }
 `;
 
-const TitleSection = styled.div`
+const TitleSection = styled.div<{ $isListView: boolean }>`
   display: flex;
   align-items: baseline;
   padding: var(--20px);
   gap: var(--10px);
+  width: ${props => (props.$isListView ? '50%' : '100%')};
 `;
 
 const Title = styled.span`
@@ -148,15 +157,15 @@ const CategoryTag = styled.span`
   margin-left: var(--10px);
 `;
 
-const Description = styled.p`
+const Description = styled.p<{ $isListView: boolean }>`
   padding: var(--20px);
   font-size: var(--font-size-small);
   line-height: 1.5;
-  max-height: 4.5em;
+  max-height: ${props => (props.$isListView ? 'auto' : '4.5em')};
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: ${props => (props.$isListView ? 'none' : '3')};
   -webkit-box-orient: vertical;
 `;
 
@@ -165,6 +174,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  flex-direction: column;
 `;
 
 const UserImage = styled.img`
@@ -215,8 +225,9 @@ const Location = styled.span`
   max-width: 200px;
 `;
 
-const AdminActions = styled.div`
+const AdminActions = styled.div<{ $isListView: boolean }>`
   display: flex;
+  flex-direction: ${props => (props.$isListView ? 'row' : 'unset')};
   justify-content: flex-end;
   gap: 10px;
   padding: var(--10px) var(--20px);
@@ -249,10 +260,10 @@ const Card: React.FC<CardProps> = React.memo(
     latitude,
     longitude,
     category,
+    isListView = false,
   }) => {
     const { deleteEvent } = useEventContext();
     const { user, role } = useUserContext();
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalEventData, setModalEventData] = useState<EventData | null>(
       null
@@ -319,8 +330,8 @@ const Card: React.FC<CardProps> = React.memo(
 
     return (
       <>
-        <CardContainer>
-          <TitleSection>
+        <CardContainer $isListView={isListView}>
+          <TitleSection $isListView={isListView}>
             <Title ref={titleRef} title={title}>
               {title}
             </Title>
@@ -338,42 +349,49 @@ const Card: React.FC<CardProps> = React.memo(
             </Label>
             <CategoryTag>{category}</CategoryTag>
           </LabelContainer>
+          {
+            !isListView && (
+              <Description
+              ref={descriptionRef}
+              title={isEllipsed ? description : ''}
+              $isListView={isListView}
+            >
+              {description}
+            </Description>
+            )
+          }
+           {
+            !isListView && (
+              <Footer>
+                <UserInfo>
+                  <UserImage
+                    src={userImage ? userImage : UserIconImage}
+                    onError={e => (e.currentTarget.src = UserIconImage)}
+                    alt="User Avatar"
+                  />
+                  <UserName title={userName}>@{userName}</UserName>
+                </UserInfo>
 
-          <Description
-            ref={descriptionRef}
-            title={isEllipsed ? description : ''}
-          >
-            {description}
-          </Description>
-
-          <Footer>
-            <UserInfo>
-              <UserImage
-                src={userImage ? userImage : UserIconImage}
-                onError={e => (e.currentTarget.src = UserIconImage)}
-                alt="User Avatar"
-              />
-              <UserName title={userName}>@{userName}</UserName>
-            </UserInfo>
-
-            <EventInfo>
-              <EventDate>{formatDateCustom(eventDate)}</EventDate>
-              <LocationContainer>
-                <img
-                  src={MapPinIconImage}
-                  alt=""
-                  width={14}
-                  height={14}
-                />
-                <Location ref={locationRef} title={location}>
-                  {location}
-                </Location>
-              </LocationContainer>
-            </EventInfo>
-          </Footer>
+                <EventInfo>
+                  <EventDate>{formatDateCustom(eventDate)}</EventDate>
+                  <LocationContainer>
+                    <img
+                      src={MapPinIconImage}
+                      alt=""
+                      width={14}
+                      height={14}
+                    />
+                    <Location ref={locationRef} title={location}>
+                      {location}
+                    </Location>
+                  </LocationContainer>
+                </EventInfo>
+              </Footer>
+            )
+           }
 
           {(role === 'admin' || isEventCreator) && (
-            <AdminActions>
+            <AdminActions $isListView={isListView}>
               <ActionButton onClick={handleEdit}>Edit</ActionButton>
               <ActionButton onClick={handleDelete}>Delete</ActionButton>
             </AdminActions>
