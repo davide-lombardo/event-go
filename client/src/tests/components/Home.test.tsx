@@ -81,7 +81,7 @@ describe('Home Component', () => {
     
     render(<Home />);
     // Find by class name instead of test ID since we can see the spinner class in the DOM
-    const spinnerElement = document.querySelector('.sc-gQkENW');
+    const spinnerElement = document.querySelector('#spinner');
     expect(spinnerElement).toBeInTheDocument();
   });
   

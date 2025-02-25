@@ -39,7 +39,7 @@ const DotsSpinner = styled.div<SpinnerProps>`
 `;
 
 const Spinner: React.FC<SpinnerProps> = ({ $size = '12px', $gradient }) => (
-  <DotsSpinner $size={$size} $gradient={$gradient}>
+  <DotsSpinner $size={$size} $gradient={$gradient} id='spinner'>
     <div />
     <div />
     <div />
