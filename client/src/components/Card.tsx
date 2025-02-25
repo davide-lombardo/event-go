@@ -48,7 +48,7 @@ const CardContainer = styled.div`
   transition: transform 0.3s ease;
   box-shadow: var(--shadow-elevation-medium);
 
-  // Gradient Border using ::before pseudo-element
+  // Gradient Border
   &::before {
     content: '';
     position: absolute;
@@ -66,12 +66,12 @@ const CardContainer = styled.div`
     mask-composite: exclude;
   }
 
-  // Inner container to hold actual content, avoiding the gradient overlap
+  // Inner container to hold actual content
   > * {
     position: relative;
     border-radius: calc(
       var(--border-radius) - 5px
-    ); // Match pseudo-element padding
+    );
   }
 
   &:hover {

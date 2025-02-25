@@ -9,7 +9,6 @@ const LayoutWrapper = styled.div`
   margin-inline: auto;
 `;
 
-
 interface LayoutProps {
   children: ReactNode; 
 }

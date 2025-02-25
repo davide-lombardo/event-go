@@ -13,8 +13,8 @@ interface AutocompleteInputProps {
 const Input = styled.input`
   padding: 0.8rem;
   font-size: 1rem;
-  border: 1px solid black;
-  border-radius: 6px;
+  border: 1px solid var(--color-gray-10);
+  border-radius: var(--border-radius-sm);
   outline: none;
   transition: border-color 0.2s;
   min-width: 100%;

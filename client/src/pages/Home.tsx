@@ -14,18 +14,17 @@ const EventListWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   justify-items: center;
-  gap: 20px;
-  padding: 20px;
+  gap: var(--20px);
+  padding: var(--20px);
   width: 100%;
   margin-top: 3rem;
 
-  /* Center the content when no events or loading */
   &.empty-state {
     display: flex;
     align-items: center;
     justify-content: center;
-    grid-template-columns: 1fr; /* Single column for empty state */
-    height: auto; /* Auto height when no events */
+    grid-template-columns: 1fr;
+    height: auto;
   }
 
   @media (max-width: 700px) {
@@ -35,9 +34,9 @@ const EventListWrapper = styled.div`
 
 const NoEventsMessage = styled.div`
   font-size: 1.2rem;
-  color: #555;
+  color: var(--color-gray-7);
   text-align: center;
-  margin-top: 50px;
+  margin-top: var(--50px);
 `;
 function Home() {
   const { events, loading, fetchEvents, pagination } = useEventContext();

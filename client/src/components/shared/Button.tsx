@@ -107,7 +107,7 @@ const Tooltip = styled.div`
   padding: var(--8px);
   position: absolute;
   z-index: 1;
-  bottom: 125%; /* Position above the button */
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
@@ -117,7 +117,7 @@ const Tooltip = styled.div`
   &::after {
     content: '';
     position: absolute;
-    top: 100%; /* Arrow pointing down */
+    top: 100%;
     left: 50%;
     margin-left: -5px;
     border-width: 5px;

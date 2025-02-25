@@ -19,9 +19,8 @@ const BaseContentContainer = styled.div`
   position: relative;
   z-index: 2;
 
-    @media (max-width: 768px) {
-      padding: 6rem var(--20px) 0 var(--20px);
-
+  @media (max-width: 768px) {
+    padding: 6rem var(--20px) 0 var(--20px);
   }
 `;
 
@@ -69,7 +68,8 @@ const MainContent = styled.div`
     margin-top: var(--10px);
     color: var(--color-gray-7);
     margin-bottom: 2rem;
-    @media (max-width: var(--breakpoint-medium)) {
+
+    @media (max-width: 900px) {
       margin-bottom: 0;
     }
   }
