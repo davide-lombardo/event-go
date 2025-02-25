@@ -2,11 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { EventCategory, EventData } from '../../types/event.model';
 import toast from 'react-hot-toast';
-import Button from '../Button';
+import Button from '../shared/Button';
 import { useEventContext } from '../../context/EventContext';
 import AutocompleteInput from '../AutocompleteInput';
 import { useUserContext } from '../../context/UserContext';
 import { formatDate } from '../../utils/date.utils';
+import Input from '../shared/Input';
+import Select from '../shared/Select';
 
 interface EventModalProps {
   isOpen: boolean;
@@ -21,28 +23,27 @@ interface ModalOverlayProps {
 
 const ModalOverlay = styled.div<ModalOverlayProps>`
   display: ${({ $isOpen }) => ($isOpen ? 'flex' : 'none')};
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  align-items: center;
-  justify-content: center;
+  background: var(--card-background-color);
   z-index: 1000;
   transition: opacity 0.3s ease-in-out;
   overflow: hidden;
 `;
 
 const ModalContent = styled.div`
-  background: white;
+  background: var(--color-white);
   padding: 2rem;
   width: 500px;
   max-width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-  border-radius: 12px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius);
   animation: fadeIn 0.3s ease-in-out;
   box-sizing: border-box;
 
@@ -73,7 +74,7 @@ const ModalContent = styled.div`
   h2 {
     margin-bottom: 1rem;
     font-size: 1.5rem;
-    color: black;
+    color: var(--font-color-base);
   }
 `;
 
@@ -93,7 +94,7 @@ const GroupContainer = styled.div`
 const Divider = styled.hr`
   border: none;
   height: 1px;
-  background-color: #ddd;
+  background-color: var(--color-gray-4);
   margin-top: 1rem;
 `;
 
@@ -102,7 +103,7 @@ const CloseButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
-  color: black;
+  color: var(--color-gray-10);
 
   &:hover {
     color: var(--color-primary);
@@ -112,43 +113,15 @@ const CloseButton = styled.button`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 10px;
-`;
-
-const Input = styled.input`
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 1px solid black;
-  border-radius: 6px;
-  outline: none;
-  transition: border-color 0.2s;
-  min-width: 100%;
-
-  &:focus {
-    box-shadow: 0 0 0 2px var(--color-primary);
-  }
-`;
-
-const CategorySelect = styled.select`
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 1px solid black;
-  border-radius: 6px;
-  outline: none;
-  transition: border-color 0.2s;
-  min-width: 100%;
-
-  &:focus {
-    box-shadow: 0 0 0 2px var(--color-primary);
-  }
+  gap: var(--10px);
 `;
 
 const Label = styled.label<{ required?: boolean }>`
   font-size: 1rem;
-  color: black;
+  color: var(--color-gray-10);
   &::after {
     content: ${({ required }) => (required ? "' *'" : '')};
-    color: red;
+    color: var(--color-primary);
     margin-left: 4px;
   }
 `;
@@ -164,12 +137,12 @@ const RadioLabel = styled.label`
   gap: 0.5rem;
   font-size: 1rem;
   cursor: pointer;
-  color: black;
+  color: var(--color-gray-10);
 
   input[type='radio'] {
     accent-color: var(
       --color-primary
-    ); /* Add primary color or any preferred color */
+    );
     margin-right: 0.5rem;
   }
 
@@ -181,8 +154,8 @@ const RadioLabel = styled.label`
 const TextArea = styled.textarea`
   padding: 0.8rem;
   font-size: 1rem;
-  border: 1px solid black;
-  border-radius: 6px;
+  border: 1px solid var(--color-gray-10);
+  border-radius: var(--border-radius-sm);
   resize: none;
   outline: none;
   transition: border-color 0.2s;
@@ -193,7 +166,7 @@ const TextArea = styled.textarea`
 `;
 
 const ErrorText = styled.span`
-  color: red;
+  color: var(--color-danger);
   font-size: 0.875rem;
   margin-top: -8px;
 `;
@@ -426,7 +399,7 @@ const EventModal: React.FC<EventModalProps> = ({
             <Label htmlFor="category" required>
               Category
             </Label>
-            <CategorySelect
+            <Select
               name="category"
               value={eventData.category}
               onChange={handleCategoryChange}
@@ -436,7 +409,7 @@ const EventModal: React.FC<EventModalProps> = ({
                   {category}
                 </option>
               ))}
-            </CategorySelect>
+            </Select>
 
             <Label htmlFor="description">Description</Label>
             <TextArea

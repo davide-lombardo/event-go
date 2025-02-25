@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Button from '../Button';
+import Button from '../shared/Button';
 import EyeIcon from '/src/assets/eye.svg';
 import EyeOffIcon from '/src/assets/eye-off.svg';
+import Input from '../shared/Input';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -27,19 +28,18 @@ const ModalOverlay = styled.div<ModalOverlayProps>`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--card-background-color);
   align-items: center;
   justify-content: center;
   z-index: 1000;
 `;
 
 const ModalContent = styled.div`
-  background: white;
+  background: var(--background-color);
   padding: 2rem;
   width: 400px;
   max-width: 90%;
-  border-radius: 12px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius);
   animation: fadeIn 0.3s ease-in-out;
 
   @keyframes fadeIn {
@@ -57,7 +57,7 @@ const ModalContent = styled.div`
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
     text-align: center;
-    color: black;
+    color: var(--font-color-base);
   }
 `;
 
@@ -71,20 +71,6 @@ const InputWrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-`;
-
-const Input = styled.input`
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 1px solid black;
-  border-radius: 6px;
-  outline: none;
-  transition: border-color 0.2s;
-  width: 100%;
-
-  &:focus {
-    box-shadow: 0 0 0 2px var(--color-primary);
-  }
 `;
 
 const Label = styled.label`
@@ -111,7 +97,7 @@ const CloseButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
-  color: black;
+  color: var(--color-gray-10);
   position: absolute;
   top: 0;
   right: 0;
@@ -122,7 +108,7 @@ const CloseButton = styled.button`
 `;
 
 const ErrorText = styled.span`
-  color: red;
+  color: var(--color-danger);
   font-size: 0.875rem;
   margin-top: -8px;
 `;
@@ -132,7 +118,7 @@ const TogglePasswordIcon = styled.span`
   right: 10px;
   cursor: pointer;
   font-size: 1.2rem;
-  color: black;
+  color: var(--color-gray-10);
 `;
 
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
@@ -251,7 +237,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
             <p>
               Don't have an account?{' '}
               <span
-                style={{ color: 'red', cursor: 'pointer' }}
+                style={{ color: 'var(--color-primary)', cursor: 'pointer' }}
                 onClick={() => setMode('signup')}
               >
                 Sign Up
@@ -261,7 +247,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
             <p>
               Already have an account?{' '}
               <span
-                style={{ color: 'red', cursor: 'pointer' }}
+                style={{ color: 'var(--color-primary)', cursor: 'pointer' }}
                 onClick={() => setMode('signin')}
               >
                 Sign In

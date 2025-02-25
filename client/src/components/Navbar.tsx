@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Button from './Button';
+import Button from './shared/Button';
 import { useEffect, useRef, useState } from 'react';
 import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';

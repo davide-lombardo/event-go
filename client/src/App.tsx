@@ -57,8 +57,6 @@ const GlobalStyle = createGlobalStyle`
   --color-category-link: #dd4eb2;
   --color-highlight: var(--color-yellow);
 
-
-
   --gradient-primary: linear-gradient(
     45deg,
     hsl(347deg 99% 63%) 0%,
@@ -80,10 +78,12 @@ const GlobalStyle = createGlobalStyle`
   --border-color: var(--color-blue-light);
   --border-color-hover: var(--color-primary-dark);
   --border-radius: 12px;
+  --border-radius-sm: 6px;
 
   /* Background colors */
   --background-color: var(--color-white);
-  --card-background-color: var(--color-grey-7);
+  --card-background-color: rgba(0, 0, 0, 0.5);
+
 
   /* Links and Misc */
   --color-link: var(--color-green-light);
@@ -118,7 +118,7 @@ const GlobalStyle = createGlobalStyle`
   /* FONTS */
 
   /* Font colors */
-  --font-color-base: var(--color-gray-1);
+  --font-color-base: var(--color-gray-10);
   --font-color-muted: var(--color-gray-5);
   --font-color-heading: var(--color-blue-very-light);
   --font-color-bright: var(--color-gray-1);
@@ -130,8 +130,6 @@ const GlobalStyle = createGlobalStyle`
   --button-font-color: var(--color-primary);
 
   /* SIZES */
-  --border-radius: 12px;
-  --border-radius-small: 8px;
 
   --spacing-small: 8px;
   --spacing-medium: 12px;

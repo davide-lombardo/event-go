@@ -3,7 +3,7 @@ import UserIconImage from '/src/assets/user.svg';
 
 import { useUserContext } from '../context/UserContext';
 import { useEffect, useRef, useState } from 'react';
-import Button from '../components/Button';
+import Button from '../components/shared/Button';
 import { useUserService } from '../services/user.service';
 import { formatDateCustom } from '../utils/date.utils';
 import { User } from '../types/user.model';

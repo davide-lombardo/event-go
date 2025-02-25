@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../Button';
+import Button from '../shared/Button';
 
 interface ConfirmDeleteProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--card-background-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,8 +23,8 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background: white;
-  padding: 20px;
+  background: var(--color-white);
+  padding: var(--20px);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-elevation-medium);
   max-width: 400px;

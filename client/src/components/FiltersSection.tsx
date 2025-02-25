@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { EventCategory, EventFilters } from '../types/event.model';
 import AutocompleteInput from './AutocompleteInput';
-import Button from './Button';
+import Button from './shared/Button';
+import Select from './shared/Select';
 
 interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
@@ -42,19 +43,6 @@ const InputGroup = styled.div`
 const Label = styled.label`
   font-size: 0.9rem;
   font-weight: bold;
-`;
-
-const Select = styled.select`
-  padding: 0.95rem;
-  font-size: 1rem;
-  border: 1px solid black;
-  border-radius: 6px;
-  outline: none;
-  transition: border-color 0.2s;
-
-  &:focus {
-    box-shadow: 0 0 0 2px var(--color-primary);
-  }
 `;
 
 const CategoriesWrapper = styled.div`
