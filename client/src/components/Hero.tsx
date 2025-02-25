@@ -27,7 +27,6 @@ const BaseContentContainer = styled.div`
 const SplitHeroWrapper = styled(BaseHeroContainer)`
   display: flex;
   align-items: center;
-  min-height: 90vh;
 
   @media (max-width: 768px) {
     min-height: 0;

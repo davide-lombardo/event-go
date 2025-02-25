@@ -4,7 +4,6 @@ import axios from 'axios';
 export default class EventsService {
   private apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-
   public async getEvents(
     filters: EventFilters, 
     page: number = 1, 

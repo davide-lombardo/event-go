@@ -128,10 +128,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  
 
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setLoading(false);
+
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         onClose();
@@ -227,7 +231,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
           </InputWrapper>
           {error && <ErrorText>{error}</ErrorText>}
           <ButtonRow>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={loading}>
               {mode === 'signin' ? 'Sign In' : 'Sign Up'}
             </Button>
           </ButtonRow>

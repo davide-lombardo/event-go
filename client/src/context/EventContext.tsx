@@ -2,7 +2,6 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
   useMemo,
   ReactNode,
   useCallback,
@@ -102,10 +101,6 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
       console.error('Error deleting event:', error);
     }
   };
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
 
   const contextValue = useMemo(() => ({
     events,

@@ -44,7 +44,6 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
   border-radius: var(--border-radius);
   overflow: hidden;
   width: ${props => (props.$isListView ? 'auto' : '25rem')};
-  max-width: 100%;
   margin: var(--20px);
   transition: transform 0.3s ease;
   box-shadow: var(--shadow-elevation-medium);
@@ -52,6 +51,12 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
   flex-direction: ${props => (props.$isListView ? 'row' : 'column')};
   align-items: ${props => (props.$isListView ? 'center' : 'flex-start')};
   justify-content: ${props => (props.$isListView ? 'space-between' : 'unset')};
+
+  @media (max-width: 700px) {
+    width: auto;
+    min-width: 20rem;
+    max-width: 25rem;
+  }
 
   // Gradient Border
   &::before {
@@ -74,9 +79,7 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
   // Inner container to hold actual content
   > * {
     position: relative;
-    border-radius: calc(
-      var(--border-radius) - 5px
-    );
+    border-radius: calc(var(--border-radius) - 5px);
     display: ${props => (props.$isListView ? 'flex' : 'block')};
     flex-direction: ${props => (props.$isListView ? 'column' : 'row')};
     align-items: ${props => (props.$isListView ? 'flex-start' : 'center')};
@@ -90,6 +93,7 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
 const TitleSection = styled.div<{ $isListView: boolean }>`
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
   padding: var(--20px);
   gap: var(--10px);
   width: ${props => (props.$isListView ? '50%' : '100%')};
@@ -104,6 +108,7 @@ const Title = styled.span`
   text-overflow: ellipsis;
   flex-grow: 1;
   margin: 0;
+  max-width: 12rem;
 `;
 
 const LinkContainer = styled.div`
@@ -128,7 +133,8 @@ const Label = styled.span<{ $paid: boolean }>`
   align-items: center;
   font-size: var(--font-size-small);
   font-weight: bold;
-  color: ${props => (props.$paid ? 'var(--color-pink)' : 'var(--color-green-light)')};
+  color: ${props =>
+    props.$paid ? 'var(--color-pink)' : 'var(--color-green-light)'};
 `;
 
 const LabelDot = styled.span<{ $paid: boolean }>`
@@ -174,7 +180,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  flex-direction: column;
+  flex-direction: row;
 `;
 
 const UserImage = styled.img`
@@ -243,6 +249,10 @@ const ActionButton = styled.button`
 
   &:hover {
     background-color: var(--color-primary);
+  }
+
+  &:focus {
+    outline-offset: 0.3rem;
   }
 `;
 
@@ -349,46 +359,37 @@ const Card: React.FC<CardProps> = React.memo(
             </Label>
             <CategoryTag>{category}</CategoryTag>
           </LabelContainer>
-          {
-            !isListView && (
-              <Description
+          {!isListView && (
+            <Description
               ref={descriptionRef}
               title={isEllipsed ? description : ''}
               $isListView={isListView}
             >
               {description}
             </Description>
-            )
-          }
-           {
-            !isListView && (
-              <Footer>
-                <UserInfo>
-                  <UserImage
-                    src={userImage ? userImage : UserIconImage}
-                    onError={e => (e.currentTarget.src = UserIconImage)}
-                    alt="User Avatar"
-                  />
-                  <UserName title={userName}>@{userName}</UserName>
-                </UserInfo>
+          )}
+          {!isListView && (
+            <Footer>
+              <UserInfo>
+                <UserImage
+                  src={userImage ? userImage : UserIconImage}
+                  onError={e => (e.currentTarget.src = UserIconImage)}
+                  alt="User Avatar"
+                />
+                <UserName title={userName}>@{userName}</UserName>
+              </UserInfo>
 
-                <EventInfo>
-                  <EventDate>{formatDateCustom(eventDate)}</EventDate>
-                  <LocationContainer>
-                    <img
-                      src={MapPinIconImage}
-                      alt=""
-                      width={14}
-                      height={14}
-                    />
-                    <Location ref={locationRef} title={location}>
-                      {location}
-                    </Location>
-                  </LocationContainer>
-                </EventInfo>
-              </Footer>
-            )
-           }
+              <EventInfo>
+                <EventDate>{formatDateCustom(eventDate)}</EventDate>
+                <LocationContainer>
+                  <img src={MapPinIconImage} alt="" width={14} height={14} />
+                  <Location ref={locationRef} title={location}>
+                    {location}
+                  </Location>
+                </LocationContainer>
+              </EventInfo>
+            </Footer>
+          )}
 
           {(role === 'admin' || isEventCreator) && (
             <AdminActions $isListView={isListView}>

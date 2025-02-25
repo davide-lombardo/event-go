@@ -73,7 +73,7 @@ const CategoryButton = styled.button<{ $isSelected: boolean }>`
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    border-color: var(--color-gray-6);
+    transform: translateY(-5px);
   }
 `;
 
@@ -162,7 +162,7 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
 
           <InputGroup>
             <Label htmlFor="date">Date</Label>
-            <Select value={filters.date} onChange={handleDateChange}>
+            <Select id="date" value={filters.date} onChange={handleDateChange}>
               <option value="all">All Dates</option>
               <option value="today">Today</option>
               <option value="tomorrow">Tomorrow</option>

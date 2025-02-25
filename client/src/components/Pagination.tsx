@@ -44,6 +44,10 @@ const IconButton = styled.button`
   &:hover {
     transform: scale(1.1);
   }
+
+  &:focus {
+    outline-offset: 0.3rem;
+  }
 `;
 
 const Pagination: React.FC<PaginationProps> = ({ hasMore }) => {

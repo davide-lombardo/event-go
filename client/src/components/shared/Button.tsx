@@ -9,6 +9,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   tooltip?: string;
+  loading?: boolean;
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -136,7 +137,7 @@ const TooltipWrapper = styled.div`
   }
 `;
 
-StyledButton.shouldForwardProp = prop => prop !== 'variant';
+StyledButton.shouldForwardProp = prop => prop !== 'variant' && prop !== 'loading';
 
 const Button: React.FC<ButtonProps> = ({
   onClick,
@@ -144,7 +145,8 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   type = 'button',
   disabled = false,
-  tooltip
+  tooltip,
+  loading = false,
 }) => {
   return (
     
@@ -153,8 +155,8 @@ const Button: React.FC<ButtonProps> = ({
         onClick={onClick}
         variant={variant}
         type={type}
-        disabled={disabled}
-        aria-disabled={disabled}
+        disabled={disabled || (type === 'submit' && loading)}
+        aria-disabled={disabled || (type === 'submit' && loading)}
       >
         {children}
       </StyledButton>

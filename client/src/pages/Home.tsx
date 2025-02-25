@@ -43,6 +43,11 @@ const SwitchContainer = styled.div`
   justify-content: end;
   margin: 1rem 1rem 0 0;
   user-select: none;
+
+  @media (max-width: 700px) {
+    justify-content: center;
+    margin-right: 0;
+  }
 `;
 
 const SwitchLabels = styled.div`
@@ -168,6 +173,7 @@ function Home() {
         await fetchEventsNearUser(latitude, longitude);
       } catch (error) {
         console.error('Error getting user location or fetching events:', error);
+        fetchEvents();
       }
     };
 
