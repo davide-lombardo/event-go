@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { EventCategory, EventData } from '../../types/event.model';
 import toast from 'react-hot-toast';
@@ -213,27 +213,6 @@ const EventModal: React.FC<EventModalProps> = ({
     link: '',
   });
 
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, onClose]);
-
   // Reset state when modal is opened with new data
   useEffect(() => {
     if (initialEventData) {
@@ -350,7 +329,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   return (
     <ModalOverlay $isOpen={isOpen}>
-      <ModalContent ref={modalRef}>
+      <ModalContent>
         <ModalHeader>
           <h2 style={{ textAlign: 'center' }}>
             {initialEventData ? 'Edit Event' : 'Add New Event'}
