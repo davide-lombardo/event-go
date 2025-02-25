@@ -59,7 +59,7 @@ const MainContent = styled.div`
     }
 
     @media (max-width: 768px) {
-      font-size: var(--40px);
+      font-size: var(--50px);
     }
   }
 
@@ -69,8 +69,8 @@ const MainContent = styled.div`
     color: var(--color-gray-7);
     margin-bottom: 2rem;
 
-    @media (max-width: 900px) {
-      margin-bottom: 0;
+    @media (max-width: 768px) {
+      margin-bottom: 3rem;
     }
   }
 `;
