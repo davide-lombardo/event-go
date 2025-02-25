@@ -4,12 +4,12 @@ import { EventCategory, EventFilters } from '../types/event.model';
 import AutocompleteInput from './AutocompleteInput';
 import Button from './shared/Button';
 import Select from './shared/Select';
+import { categoryIcons } from '../utils/category.utils';
 
 interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
   initialLocation: string;
 }
-
 
 const FilterWrapper = styled.div`
   display: flex;
@@ -66,7 +66,11 @@ const CategoryButton = styled.button<{ $isSelected: boolean }>`
   max-width: 80px;
   padding: var(--10px);
 
-  background: radial-gradient(ellipse at 50% 100px, rgba(250, 247, 244, 0.3), rgba(250, 247, 244, 1));
+  background: radial-gradient(
+    ellipse at 50% 100px,
+    rgba(250, 247, 244, 0.3),
+    rgba(250, 247, 244, 1)
+  );
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-elevation-medium);
@@ -81,20 +85,6 @@ const CategoryText = styled.span`
   font-size: 0.9rem;
   text-align: center;
 `;
-
-const CategoryIcon = styled.span`
-  font-size: 1.5rem;
-`;
-
-const categoryIcons: Record<EventCategory, string> = {
-  [EventCategory.Music]: '🎵',
-  [EventCategory.Sports]: '⚽',
-  [EventCategory.Tech]: '💻',
-  [EventCategory.Art]: '🎨',
-  [EventCategory.Education]: '📚',
-  [EventCategory.Health]: '🌿',
-  [EventCategory.Business]: '💼',
-};
 
 const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
   const [filters, setFilters] = useState<EventFilters>({
@@ -172,7 +162,7 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
         </InputsWrapper>
 
         <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
-          <Button type="submit" variant='primary' onClick={handleApply}>
+          <Button type="submit" variant="primary" onClick={handleApply}>
             Apply
           </Button>
 
@@ -189,7 +179,7 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
             $isSelected={filters.categories.includes(category)}
             onClick={() => handleCategoryToggle(category)}
           >
-            <CategoryIcon>{categoryIcons[category]}</CategoryIcon>
+            <img src={categoryIcons[category as EventCategory]} alt="" />
             <CategoryText>{category}</CategoryText>
           </CategoryButton>
         ))}

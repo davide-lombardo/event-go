@@ -5,11 +5,12 @@ import LinkIconImage from '/src/assets/external-link.svg';
 import UserIconImage from '/src/assets/user.svg';
 import MapPinIconImage from '/src/assets/map-pin.svg';
 import { useUserContext } from '../context/UserContext';
-import { EventData } from '../types/event.model';
+import { EventCategory, EventData } from '../types/event.model';
 import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';
 import ConfirmDelete from './dialogs/ConfirmDelete';
 import { formatDateCustom } from '../utils/date.utils';
+import { categoryIcons } from '../utils/category.utils';
 
 interface CardProps {
   title: string;
@@ -52,7 +53,7 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
   align-items: ${props => (props.$isListView ? 'center' : 'flex-start')};
   justify-content: ${props => (props.$isListView ? 'space-between' : 'unset')};
 
-  @media (max-width: 700px) {
+  @media (max-width: 500px) {
     width: auto;
     min-width: 20rem;
     max-width: 25rem;
@@ -161,6 +162,14 @@ const CategoryTag = styled.span`
   margin-right: var(--10px);
   border-radius: 100px;
   margin-left: var(--10px);
+  display: flex;
+  align-items: center;
+`;
+
+const CategoryIcon = styled.img`
+  height: 1em;
+  width: auto;
+  margin-right: var(--5px);
 `;
 
 const Description = styled.p<{ $isListView: boolean }>`
@@ -357,7 +366,13 @@ const Card: React.FC<CardProps> = React.memo(
               <LabelDot $paid={paid} />
               {paid ? 'Paid' : 'Free'}
             </Label>
-            <CategoryTag>{category}</CategoryTag>
+            <CategoryTag>
+            <CategoryIcon
+                src={categoryIcons[category as EventCategory]}
+                alt=""
+              />
+              {category}
+            </CategoryTag>
           </LabelContainer>
           {!isListView && (
             <Description
