@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import LinkIcon from './shared/LinkIcon';
-import LinkIconImage from '/src/assets/external-link.svg';
 import UserIconImage from '/src/assets/user.svg';
 import MapPinIconImage from '/src/assets/map-pin.svg';
 import { useUserContext } from '../context/UserContext';
@@ -110,23 +108,6 @@ const Title = styled.span`
   flex-grow: 1;
   margin: 0;
   max-width: 12rem;
-`;
-
-const LinkContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const Link = styled.a`
-  display: inline-flex;
-  gap: 2px;
-  font-size: var(--font-size-small);
-  color: var(--color-grey-7);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const Label = styled.span<{ $paid: boolean }>`
@@ -284,9 +265,7 @@ const Card: React.FC<CardProps> = React.memo(
     const { deleteEvent } = useEventContext();
     const { user, role } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalEventData, setModalEventData] = useState<EventData | null>(
-      null
-    );
+    const [modalEventData, setModalEventData] = useState<EventData | null>(null);
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
     const titleRef = useRef<HTMLSpanElement>(null);
@@ -349,70 +328,71 @@ const Card: React.FC<CardProps> = React.memo(
 
     return (
       <>
-        <CardContainer $isListView={isListView}>
-          <TitleSection $isListView={isListView}>
-            <Title ref={titleRef} title={title}>
-              {title}
-            </Title>
-            <LinkContainer>
-              <Link href={link} target="_blank">
-                view event
-                <LinkIcon src={LinkIconImage} alt="" />
-              </Link>
-            </LinkContainer>
-          </TitleSection>
-          <LabelContainer>
-            <Label $paid={paid}>
-              <LabelDot $paid={paid} />
-              {paid ? 'Paid' : 'Free'}
-            </Label>
-            <CategoryTag $category={category as EventCategory}>
-              <CategoryIcon
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <CardContainer $isListView={isListView}>
+            <TitleSection $isListView={isListView}>
+              <Title ref={titleRef} title={title}>
+                {title}
+              </Title>
+            </TitleSection>
+            <LabelContainer>
+              <Label $paid={paid}>
+                <LabelDot $paid={paid} />
+                {paid ? 'Paid' : 'Free'}
+              </Label>
+              <CategoryTag $category={category as EventCategory}>
+                <CategoryIcon
                   src={categoryIcons[category as EventCategory]}
                   alt=""
                 />
                 {category}
-            </CategoryTag>
-          </LabelContainer>
-          {!isListView && (
-            <Description
-              ref={descriptionRef}
-              title={isEllipsed ? description : ''}
-              $isListView={isListView}
-            >
-              {description}
-            </Description>
-          )}
-          {!isListView && (
-            <Footer>
-              <UserInfo>
-                <UserImage
-                  src={userImage ? userImage : UserIconImage}
-                  onError={e => (e.currentTarget.src = UserIconImage)}
-                  alt="User Avatar"
-                />
-                <UserName title={userName}>@{userName}</UserName>
-              </UserInfo>
+              </CategoryTag>
+            </LabelContainer>
+            {!isListView && (
+              <Description
+                ref={descriptionRef}
+                title={isEllipsed ? description : ''}
+                $isListView={isListView}
+              >
+                {description}
+              </Description>
+            )}
+            {!isListView && (
+              <Footer>
+                <UserInfo>
+                  <UserImage
+                    src={userImage ? userImage : UserIconImage}
+                    onError={e => (e.currentTarget.src = UserIconImage)}
+                    alt="User Avatar"
+                  />
+                  <UserName title={userName}>@{userName}</UserName>
+                </UserInfo>
 
-              <EventInfo>
-                <EventDate>{formatDateCustom(eventDate)}</EventDate>
-                <LocationContainer>
-                  <img src={MapPinIconImage} alt="" width={14} height={14} />
-                  <Location ref={locationRef} title={location}>
-                    {location}
-                  </Location>
-                </LocationContainer>
-              </EventInfo>
-            </Footer>
-          )}
+                <EventInfo>
+                  <EventDate>{formatDateCustom(eventDate)}</EventDate>
+                  <LocationContainer>
+                    <img src={MapPinIconImage} alt="" width={14} height={14} />
+                    <Location ref={locationRef} title={location}>
+                      {location}
+                    </Location>
+                  </LocationContainer>
+                </EventInfo>
+              </Footer>
+            )}
 
-          {(role === 'admin' || isEventCreator) && (
-            <AdminActions $isListView={isListView}>
-              <ActionButton onClick={handleEdit}>Edit</ActionButton>
-              <ActionButton onClick={handleDelete}>Delete</ActionButton>
-            </AdminActions>
-          )}
-        </CardContainer>
+            {(role === 'admin' || isEventCreator) && (
+              <AdminActions $isListView={isListView}>
+                <ActionButton onClick={handleEdit}>Edit</ActionButton>
+                <ActionButton onClick={handleDelete}>Delete</ActionButton>
+              </AdminActions>
+            )}
+          </CardContainer>
+        </a>
 
         {isModalOpen && modalEventData && (
           <EventModal
