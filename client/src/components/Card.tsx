@@ -107,7 +107,11 @@ const Title = styled.span`
   text-overflow: ellipsis;
   flex-grow: 1;
   margin: 0;
-  max-width: 12rem;
+  max-width: 18rem;
+
+  @media (max-width: 500px) {
+    max-width: 10rem;
+  }
 `;
 
 const Label = styled.span<{ $paid: boolean }>`
@@ -265,7 +269,9 @@ const Card: React.FC<CardProps> = React.memo(
     const { deleteEvent } = useEventContext();
     const { user, role } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalEventData, setModalEventData] = useState<EventData | null>(null);
+    const [modalEventData, setModalEventData] = useState<EventData | null>(
+      null
+    );
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
     const titleRef = useRef<HTMLSpanElement>(null);
