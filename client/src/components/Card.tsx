@@ -94,7 +94,9 @@ const TitleSection = styled.div<{ $isListView: boolean }>`
   align-items: baseline;
   justify-content: space-between;
   padding: var(--20px);
+  padding-bottom: 0;
   gap: var(--10px);
+  padding-bottom: ${props => (props.$isListView ? 'var(--20px)' : '0')};
   width: ${props => (props.$isListView ? '50%' : '100%')};
 `;
 
@@ -144,9 +146,7 @@ const CategoryTag = styled.span<{ $category: EventCategory }>`
   background-color: transparent;
   font-size: var(--font-size-small);
   padding: var(--5px) var(--10px);
-  margin-right: var(--10px);
   border-radius: 100px;
-  margin-left: var(--10px);
   display: flex;
   align-items: center;
 `;
@@ -187,12 +187,11 @@ const UserImage = styled.img`
 const UserInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 `;
 
 const UserName = styled.span`
-  font-weight: bold;
-  font-size: var(--font-size-small);
+  font-size: 0.7rem;
   color: var(--font-color-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -345,12 +344,12 @@ const Card: React.FC<CardProps> = React.memo(
               <Title ref={titleRef} title={title}>
                 {title}
               </Title>
-            </TitleSection>
-            <LabelContainer>
               <Label $paid={paid}>
                 <LabelDot $paid={paid} />
                 {paid ? 'Paid' : 'Free'}
               </Label>
+            </TitleSection>
+            <LabelContainer>
               <CategoryTag $category={category as EventCategory}>
                 <CategoryIcon
                   src={categoryIcons[category as EventCategory]}
@@ -359,7 +358,7 @@ const Card: React.FC<CardProps> = React.memo(
                 {category}
               </CategoryTag>
             </LabelContainer>
-            {!isListView && (
+            {!isListView && description && (
               <Description
                 ref={descriptionRef}
                 title={isEllipsed ? description : ''}

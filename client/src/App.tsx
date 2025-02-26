@@ -58,13 +58,13 @@ const GlobalStyle = createGlobalStyle`
   --color-highlight: var(--color-yellow);
 
   /* Category Colors */
-  --color-category-music: #FFA500; 
-  --color-category-sports: #39E75F; 
-  --color-category-art: #4B0082; 
-  --color-category-education: #CC0088; 
-  --color-category-health: #039B87; 
-  --color-category-business: #CC8800; 
-  --color-category-tech: #8800CC;
+  --color-category-music: #FF6347;
+  --color-category-sports: #1E90FF;
+  --color-category-art: #8A2BE2;
+  --color-category-education: #FF4500;
+  --color-category-health: #32CD32;
+  --color-category-business: #dcbb00;
+  --color-category-tech: #800080;
 
   --gradient-primary: linear-gradient(
     45deg,

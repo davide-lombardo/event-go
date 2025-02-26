@@ -5,7 +5,6 @@ import AutocompleteInput from './AutocompleteInput';
 import Button from './shared/Button';
 import Select from './shared/Select';
 import { categoryIcons } from '../utils/category.utils';
-import MapPinIconImage from '/src/assets/map-pin.svg';
 
 interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
@@ -105,12 +104,6 @@ const ButtonsWrapper = styled.div`
   }
 `;
 
-const MapIcon = styled.img`
-  margin-right: 6px;
-  width: 16px;
-  filter: brightness(0) invert(1);
-`;
-
 const FilterSection = ({
   onFilterChange,
   initialLocation,
@@ -122,8 +115,6 @@ const FilterSection = ({
     date: '',
     categories: [],
   });
-
-  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
     setFilters(prevFilters => ({
@@ -157,7 +148,6 @@ const FilterSection = ({
   };
 
   const handleFindNearMe = async () => {
-    setIsLocating(true);
     try {
       const position = await getUserLocation();
       const { latitude, longitude } = position.coords;
@@ -175,9 +165,7 @@ const FilterSection = ({
       alert(
         'Unable to access your location. Please check your browser permissions.'
       );
-    } finally {
-      setIsLocating(false);
-    }
+    } 
   };
 
   const handleApply = () => {
@@ -194,6 +182,7 @@ const FilterSection = ({
               initialValue={filters.location.searchText}
               onLocationChange={handleLocationChange}
               placeholder="Enter a location"
+              handleFindNearMe={handleFindNearMe} 
             />
           </InputGroup>
 
@@ -209,15 +198,6 @@ const FilterSection = ({
         </InputsWrapper>
 
         <ButtonsWrapper>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={handleFindNearMe}
-            disabled={isLocating}
-          >
-            <MapIcon src={MapPinIconImage} alt="" />
-            Location
-          </Button>
           <Button type="submit" variant="primary" onClick={handleApply}>
             Search Events
           </Button>

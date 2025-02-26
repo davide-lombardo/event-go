@@ -79,20 +79,8 @@ const ImageContainer = styled.div`
   height: 100%;
   background: var(--gradient-primary);
   overflow: hidden;
-  clip-path: polygon(
-    20% 0%,
-    0% 20%,
-    30% 50%,
-    0% 80%,
-    20% 100%,
-    50% 70%,
-    80% 100%,
-    100% 80%,
-    70% 50%,
-    100% 20%,
-    80% 0%,
-    50% 30%
-  );
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-elevation-medium);
 
   @media (max-width: 900px) {
     display: none;
@@ -107,7 +95,7 @@ const ImageContainer = styled.div`
     left: -10%;
     background: url('https://images.unsplash.com/photo-1682447404920-4be1294c2854?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D')
       center/cover;
-    opacity: 0.4;
+    opacity: 0.5;
   }
 `;
 
