@@ -5,6 +5,7 @@ import AutocompleteInput from './AutocompleteInput';
 import Button from './shared/Button';
 import Select from './shared/Select';
 import { categoryIcons } from '../utils/category.utils';
+import MapPinIconImage from '/src/assets/map-pin.svg';
 
 interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
@@ -104,6 +105,12 @@ const ButtonsWrapper = styled.div`
   }
 `;
 
+const MapIcon = styled.img`
+  margin-right: 6px;
+  width: 16px;
+  filter: brightness(0) invert(1);
+`;
+
 const FilterSection = ({
   onFilterChange,
   initialLocation,
@@ -177,16 +184,6 @@ const FilterSection = ({
     onFilterChange(filters);
   };
 
-  const handleClear = () => {
-    const clearedFilters: EventFilters = {
-      location: { searchText: '', lat: 0, lng: 0 },
-      date: '',
-      categories: [],
-    };
-    setFilters(clearedFilters);
-    onFilterChange(clearedFilters);
-  };
-
   return (
     <>
       <FilterWrapper>
@@ -218,14 +215,11 @@ const FilterSection = ({
             onClick={handleFindNearMe}
             disabled={isLocating}
           >
-            Find Near Me
+            <MapIcon src={MapPinIconImage} alt="" />
+            Location
           </Button>
           <Button type="submit" variant="primary" onClick={handleApply}>
-            Apply
-          </Button>
-
-          <Button onClick={handleClear} variant={'outline'}>
-            Clear
+            Search Events
           </Button>
         </ButtonsWrapper>
       </FilterWrapper>

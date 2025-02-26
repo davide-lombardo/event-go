@@ -13,6 +13,8 @@ interface ButtonProps {
 }
 
 const StyledButton = styled.button<ButtonProps>`
+  display: flex;
+  align-items: center;
   padding: var(--12px) var(--25px);
   border: none;
   border-radius: var(--8px);
@@ -38,7 +40,7 @@ const StyledButton = styled.button<ButtonProps>`
     }
   }};
 
-color: ${({ variant }) => {
+  color: ${({ variant }) => {
     switch (variant) {
       case 'primary':
         return 'var(--color-white)';
@@ -67,7 +69,7 @@ color: ${({ variant }) => {
         return 'none';
     }
   }};
-  
+
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   transition: background-color 0.3s ease;
 
@@ -82,6 +84,10 @@ color: ${({ variant }) => {
       variant === 'transparent'
         ? 'var(--color-primary)'
         : 'var(--color-gray-7)'};
+
+    img {
+      filter: brightness(0);
+    }
   }
 
   &:focus {
@@ -96,7 +102,6 @@ color: ${({ variant }) => {
     background-color: var(--color-gray-4);
     color: var(--color-gray-6);
   }
-    
 `;
 
 const Tooltip = styled.div`
@@ -137,7 +142,8 @@ const TooltipWrapper = styled.div`
   }
 `;
 
-StyledButton.shouldForwardProp = prop => prop !== 'variant' && prop !== 'loading';
+StyledButton.shouldForwardProp = prop =>
+  prop !== 'variant' && prop !== 'loading';
 
 const Button: React.FC<ButtonProps> = ({
   onClick,
@@ -149,7 +155,6 @@ const Button: React.FC<ButtonProps> = ({
   loading = false,
 }) => {
   return (
-    
     <TooltipWrapper>
       <StyledButton
         onClick={onClick}
