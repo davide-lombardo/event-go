@@ -20,7 +20,6 @@ interface ModalOverlayProps {
   $isOpen: boolean;
 }
 
-
 const ModalOverlay = styled.div<ModalOverlayProps>`
   display: ${({ $isOpen }) => ($isOpen ? 'flex' : 'none')};
   position: fixed;
@@ -127,17 +126,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  });
   const [loading, setLoading] = useState(false);
-  
 
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
+    emailRef.current?.focus();
+
     setLoading(false);
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -152,16 +162,27 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
   }, [isOpen, onClose]);
 
   const validateInput = () => {
+    const newErrors = {
+      email: '',
+      password: '',
+    };
+
     if (!email.includes('@')) {
-      setError('Please enter a valid email address.');
-      return false;
+      newErrors.email = 'Please enter a valid email address.';
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
-      return false;
+      newErrors.password = 'Password must be at least 6 characters.';
     }
-    setError('');
-    return true;
+
+    setErrors(newErrors);
+
+    if (newErrors.email) {
+      emailRef.current?.focus();
+    } else if (newErrors.password) {
+      passwordRef.current?.focus();
+    }
+
+    return Object.values(newErrors).every(error => error === '');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -199,8 +220,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
             placeholder="Email"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            ref={emailRef}
             required
           />
+            {errors.email && <ErrorText>{errors.email}</ErrorText>}
+
           <Label htmlFor="password">Password</Label>
           <InputWrapper>
             <Input
@@ -209,27 +233,22 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              ref={passwordRef}
               required
             />
+
             <TogglePasswordIcon onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? (
-                <img
-                  src={EyeOffIcon}
-                  alt=""
-                  width={14}
-                  height={14}
-                />
+                <img src={EyeOffIcon} alt="" width={14} height={14} />
               ) : (
-                <img
-                  src={EyeIcon}
-                  alt=""
-                  width={14}
-                  height={14}
-                />
+                <img src={EyeIcon} alt="" width={14} height={14} />
               )}
             </TogglePasswordIcon>
+
+
           </InputWrapper>
-          {error && <ErrorText>{error}</ErrorText>}
+            {errors.password && <ErrorText>{errors.password}</ErrorText>}
+          
           <ButtonRow>
             <Button type="submit" variant="primary" disabled={loading}>
               {mode === 'signin' ? 'Sign In' : 'Sign Up'}

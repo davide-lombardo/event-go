@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { EventCategory, EventData } from '../../types/event.model';
 import toast from 'react-hot-toast';
@@ -140,9 +140,7 @@ const RadioLabel = styled.label`
   color: var(--color-gray-10);
 
   input[type='radio'] {
-    accent-color: var(
-      --color-primary
-    );
+    accent-color: var(--color-primary);
     margin-right: 0.5rem;
   }
 
@@ -213,8 +211,14 @@ const EventModal: React.FC<EventModalProps> = ({
     link: '',
   });
 
+  const nameRef = useRef<HTMLInputElement>(null);
+  const dateRef = useRef<HTMLInputElement>(null);
+  const linkRef = useRef<HTMLInputElement>(null);
+
   // Reset state when modal is opened with new data
   useEffect(() => {
+    nameRef.current?.focus();
+    
     if (initialEventData) {
       setEventData({
         ...initialEventData,
@@ -265,6 +269,16 @@ const EventModal: React.FC<EventModalProps> = ({
     }
 
     setErrors(newErrors);
+
+    // Focus on the first input with an error
+    if (newErrors.name) {
+      nameRef.current?.focus();
+    } else if (newErrors.date) {
+      dateRef.current?.focus();
+    } else if (newErrors.link) {
+      linkRef.current?.focus();
+    }
+
     return Object.values(newErrors).every(error => error === '');
   };
 
@@ -346,6 +360,7 @@ const EventModal: React.FC<EventModalProps> = ({
               placeholder="Enter the name of the event"
               value={eventData.name}
               onChange={handleChange}
+              ref={nameRef}
               required
             />
             {errors.name && <ErrorText>{errors.name}</ErrorText>}
@@ -359,6 +374,7 @@ const EventModal: React.FC<EventModalProps> = ({
               placeholder="Event Date"
               value={eventData.eventDate}
               onChange={handleChange}
+              ref={dateRef}
               required
             />
             {errors.date && <ErrorText>{errors.date}</ErrorText>}
@@ -412,6 +428,7 @@ const EventModal: React.FC<EventModalProps> = ({
               placeholder="https://example.com"
               value={eventData.link}
               onChange={handleChange}
+              ref={linkRef}
               required
             />
             {errors.link && <ErrorText>{errors.link}</ErrorText>}
