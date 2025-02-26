@@ -9,7 +9,7 @@ interface AutocompleteInputProps {
   initialValue?: string;
   placeholder?: string;
   onLocationChange: (location: string, lat: number, lng: number) => void;
-  handleFindNearMe: () => void;
+  handleFindNearMe?: () => void;
 }
 
 const InputWrapper = styled.div`
@@ -85,9 +85,11 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   };
 
   const handleMapPinClick = () => {
-    handleFindNearMe();
+    if (handleFindNearMe) {
+      handleFindNearMe();
+    }
   };
-
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newLocation = e.target.value;
     setLocation({
