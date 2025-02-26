@@ -53,7 +53,7 @@ const StyledButton = styled.button<ButtonProps>`
       case 'warning':
         return 'var(--color-white)';
       case 'link':
-        return 'var(--color-blue)';
+        return 'var(--color-gray-7)';
       case 'outline':
         return 'var(--color-gray-7)';
       default:

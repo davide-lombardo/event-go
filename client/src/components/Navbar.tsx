@@ -35,6 +35,7 @@ const Logo = styled.div`
   background-image: var(--gradient-primary);
   background-size: 100%;
   background-repeat: repeat;
+  background-clip: text;
 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -171,7 +172,7 @@ const Nav = () => {
 
       <ButtonGroup>
         {user && (
-          <Button onClick={handleOpenModal} variant={'outline'}>
+          <Button onClick={handleOpenModal} variant={'link'}>
             <span style={{ display: 'flex', alignItems: 'center' }}>
               Add Event
               <svg

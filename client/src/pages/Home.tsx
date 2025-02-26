@@ -8,6 +8,9 @@ import { EventFilters } from '../types/event.model';
 import Pagination from '../components/Pagination';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Skeleton from '../components/Skeleton';
+import GridIcon from '/src/assets/grid.svg';
+import ListIcon from '/src/assets/list.svg';
+
 
 const EventListWrapper = styled.div<{ $isListView: boolean }>`
   display: ${props => (props.$isListView ? 'flex' : 'grid')};
@@ -93,11 +96,10 @@ const HiddenRadio = styled.input`
   height: 0;
 `;
 
-const ViewIcon = styled.span`
+const ViewIcon = styled.img<{ $isActive: boolean }>`
   margin-right: 6px;
-  display: inline-flex;
-  align-items: center;
-  font-size: 16px;
+  width: 1rem;
+  filter: ${props => (props.$isActive ? 'invert(1)' : 'none')};
 `;
 
 function Home() {
@@ -136,7 +138,7 @@ function Home() {
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
       );
       const data = await response.json();
-      
+
       let location = '';
       if (data.status === 'OK' && data.results.length > 0) {
         location = data.results[0].formatted_address;
@@ -144,7 +146,7 @@ function Home() {
       } else {
         throw new Error('Unable to retrieve address from coordinates');
       }
-      
+
       const filters: EventFilters = {
         location: {
           searchText: location,
@@ -212,7 +214,7 @@ function Home() {
                   checked={isListView}
                   onChange={() => toggleView()}
                 />
-                <ViewIcon>≡</ViewIcon> List View
+                <ViewIcon src={ListIcon} alt="" $isActive={isListView}></ViewIcon> List View
               </SwitchLabel>
 
               <SwitchLabel $active={!isListView}>
@@ -222,7 +224,7 @@ function Home() {
                   checked={!isListView}
                   onChange={() => toggleView()}
                 />
-                <ViewIcon>⊞</ViewIcon> Grid View
+                <ViewIcon src={GridIcon} alt="" $isActive={!isListView}></ViewIcon> Grid View
               </SwitchLabel>
             </SwitchLabels>
           </SwitchContainer>

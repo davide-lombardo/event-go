@@ -72,6 +72,7 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
     -webkit-mask: linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
   }
 
@@ -230,6 +231,10 @@ const AdminActions = styled.div<{ $isListView: boolean }>`
   justify-content: flex-end;
   gap: 10px;
   padding: var(--10px) var(--20px);
+
+  @media (max-width: 500px) {
+    flex-direction: ${props => (props.$isListView ? 'column' : 'unset')};
+  }
 `;
 
 const ActionButton = styled.button`
@@ -281,7 +286,10 @@ const Card: React.FC<CardProps> = React.memo(
 
     const isEventCreator = user?.username === userName;
 
-    const handleEdit = () => {
+    const handleEdit = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
       setModalEventData({
         id: eventId,
         name: title,
@@ -299,7 +307,9 @@ const Card: React.FC<CardProps> = React.memo(
       setIsModalOpen(true);
     };
 
-    const handleDelete = async () => {
+    const handleDelete = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
       setIsDeleteConfirmOpen(true);
     };
 

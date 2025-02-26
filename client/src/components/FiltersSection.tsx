@@ -73,6 +73,7 @@ const CategoryButton = styled.button<{ $isSelected: boolean }>`
     rgba(250, 247, 244, 0.3),
     rgba(250, 247, 244, 1)
   );
+  backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-elevation-medium);

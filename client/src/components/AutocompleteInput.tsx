@@ -19,8 +19,8 @@ const InputWrapper = styled.div`
   align-items: center;
 `;
 
-const Input = styled.input<{ fullWidth: boolean }>`
-  padding: ${props => (props.fullWidth ? '0.8rem' : '0.8rem 0.8rem 0.8rem 3rem')};
+const Input = styled.input<{ $fullWidth: boolean }>`
+  padding: ${props => (props.$fullWidth ? '0.8rem' : '0.8rem 0.8rem 0.8rem 3rem')};
   font-size: 1rem;
   border: 1px solid var(--color-gray-10);
   border-radius: var(--border-radius-sm);
@@ -111,7 +111,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
             value={location.location}
             placeholder={placeholder}
             onChange={handleInputChange}
-            fullWidth={false}
+            $fullWidth={false}
           />
         </StandaloneSearchBox>
         <MapPinButton onClick={handleMapPinClick}>
@@ -125,12 +125,12 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
           value={location.location}
           placeholder={placeholder}
           onChange={handleInputChange}
-          fullWidth={true}
+          $fullWidth={true}
         />
       </StandaloneSearchBox>
     )
   ) : (
-    <Input type="text" placeholder="Loading..." disabled  fullWidth={!showMapPinIcon}/>
+    <Input type="text" placeholder="Loading..." disabled $fullWidth={!showMapPinIcon}/>
   );
 };
 
