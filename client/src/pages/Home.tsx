@@ -102,8 +102,8 @@ const ViewIcon = styled.span`
 
 function Home() {
   const { events, loading, fetchEvents, pagination } = useEventContext();
-  const [userLocation, setUserLocation] = useState<string>('');
   const [isListView, setIsListView] = useState(false);
+  const [userLocation, setUserLocation] = useState<string>('');
 
   const handleFilterChange = useCallback(
     (newFilters: EventFilters) => {
@@ -129,27 +129,22 @@ function Home() {
     });
   };
 
-  const getAddressFromCoordinates = async (
-    lat: number,
-    lng: number
-  ): Promise<string> => {
-    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
-
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
-    );
-    const data = await response.json();
-    if (data.status === 'OK' && data.results.length > 0) {
-      return data.results[0].formatted_address;
-    } else {
-      throw new Error('Unable to retrieve address from coordinates');
-    }
-  };
-
   const fetchEventsNearUser = async (lat: number, lng: number) => {
     try {
-      const location = await getAddressFromCoordinates(lat, lng);
-      setUserLocation(location);
+      const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+      );
+      const data = await response.json();
+      
+      let location = '';
+      if (data.status === 'OK' && data.results.length > 0) {
+        location = data.results[0].formatted_address;
+        setUserLocation(location);
+      } else {
+        throw new Error('Unable to retrieve address from coordinates');
+      }
+      
       const filters: EventFilters = {
         location: {
           searchText: location,
@@ -160,24 +155,15 @@ function Home() {
         categories: [],
       };
       await fetchEvents(filters);
+      return location;
     } catch (error) {
       console.error('Error fetching events:', error);
+      return '';
     }
   };
 
   useEffect(() => {
-    const fetchUserLocationAndEvents = async () => {
-      try {
-        const position = await getUserLocation();
-        const { latitude, longitude } = position.coords;
-        await fetchEventsNearUser(latitude, longitude);
-      } catch (error) {
-        console.error('Error getting user location or fetching events:', error);
-        fetchEvents();
-      }
-    };
-
-    fetchUserLocationAndEvents();
+    fetchEvents();
   }, []);
 
   const toggleView = () => {
@@ -199,6 +185,8 @@ function Home() {
       <FilterSection
         onFilterChange={handleFilterChange}
         initialLocation={userLocation}
+        getUserLocation={getUserLocation}
+        fetchEventsNearUser={fetchEventsNearUser}
       />
 
       {eventsToDisplay.length > 0 && (

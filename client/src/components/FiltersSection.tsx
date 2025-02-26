@@ -9,6 +9,8 @@ import { categoryIcons } from '../utils/category.utils';
 interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
   initialLocation: string;
+  getUserLocation: () => Promise<GeolocationPosition>;
+  fetchEventsNearUser: (lat: number, lng: number) => Promise<string>;
 }
 
 const FilterWrapper = styled.div`
@@ -79,6 +81,12 @@ const CategoryButton = styled.button<{ $isSelected: boolean }>`
   &:hover {
     transform: translateY(-5px);
   }
+
+  @media (pointer: coarse) {
+    &:active {
+      transform: translateY(-5px);
+    }
+  }
 `;
 
 const CategoryText = styled.span`
@@ -86,12 +94,29 @@ const CategoryText = styled.span`
   text-align: center;
 `;
 
-const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+
+  @media (max-width: 900px) {
+    margin-top: 10px;
+  }
+`;
+
+const FilterSection = ({
+  onFilterChange,
+  initialLocation,
+  getUserLocation,
+  fetchEventsNearUser,
+}: FilterProps) => {
   const [filters, setFilters] = useState<EventFilters>({
     location: { searchText: '', lat: 0, lng: 0 },
     date: '',
     categories: [],
   });
+
+  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
     setFilters(prevFilters => ({
@@ -123,6 +148,31 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
         : [...prevFilters.categories, category],
     }));
   };
+
+  const handleFindNearMe = async () => {
+    setIsLocating(true);
+    try {
+      const position = await getUserLocation();
+      const { latitude, longitude } = position.coords;
+      const location = await fetchEventsNearUser(latitude, longitude);
+      setFilters(prevFilters => ({
+        ...prevFilters,
+        location: {
+          searchText: location,
+          lat: latitude,
+          lng: longitude,
+        },
+      }));
+    } catch (error) {
+      console.error('Error getting user location:', error);
+      alert(
+        'Unable to access your location. Please check your browser permissions.'
+      );
+    } finally {
+      setIsLocating(false);
+    }
+  };
+
   const handleApply = () => {
     onFilterChange(filters);
   };
@@ -161,7 +211,15 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
           </InputGroup>
         </InputsWrapper>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+        <ButtonsWrapper>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleFindNearMe}
+            disabled={isLocating}
+          >
+            Find Near Me
+          </Button>
           <Button type="submit" variant="primary" onClick={handleApply}>
             Apply
           </Button>
@@ -169,7 +227,7 @@ const FilterSection = ({ onFilterChange, initialLocation }: FilterProps) => {
           <Button onClick={handleClear} variant={'outline'}>
             Clear
           </Button>
-        </div>
+        </ButtonsWrapper>
       </FilterWrapper>
 
       <CategoriesWrapper>

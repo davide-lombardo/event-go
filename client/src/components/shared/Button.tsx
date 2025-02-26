@@ -22,7 +22,7 @@ const StyledButton = styled.button<ButtonProps>`
       case 'primary':
         return 'var(--color-primary)';
       case 'secondary':
-        return 'var(--color-secondary)';
+        return 'var(--color-gray-8)';
       case 'danger':
         return 'var(--color-danger)';
       case 'success':
@@ -43,7 +43,7 @@ color: ${({ variant }) => {
       case 'primary':
         return 'var(--color-white)';
       case 'secondary':
-        return 'var(--color-gray-7)';
+        return 'var(--color-gray-1)';
       case 'danger':
         return 'var(--color-white)';
       case 'success':
