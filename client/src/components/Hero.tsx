@@ -8,19 +8,19 @@ interface HeroProps {
 const BaseHeroContainer = styled.div`
   position: relative;
   width: 100%;
-  min-height: 80vh;
+  min-height: 65vh;
   overflow: hidden;
 `;
 
 const BaseContentContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 6rem var(--20px);
+  padding: 0 var(--20px);
   position: relative;
   z-index: 2;
 
   @media (max-width: 768px) {
-    padding: 6rem var(--20px) 0 var(--20px);
+    padding: var(--50px) var(--20px) 0 var(--20px);
   }
 `;
 

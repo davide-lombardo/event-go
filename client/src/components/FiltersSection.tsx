@@ -65,8 +65,8 @@ const CategoryButton = styled.button<{ $isSelected: boolean }>`
   border: 3px solid
     ${props => (props.$isSelected ? 'var(--color-primary)' : 'transparent')};
   cursor: pointer;
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 90px;
+  max-width: 90px;
   padding: var(--10px);
 
   background: radial-gradient(

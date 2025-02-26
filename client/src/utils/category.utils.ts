@@ -17,3 +17,13 @@ export const categoryIcons: Record<EventCategory, string> = {
   [EventCategory.Health]: HealthIcon,
   [EventCategory.Business]: BusinessIcon,
 };
+
+export const categoryColors = {
+  [EventCategory.Music]: 'var(--color-category-music)',
+  [EventCategory.Sports]: 'var(--color-category-sports)',
+  [EventCategory.Art]: 'var(--color-category-art)',
+  [EventCategory.Education]: 'var(--color-category-education)',
+  [EventCategory.Health]: 'var(--color-category-health)',
+  [EventCategory.Business]: 'var(--color-category-business)',
+  [EventCategory.Tech]: 'var(--color-category-tech)',
+};

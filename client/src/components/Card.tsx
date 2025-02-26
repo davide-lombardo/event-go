@@ -10,7 +10,7 @@ import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';
 import ConfirmDelete from './dialogs/ConfirmDelete';
 import { formatDateCustom } from '../utils/date.utils';
-import { categoryIcons } from '../utils/category.utils';
+import { categoryColors, categoryIcons } from '../utils/category.utils';
 
 interface CardProps {
   title: string;
@@ -153,11 +153,11 @@ const LabelContainer = styled.div`
   padding: var(--10px) var(--20px);
 `;
 
-const CategoryTag = styled.span`
+const CategoryTag = styled.span<{ $category: EventCategory }>`
+  color: ${props => categoryColors[props.$category] || 'transparent'};
+  border: ${props => `1px solid ${categoryColors[props.$category]}`};
   background-color: transparent;
-  color: var(--color-primary);
   font-size: var(--font-size-small);
-  border: 1px solid var(--color-primary);
   padding: var(--5px) var(--10px);
   margin-right: var(--10px);
   border-radius: 100px;
@@ -366,12 +366,12 @@ const Card: React.FC<CardProps> = React.memo(
               <LabelDot $paid={paid} />
               {paid ? 'Paid' : 'Free'}
             </Label>
-            <CategoryTag>
-            <CategoryIcon
-                src={categoryIcons[category as EventCategory]}
-                alt=""
-              />
-              {category}
+            <CategoryTag $category={category as EventCategory}>
+              <CategoryIcon
+                  src={categoryIcons[category as EventCategory]}
+                  alt=""
+                />
+                {category}
             </CategoryTag>
           </LabelContainer>
           {!isListView && (

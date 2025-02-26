@@ -57,6 +57,15 @@ const GlobalStyle = createGlobalStyle`
   --color-category-link: #dd4eb2;
   --color-highlight: var(--color-yellow);
 
+  /* Category Colors */
+  --color-category-music: #FF5733; 
+  --color-category-sports: #33FF57; 
+  --color-category-art: #3357FF;
+  --color-category-education: #FF33A7; 
+  --color-category-health: #33FFD7;
+  --color-category-business: #FFB433;
+  --color-category-tech: #B433FF;
+
   --gradient-primary: linear-gradient(
     45deg,
     hsl(347deg 99% 63%) 0%,
