@@ -10,6 +10,7 @@ interface AutocompleteInputProps {
   placeholder?: string;
   onLocationChange: (location: string, lat: number, lng: number) => void;
   handleFindNearMe?: () => void;
+  showMapPinIcon?: boolean;
 }
 
 const InputWrapper = styled.div`
@@ -18,14 +19,14 @@ const InputWrapper = styled.div`
   align-items: center;
 `;
 
-const Input = styled.input`
-  padding: 0.8rem 0.8rem 0.8rem 3rem;
+const Input = styled.input<{ fullWidth: boolean }>`
+  padding: ${props => (props.fullWidth ? '0.8rem' : '0.8rem 0.8rem 0.8rem 3rem')};
   font-size: 1rem;
   border: 1px solid var(--color-gray-10);
   border-radius: var(--border-radius-sm);
   outline: none;
   transition: border-color 0.2s;
-  min-width: 100%;
+  width: 100%;
 
   &:focus {
     box-shadow: 0 0 0 2px var(--color-primary);
@@ -55,7 +56,8 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   placeholder = "Enter a location",
   initialValue = '',
   onLocationChange,
-  handleFindNearMe
+  handleFindNearMe,
+  showMapPinIcon = true
 }) => {
   const [location, setLocation] = useState({ location: initialValue, lat: 0, lng: 0 });
 
@@ -89,7 +91,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
       handleFindNearMe();
     }
   };
-  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newLocation = e.target.value;
     setLocation({
@@ -101,21 +103,34 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   };
 
   return isLoaded ? (
-    <InputWrapper>
+    showMapPinIcon ? (
+      <InputWrapper>
+        <StandaloneSearchBox onLoad={ref => (searchBoxRef.current = ref)} onPlacesChanged={handlePlaceChange}>
+          <Input
+            type="text"
+            value={location.location}
+            placeholder={placeholder}
+            onChange={handleInputChange}
+            fullWidth={false}
+          />
+        </StandaloneSearchBox>
+        <MapPinButton onClick={handleMapPinClick}>
+          <img src={MapPinIconImage} alt="Map Pin" />
+        </MapPinButton>
+      </InputWrapper>
+    ) : (
       <StandaloneSearchBox onLoad={ref => (searchBoxRef.current = ref)} onPlacesChanged={handlePlaceChange}>
         <Input
           type="text"
           value={location.location}
           placeholder={placeholder}
           onChange={handleInputChange}
+          fullWidth={true}
         />
       </StandaloneSearchBox>
-      <MapPinButton onClick={handleMapPinClick}>
-        <img src={MapPinIconImage} alt="Map Pin" />
-      </MapPinButton>
-    </InputWrapper>
+    )
   ) : (
-    <Input type="text" placeholder="Loading..." disabled />
+    <Input type="text" placeholder="Loading..." disabled  fullWidth={!showMapPinIcon}/>
   );
 };
 

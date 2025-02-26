@@ -386,6 +386,7 @@ const EventModal: React.FC<EventModalProps> = ({
               initialValue={eventData.location}
               placeholder="Enter the location of the event"
               onLocationChange={handleLocationChange}
+              showMapPinIcon={false}
             />
             <Divider />
           </GroupContainer>
