@@ -40,6 +40,12 @@ html {
   --30px: 1.875rem;
   --40px: 2.5rem;
   --50px: 3.125rem;
+
+  --breakpoint-small: 700px;
+  --breakpoint-medium: 900px;
+  --breakpoint-medium-lg: 1024px;
+  --breakpoint-large: 1200px;
+  --breakpoint-xlarge: 1600px;
 }
 
 body {

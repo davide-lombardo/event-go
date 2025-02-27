@@ -250,7 +250,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
             {errors.password && <ErrorText>{errors.password}</ErrorText>}
           
           <ButtonRow>
-            <Button type="submit" variant="primary" disabled={loading}>
+            <Button type="submit" variant="primary" disabled={loading} label={mode === 'signin' ? 'Sign In' : 'Sign Up' }>
               {mode === 'signin' ? 'Sign In' : 'Sign Up'}
             </Button>
           </ButtonRow>

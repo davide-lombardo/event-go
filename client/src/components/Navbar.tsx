@@ -113,8 +113,8 @@ const DropdownDivider = styled.div`
 const WelcomeMessage = styled.div`
   font-size: 14px;
   padding: 12px 16px;
-  color: #555;
-  font-weight: 600;
+  color: var(--color-gray-8);
+  font-weight: 400;
 `;
 
 const Nav = () => {
@@ -172,7 +172,7 @@ const Nav = () => {
 
       <ButtonGroup>
         {user && (
-          <Button onClick={handleOpenModal} variant={'link'}>
+          <Button onClick={handleOpenModal} variant={'link'} label='Add Event'>
             <span style={{ display: 'flex', alignItems: 'center' }}>
               Add Event
               <svg
@@ -224,7 +224,7 @@ const Nav = () => {
             </Dropdown>
           </>
         ) : (
-          <Button onClick={handleOpenAuthModal} variant={'primary'}>
+          <Button onClick={handleOpenAuthModal} variant={'primary'} label='Sign In'>
             Sign In
           </Button>
         )}

@@ -65,7 +65,7 @@ const MainContent = styled.div`
   p {
     font-size: var(--16px);
     margin-top: var(--10px);
-    color: var(--color-gray-7);
+    color: var(--color-gray-8);
     margin-bottom: 2rem;
 
     @media (max-width: 768px) {

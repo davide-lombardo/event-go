@@ -42,6 +42,8 @@ const MapPinButton = styled.button`
   background: transparent;
   border: none;
   cursor: pointer;
+  width: 25px;
+  height: 25px;
 
   img {
     width: 16px;

@@ -460,10 +460,10 @@ const EventModal: React.FC<EventModalProps> = ({
           </GroupContainer>
 
           <ButtonRow>
-            <Button onClick={onClose} variant={'outline'}>
+            <Button onClick={onClose} variant={'outline'} label='Cancel'>
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} label='Save Event'>
               Save Event
             </Button>
           </ButtonRow>

@@ -51,8 +51,8 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
       <ModalContent>
         <p>{message}</p>
         <ButtonGroup>
-          <Button variant="danger" onClick={onConfirm}>Delete</Button>
-          <Button variant="outline" onClick={onCancel}>No</Button>
+          <Button variant="danger" onClick={onConfirm} label='Delete'>Delete</Button>
+          <Button variant="outline" onClick={onCancel} label='No'>No</Button>
         </ButtonGroup>
       </ModalContent>
     </ModalOverlay>

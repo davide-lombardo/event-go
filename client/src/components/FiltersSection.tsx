@@ -199,7 +199,7 @@ const FilterSection = ({
         </InputsWrapper>
 
         <ButtonsWrapper>
-          <Button type="submit" variant="primary" onClick={handleApply}>
+          <Button type="submit" variant="primary" onClick={handleApply} label='Search Events'>
             Search Events
           </Button>
         </ButtonsWrapper>

@@ -265,7 +265,7 @@ const UserProfile = () => {
             </>
         </div>
 
-        <Button onClick={handleSave} disabled={loading}>
+        <Button onClick={handleSave} disabled={loading} label={loading ? 'Saving...' : 'Save'}>
           {loading ? 'Saving...' : 'Save'}
         </Button>
       </UserProfileHeader>

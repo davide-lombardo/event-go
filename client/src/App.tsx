@@ -15,7 +15,6 @@ const GlobalStyle = createGlobalStyle`
   /* COLORS */
   --color-primary: #D63384;
   --color-primary-dark: #9B287B;
-  --color-secondary: var(--color-blue);
   --color-danger: var(--color-red);
   --color-success: var(--color-green-light);
   --color-warning: var(--color-orange);
@@ -27,12 +26,11 @@ const GlobalStyle = createGlobalStyle`
   --color-gray-2: #e6e6e6;
   --color-gray-3: #ccc;
   --color-gray-4: #ddd;
-  --color-gray-7: #777;
-
-
+  --color-gray-5: #aaa; 
   --color-gray-6: #575757;
   --color-gray-65: #525252;
-  --color-gray-7: #2c2c2c;
+  --color-gray-7: #777; 
+  --color-gray-75: #2c2c2c;
   --color-gray-8: #252525;
   --color-gray-9: #1f1f1f;
   --color-gray-10: #181818;
@@ -40,22 +38,11 @@ const GlobalStyle = createGlobalStyle`
   /* Misc colors */
   --color-white: #FFFFFF;
   --color-red: #FE436C;
-  --color-red-dark: #dc395c;
   --color-orange: #ff7e22;
   --color-green-light: #00d1b2;
   --color-yellow: #fca62a;
-  --color-light-yellow: #F6EB61;
   --color-pink: #f57ad0;
-  --color-lavender: #a180f9;
-  --color-violet: #ff75f8;
-  --color-blue: #59abf7;
   --color-purple: #673ece;
-  --color-indigo: #4e5dff;
-  --color-indigo-dark: #431dee;
-  --color-indigo-light: #a6aaff;
-  --color-indigo-muted: #f1f2fd;
-  --color-category-link: #dd4eb2;
-  --color-highlight: var(--color-yellow);
 
   /* Category Colors */
   --color-category-music: #FF6347;
@@ -84,22 +71,12 @@ const GlobalStyle = createGlobalStyle`
   );
 
   /* Borders */
-  --border-color: var(--color-blue-light);
-  --border-color-hover: var(--color-primary-dark);
   --border-radius: 12px;
   --border-radius-sm: 6px;
 
   /* Background colors */
   --background-color: var(--color-white);
   --card-background-color: rgba(0, 0, 0, 0.5);
-
-
-  /* Links and Misc */
-  --color-link: var(--color-green-light);
-  --color-link-hover: var(--color-green-medium);
-  --scrollbar-color: var(--color-blue-light);
-  --scrollbar-track: var(--color-blue-medium);
-
 
   /* SHADOWS */
   --shadow-color: 30deg 3% 59%;
@@ -108,11 +85,13 @@ const GlobalStyle = createGlobalStyle`
     0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.34),
     0.4px 0.8px 1px -1.2px hsl(var(--shadow-color) / 0.34),
     1px 2px 2.5px -2.5px hsl(var(--shadow-color) / 0.34);
+
   --shadow-elevation-medium:
     0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
     0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
     2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
     5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
+
   --shadow-elevation-high:
     0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.34),
     1.5px 2.9px 3.7px -0.4px hsl(var(--shadow-color) / 0.34),
@@ -128,15 +107,7 @@ const GlobalStyle = createGlobalStyle`
 
   /* Font colors */
   --font-color-base: var(--color-gray-10);
-  --font-color-muted: var(--color-gray-5);
-  --font-color-heading: var(--color-blue-very-light);
-  --font-color-bright: var(--color-gray-1);
-
-  /* Button colors */
-  --button-border-color: var(--color-gray-4);
-  --button-border-color-hover: var(--color-gray-5);
-  --button-background-color: var(--color-blue-light);
-  --button-font-color: var(--color-primary);
+  --font-color-muted: var(--color-gray-6);
 
   /* SIZES */
 
@@ -147,19 +118,10 @@ const GlobalStyle = createGlobalStyle`
   --content-width: 860px;
   --content-width-small: 560px;
   --content-width-medium: 700px;
-  --navbar-height-small: 60px;
 
   /* Font Sizes */
   --font-size-small: 0.8rem;
   --font-size-medium: 1rem;
-
-  /* Breakpoints */
-  --breakpoint-small: 700px;
-  --breakpoint-medium: 900px;
-  --breakpoint-medium-lg: 1024px;
-  --breakpoint-large: 1200px;
-  --breakpoint-xlarge: 1600px;
-
 }
 `;
 

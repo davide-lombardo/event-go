@@ -47,8 +47,8 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
   transition: transform 0.3s ease;
   box-shadow: var(--shadow-elevation-medium);
   display: ${props => (props.$isListView ? 'flex' : 'block')};
-  flex-direction: ${props => (props.$isListView ? 'row' : 'column')};
-  align-items: ${props => (props.$isListView ? 'center' : 'flex-start')};
+  flex-direction: ${props => (props.$isListView ? 'column' : 'column')};
+  align-items: ${props => (props.$isListView ? 'stretch' : 'flex-start')};
   justify-content: ${props => (props.$isListView ? 'space-between' : 'unset')};
 
   @media (max-width: 500px) {
@@ -76,18 +76,18 @@ const CardContainer = styled.div<{ $isListView: boolean }>`
     mask-composite: exclude;
   }
 
-  // Inner container to hold actual content
-  > * {
-    position: relative;
-    border-radius: calc(var(--border-radius) - 5px);
-    display: ${props => (props.$isListView ? 'flex' : 'block')};
-    flex-direction: ${props => (props.$isListView ? 'column' : 'row')};
-    align-items: ${props => (props.$isListView ? 'flex-start' : 'center')};
-  }
-
   &:hover {
     transform: translateY(-5px);
   }
+`;
+
+const CardContentWrapper = styled.div<{ $isListView: boolean }>`
+  position: relative;
+  border-radius: calc(var(--border-radius) - 5px);
+  display: ${props => (props.$isListView ? 'flex' : 'block')};
+  flex-direction: ${props => (props.$isListView ? 'row' : 'column')};
+  align-items: ${props => (props.$isListView ? 'center' : 'flex-start')};
+  justify-content: ${props => (props.$isListView ? 'space-between' : 'unset')};
 `;
 
 const TitleSection = styled.div<{ $isListView: boolean }>`
@@ -207,7 +207,7 @@ const EventInfo = styled.div`
 
 const EventDate = styled.span`
   font-size: var(--font-size-small);
-  color: var(--color-primary);
+  color: var(--font-color-muted);
 `;
 
 const LocationContainer = styled.div`
@@ -225,15 +225,15 @@ const Location = styled.span`
   max-width: 100px;
 `;
 
-const AdminActions = styled.div<{ $isListView: boolean }>`
+const AdminActions = styled.div`
   display: flex;
-  flex-direction: ${props => (props.$isListView ? 'row' : 'unset')};
   justify-content: flex-end;
   gap: 10px;
   padding: var(--10px) var(--20px);
+  width: 100%;
 
   @media (max-width: 500px) {
-    flex-direction: ${props => (props.$isListView ? 'column' : 'unset')};
+    flex-direction: row;
   }
 `;
 
@@ -285,6 +285,7 @@ const Card: React.FC<CardProps> = React.memo(
     const isEllipsed = useEllipsisTooltip(descriptionRef);
 
     const isEventCreator = user?.username === userName;
+    const showAdminActions = role === 'admin' || isEventCreator;
 
     const handleEdit = (e: React.MouseEvent) => {
       e.preventDefault();
@@ -350,58 +351,60 @@ const Card: React.FC<CardProps> = React.memo(
           style={{ textDecoration: 'none', color: 'inherit' }}
         >
           <CardContainer $isListView={isListView}>
-            <TitleSection $isListView={isListView}>
-              <Title ref={titleRef} title={title}>
-                {title}
-              </Title>
-              <Label $paid={paid}>
-                <LabelDot $paid={paid} />
-                {paid ? 'Paid' : 'Free'}
-              </Label>
-            </TitleSection>
-            <LabelContainer>
-              <CategoryTag $category={category as EventCategory}>
-                <CategoryIcon
-                  src={categoryIcons[category as EventCategory]}
-                  alt=""
-                />
-                {category}
-              </CategoryTag>
-            </LabelContainer>
-            {!isListView && description && (
-              <Description
-                ref={descriptionRef}
-                title={isEllipsed ? description : ''}
-                $isListView={isListView}
-              >
-                {description}
-              </Description>
-            )}
-            {!isListView && (
-              <Footer>
-                <UserInfo>
-                  <UserImage
-                    src={userImage ? userImage : UserIconImage}
-                    onError={e => (e.currentTarget.src = UserIconImage)}
-                    alt="User Avatar"
+            <CardContentWrapper $isListView={isListView}>
+              <TitleSection $isListView={isListView}>
+                <Title ref={titleRef} title={title}>
+                  {title}
+                </Title>
+                <Label $paid={paid}>
+                  <LabelDot $paid={paid} />
+                  {paid ? 'Paid' : 'Free'}
+                </Label>
+              </TitleSection>
+              <LabelContainer>
+                <CategoryTag $category={category as EventCategory}>
+                  <CategoryIcon
+                    src={categoryIcons[category as EventCategory]}
+                    alt=""
                   />
-                  <UserName title={userName}>@{userName}</UserName>
-                </UserInfo>
+                  {category}
+                </CategoryTag>
+              </LabelContainer>
+              {!isListView && description && (
+                <Description
+                  ref={descriptionRef}
+                  title={isEllipsed ? description : ''}
+                  $isListView={isListView}
+                >
+                  {description}
+                </Description>
+              )}
+              {!isListView && (
+                <Footer>
+                  <UserInfo>
+                    <UserImage
+                      src={userImage ? userImage : UserIconImage}
+                      onError={e => (e.currentTarget.src = UserIconImage)}
+                      alt="User Avatar"
+                    />
+                    <UserName title={userName}>@{userName}</UserName>
+                  </UserInfo>
 
-                <EventInfo>
-                  <EventDate>{formatDateCustom(eventDate)}</EventDate>
-                  <LocationContainer>
-                    <img src={MapPinIconImage} alt="" width={14} height={14} />
-                    <Location ref={locationRef} title={location}>
-                      {location}
-                    </Location>
-                  </LocationContainer>
-                </EventInfo>
-              </Footer>
-            )}
+                  <EventInfo>
+                    <EventDate>{formatDateCustom(eventDate)}</EventDate>
+                    <LocationContainer>
+                      <img src={MapPinIconImage} alt="" width={14} height={14} />
+                      <Location ref={locationRef} title={location}>
+                        {location}
+                      </Location>
+                    </LocationContainer>
+                  </EventInfo>
+                </Footer>
+              )}
+            </CardContentWrapper>
 
-            {(role === 'admin' || isEventCreator) && (
-              <AdminActions $isListView={isListView}>
+            {showAdminActions && (
+              <AdminActions theme={{ $isListView: isListView }}>
                 <ActionButton onClick={handleEdit}>Edit</ActionButton>
                 <ActionButton onClick={handleDelete}>Delete</ActionButton>
               </AdminActions>

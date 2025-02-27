@@ -10,6 +10,7 @@ interface ButtonProps {
   disabled?: boolean;
   tooltip?: string;
   loading?: boolean;
+  label?: string;
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -53,9 +54,9 @@ const StyledButton = styled.button<ButtonProps>`
       case 'warning':
         return 'var(--color-white)';
       case 'link':
-        return 'var(--color-gray-7)';
+        return 'var(--color-gray-8)';
       case 'outline':
-        return 'var(--color-gray-7)';
+        return 'var(--color-gray-8)';
       default:
         return 'var(--color-white)';
     }
@@ -64,7 +65,7 @@ const StyledButton = styled.button<ButtonProps>`
   border: ${({ variant }) => {
     switch (variant) {
       case 'outline':
-        return '1px solid var(--color-gray-4)';
+        return '1px solid var(--color-gray-5)';
       default:
         return 'none';
     }
@@ -78,12 +79,12 @@ const StyledButton = styled.button<ButtonProps>`
       variant === 'primary'
         ? 'transparent'
         : variant === 'danger'
-        ? 'var(--color-grey-7)'
+        ? 'var(--color-grey-8)'
         : 'rgba(0, 0, 0, 0.05)'};
     color: ${({ variant }) =>
       variant === 'transparent'
         ? 'var(--color-primary)'
-        : 'var(--color-gray-7)'};
+        : 'var(--color-gray-8)'};
 
     img {
       filter: brightness(0);
@@ -153,6 +154,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   tooltip,
   loading = false,
+  label,
 }) => {
   return (
     <TooltipWrapper>
@@ -162,6 +164,7 @@ const Button: React.FC<ButtonProps> = ({
         type={type}
         disabled={disabled || (type === 'submit' && loading)}
         aria-disabled={disabled || (type === 'submit' && loading)}
+        aria-label={label} 
       >
         {children}
       </StyledButton>
