@@ -232,7 +232,7 @@ const AdminActions = styled.div`
   gap: 10px;
   padding: var(--10px) var(--20px);
   width: 100%;
-  z-index: 10;
+  z-index: 1;
 
   @media (max-width: 500px) {
     flex-direction: row;
