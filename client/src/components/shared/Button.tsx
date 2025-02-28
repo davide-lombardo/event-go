@@ -11,6 +11,7 @@ interface ButtonProps {
   tooltip?: string;
   loading?: boolean;
   label?: string;
+  icon?: React.ReactNode | string;
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -20,20 +21,19 @@ const StyledButton = styled.button<ButtonProps>`
   border: none;
   border-radius: var(--8px);
   font-size: var(--16px);
-  background-color: ${({ variant }) => {
+  transition: background-color 0.3s ease;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+
+  background-color: ${({ variant = 'primary' }) => {
     switch (variant) {
       case 'primary':
-        return 'var(--color-primary)';
+      case 'danger':
+      case 'success':
+      case 'warning':
+        return `var(--color-${variant})`;
       case 'secondary':
         return 'var(--color-gray-8)';
-      case 'danger':
-        return 'var(--color-danger)';
-      case 'success':
-        return 'var(--color-success)';
-      case 'warning':
-        return 'var(--color-warning)';
       case 'link':
-        return 'transparent';
       case 'outline':
         return 'transparent';
       default:
@@ -41,20 +41,16 @@ const StyledButton = styled.button<ButtonProps>`
     }
   }};
 
-  color: ${({ variant }) => {
+  color: ${({ variant = 'primary' }) => {
     switch (variant) {
       case 'primary':
+      case 'danger':
+      case 'success':
+      case 'warning':
         return 'var(--color-white)';
       case 'secondary':
         return 'var(--color-gray-1)';
-      case 'danger':
-        return 'var(--color-white)';
-      case 'success':
-        return 'var(--color-white)';
-      case 'warning':
-        return 'var(--color-white)';
       case 'link':
-        return 'var(--color-gray-8)';
       case 'outline':
         return 'var(--color-gray-8)';
       default:
@@ -62,28 +58,17 @@ const StyledButton = styled.button<ButtonProps>`
     }
   }};
 
-  border: ${({ variant }) => {
-    switch (variant) {
-      case 'outline':
-        return '1px solid var(--color-gray-5)';
-      default:
-        return 'none';
-    }
-  }};
-
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  transition: background-color 0.3s ease;
+  border: ${({ variant = 'primary' }) =>
+    variant === 'outline' ? '1px solid var(--color-gray-5)' : 'none'};
 
   &:hover {
-    background-color: ${({ variant }) =>
-      variant === 'primary'
-        ? 'transparent'
-        : variant === 'danger'
-        ? 'var(--color-grey-8)'
+    background-color: ${({ variant = 'primary' }) =>
+      ['primary', 'danger'].includes(variant)
+        ? 'var(--color-gray-8)'
         : 'rgba(0, 0, 0, 0.05)'};
-    color: ${({ variant }) =>
-      variant === 'transparent'
-        ? 'var(--color-primary)'
+    color: ${({ variant = 'primary' }) =>
+      ['primary', 'danger'].includes(variant)
+        ? 'var(--color-white)'
         : 'var(--color-gray-8)'};
 
     img {
@@ -144,7 +129,7 @@ const TooltipWrapper = styled.div`
 `;
 
 StyledButton.shouldForwardProp = prop =>
-  prop !== 'variant' && prop !== 'loading';
+  prop !== 'variant' && prop !== 'loading' && prop !== 'icon';
 
 const Button: React.FC<ButtonProps> = ({
   onClick,
@@ -155,7 +140,22 @@ const Button: React.FC<ButtonProps> = ({
   tooltip,
   loading = false,
   label,
+  icon, 
 }) => {
+  const renderIcon = () => {
+    if (typeof icon === 'string') {
+      return (
+        <div
+          dangerouslySetInnerHTML={{ __html: icon }}
+          style={{ marginRight: '8px' }}
+        />
+      );
+    }
+    return React.cloneElement(icon as React.ReactElement, {
+      style: { marginRight: '8px' },
+    });
+  };
+
   return (
     <TooltipWrapper>
       <StyledButton
@@ -164,8 +164,9 @@ const Button: React.FC<ButtonProps> = ({
         type={type}
         disabled={disabled || (type === 'submit' && loading)}
         aria-disabled={disabled || (type === 'submit' && loading)}
-        aria-label={label} 
+        aria-label={label}
       >
+        {icon && renderIcon()}
         {children}
       </StyledButton>
       {disabled && tooltip && <Tooltip>{tooltip}</Tooltip>}

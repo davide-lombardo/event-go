@@ -19,7 +19,11 @@ const NavbarWrapper = styled.nav`
   color: var(--color-gray-1);
 
   @media (min-width: 1024px) {
-    background: radial-gradient(ellipse at 50% 100px, rgba(250, 247, 244, 0.3), rgba(250, 247, 244, 1));
+    background: radial-gradient(
+      ellipse at 50% 100px,
+      rgba(250, 247, 244, 0.3),
+      rgba(250, 247, 244, 1)
+    );
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-elevation-medium);
@@ -75,15 +79,6 @@ const Dropdown = styled.div<{ $show: boolean }>`
   z-index: 1000;
 `;
 
-// const StyledLink = styled(Link)`
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-//   text-decoration: none;
-//   color: inherit;
-//   width: 100%;
-// `;
-
 const DropdownOption = styled.div`
   display: flex;
   align-items: center;
@@ -135,7 +130,10 @@ const Nav = () => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setDropdownOpen(false);
     }
   };
@@ -164,6 +162,24 @@ const Nav = () => {
     setUser(null);
   };
 
+  const addEventIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      className="lucide lucide-plus"
+    >
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </svg>
+  );
+
   return (
     <NavbarWrapper>
       <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -172,25 +188,13 @@ const Nav = () => {
 
       <ButtonGroup>
         {user && (
-          <Button onClick={handleOpenModal} variant={'link'} label='Add Event'>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-              Add Event
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ marginLeft: '4px' }}
-              >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </span>
+          <Button
+            onClick={handleOpenModal}
+            variant={'link'}
+            label="Add Event"
+            icon={addEventIcon}
+          >
+            Add Event
           </Button>
         )}
 
@@ -224,7 +228,11 @@ const Nav = () => {
             </Dropdown>
           </>
         ) : (
-          <Button onClick={handleOpenAuthModal} variant={'primary'} label='Sign In'>
+          <Button
+            onClick={handleOpenAuthModal}
+            variant={'primary'}
+            label="Sign In"
+          >
             Sign In
           </Button>
         )}
@@ -243,10 +251,14 @@ const Nav = () => {
             let userData;
             if (mode === 'signin') {
               await userService.signIn(email, password);
-              userData = await userService.getUserProfile(localStorage.getItem('token'));
+              userData = await userService.getUserProfile(
+                localStorage.getItem('token')
+              );
             } else if (mode === 'signup') {
               await userService.signUp(username, email, password);
-              userData = await userService.getUserProfile(localStorage.getItem('token'));
+              userData = await userService.getUserProfile(
+                localStorage.getItem('token')
+              );
             }
 
             if (userData) {
