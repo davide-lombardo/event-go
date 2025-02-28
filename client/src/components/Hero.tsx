@@ -91,8 +91,6 @@ const ImageContainer = styled.div`
     position: absolute;
     width: 120%;
     height: 120%;
-    top: -10%;
-    left: -10%;
     background: url('https://images.unsplash.com/photo-1682447404920-4be1294c2854?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D')
       center/cover;
     opacity: 0.5;
