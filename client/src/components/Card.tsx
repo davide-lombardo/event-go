@@ -226,11 +226,13 @@ const Location = styled.span`
 `;
 
 const AdminActions = styled.div`
+  position: relative;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   padding: var(--10px) var(--20px);
   width: 100%;
+  z-index: 10;
 
   @media (max-width: 500px) {
     flex-direction: row;
@@ -287,10 +289,8 @@ const Card: React.FC<CardProps> = React.memo(
     const isEventCreator = user?.username === userName;
     const showAdminActions = role === 'admin' || isEventCreator;
 
-    const handleEdit = (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
+    const handleEdit = () => {
+      console.log('Edit button clicked');
       setModalEventData({
         id: eventId,
         name: title,
@@ -308,9 +308,8 @@ const Card: React.FC<CardProps> = React.memo(
       setIsModalOpen(true);
     };
 
-    const handleDelete = (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+    const handleDelete = () => {
+      console.log('Delete button clicked');
       setIsDeleteConfirmOpen(true);
     };
 
@@ -344,13 +343,13 @@ const Card: React.FC<CardProps> = React.memo(
 
     return (
       <>
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: 'none', color: 'inherit' }}
-        >
-          <CardContainer $isListView={isListView}>
+        <CardContainer $isListView={isListView}>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
             <CardContentWrapper $isListView={isListView}>
               <TitleSection $isListView={isListView}>
                 <Title ref={titleRef} title={title}>
@@ -393,7 +392,12 @@ const Card: React.FC<CardProps> = React.memo(
                   <EventInfo>
                     <EventDate>{formatDateCustom(eventDate)}</EventDate>
                     <LocationContainer>
-                      <img src={MapPinIconImage} alt="" width={14} height={14} />
+                      <img
+                        src={MapPinIconImage}
+                        alt=""
+                        width={14}
+                        height={14}
+                      />
                       <Location ref={locationRef} title={location}>
                         {location}
                       </Location>
@@ -402,15 +406,15 @@ const Card: React.FC<CardProps> = React.memo(
                 </Footer>
               )}
             </CardContentWrapper>
+          </a>
 
-            {showAdminActions && (
-              <AdminActions theme={{ $isListView: isListView }}>
-                <ActionButton onClick={handleEdit}>Edit</ActionButton>
-                <ActionButton onClick={handleDelete}>Delete</ActionButton>
-              </AdminActions>
-            )}
-          </CardContainer>
-        </a>
+          {showAdminActions && (
+            <AdminActions theme={{ $isListView: isListView }}>
+              <ActionButton onClick={handleEdit}>Edit</ActionButton>
+              <ActionButton onClick={handleDelete}>Delete</ActionButton>
+            </AdminActions>
+          )}
+        </CardContainer>
 
         {isModalOpen && modalEventData && (
           <EventModal
