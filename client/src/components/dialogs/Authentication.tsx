@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../shared/Button';
-import EyeIcon from '/src/assets/eye.svg';
-import EyeOffIcon from '/src/assets/eye-off.svg';
 import Input from '../shared/Input';
+import { EyeCloseIcon, EyeOpenIcon } from '../../utils/icons.utils';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -114,10 +113,17 @@ const ErrorText = styled.span`
 
 const TogglePasswordIcon = styled.span`
   position: absolute;
-  right: 10px;
+  right: 15px;
   cursor: pointer;
   font-size: 1.2rem;
   color: var(--color-gray-10);
+`;
+
+
+const IconWrapper = styled.span`
+  display: flex;
+  align-items: center;
+  
 `;
 
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
@@ -239,9 +245,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {
 
             <TogglePasswordIcon onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? (
-                <img src={EyeOffIcon} alt="" width={14} height={14} />
+                <IconWrapper>{EyeOpenIcon}</IconWrapper>
               ) : (
-                <img src={EyeIcon} alt="" width={14} height={14} />
+                <IconWrapper>{EyeCloseIcon}</IconWrapper>
               )}
             </TogglePasswordIcon>
 

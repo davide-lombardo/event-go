@@ -6,9 +6,9 @@ import { useEventContext } from '../context/EventContext';
 import { useUserContext } from '../context/UserContext';
 import AuthModal from './dialogs/Authentication';
 import { useUserService } from '../services/user.service';
-import UserIcon from '/src/assets/user.svg';
-import LogoutIcon from '/src/assets/log-out.svg';
 import { Link } from 'react-router-dom';
+import { AddEventIcon, LogoutIcon } from '../utils/icons.utils';
+import UserAvatar from './UserInfo';
 
 const NavbarWrapper = styled.nav`
   display: flex;
@@ -54,15 +54,6 @@ const ButtonGroup = styled.div`
   position: relative;
 `;
 
-const UserProfileImage = styled.img`
-  width: var(--40px);
-  height: var(--40px);
-  border-radius: 50%;
-  margin-left: 10px;
-  object-fit: cover;
-  cursor: pointer;
-`;
-
 const Dropdown = styled.div<{ $show: boolean }>`
   position: absolute;
   top: 50px;
@@ -82,7 +73,7 @@ const Dropdown = styled.div<{ $show: boolean }>`
 const DropdownOption = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between icon and text */
+  gap: 10px;
   padding: 12px 16px;
   font-size: 14px;
   color: #333;
@@ -110,6 +101,15 @@ const WelcomeMessage = styled.div`
   padding: 12px 16px;
   color: var(--color-gray-8);
   font-weight: 400;
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  color: var(--color-gray-10);
+`;
+
+const UserProfileContainer = styled.div`
+  cursor: pointer;
 `;
 
 const Nav = () => {
@@ -162,24 +162,6 @@ const Nav = () => {
     setUser(null);
   };
 
-  const addEventIcon = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className="lucide lucide-plus"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
-
   return (
     <NavbarWrapper>
       <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -192,7 +174,7 @@ const Nav = () => {
             onClick={handleOpenModal}
             variant={'link'}
             label="Add Event"
-            icon={addEventIcon}
+            icon={AddEventIcon}
           >
             Add Event
           </Button>
@@ -200,12 +182,15 @@ const Nav = () => {
 
         {user ? (
           <>
-            <UserProfileImage
-              src={user.photoURL || UserIcon}
-              onError={e => (e.currentTarget.src = UserIcon)}
-              alt="User profile"
-              onClick={handleProfileImageClick}
-            />
+            <UserProfileContainer onClick={handleProfileImageClick}>
+              <UserAvatar
+                userName={user.username}
+                userImage={user.photoURL}
+                hideUsername={true}
+                forceDefaultIcon={true}
+              />
+            </UserProfileContainer>
+
             <Dropdown $show={dropdownOpen} ref={dropdownRef}>
               <WelcomeMessage>
                 Welcome, <b>{user.username}</b>
@@ -222,7 +207,7 @@ const Nav = () => {
 
               <DropdownDivider /> */}
               <DropdownOption onClick={handleSignOut}>
-                <img src={LogoutIcon} alt="logout icon" />
+                <IconWrapper>{LogoutIcon}</IconWrapper>
                 Logout
               </DropdownOption>
             </Dropdown>

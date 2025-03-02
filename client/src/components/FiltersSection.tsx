@@ -5,6 +5,7 @@ import AutocompleteInput from './AutocompleteInput';
 import Button from './shared/Button';
 import Select from './shared/Select';
 import { categoryIcons } from '../utils/category.utils';
+import { SearchIcon } from '../utils/icons.utils';
 
 interface FilterProps {
   onFilterChange: (filters: EventFilters) => void;
@@ -90,6 +91,15 @@ const CategoryButton = styled.button<{ $isSelected: boolean }>`
   }
 `;
 
+const IconWrapper = styled.div`
+  color: var(--color-gray-10);
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
 const CategoryText = styled.span`
   font-size: 0.9rem;
   text-align: center;
@@ -104,25 +114,6 @@ const ButtonsWrapper = styled.div`
     margin-top: 10px;
   }
 `;
-
-const searchIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="lucide lucide-search"
-  >
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.3-4.3" />
-  </svg>
-);
-
 
 const FilterSection = ({
   onFilterChange,
@@ -185,7 +176,7 @@ const FilterSection = ({
       alert(
         'Unable to access your location. Please check your browser permissions.'
       );
-    } 
+    }
   };
 
   const handleApply = () => {
@@ -202,7 +193,7 @@ const FilterSection = ({
               initialValue={filters.location.searchText}
               onLocationChange={handleLocationChange}
               placeholder="Enter a location"
-              handleFindNearMe={handleFindNearMe} 
+              handleFindNearMe={handleFindNearMe}
             />
           </InputGroup>
 
@@ -218,7 +209,13 @@ const FilterSection = ({
         </InputsWrapper>
 
         <ButtonsWrapper>
-          <Button type="submit" variant="primary" onClick={handleApply} label='Search Events' icon={searchIcon}>
+          <Button
+            type="submit"
+            variant="primary"
+            onClick={handleApply}
+            label="Search Events"
+            icon={SearchIcon}
+          >
             Search Events
           </Button>
         </ButtonsWrapper>
@@ -231,7 +228,9 @@ const FilterSection = ({
             $isSelected={filters.categories.includes(category)}
             onClick={() => handleCategoryToggle(category)}
           >
-            <img src={categoryIcons[category as EventCategory]} alt="" />
+            <IconWrapper>
+              {categoryIcons[category as EventCategory]}
+            </IconWrapper>
             <CategoryText>{category}</CategoryText>
           </CategoryButton>
         ))}

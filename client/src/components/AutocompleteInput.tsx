@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Libraries, StandaloneSearchBox, useJsApiLoader } from '@react-google-maps/api';
-import MapPinIconImage from '/src/assets/map-pin.svg';
+import AnimatedPin from './MapPinIcon';
+
 
 const libraries: Libraries = ["places"];
 
@@ -25,7 +26,7 @@ const Input = styled.input<{ $fullWidth: boolean }>`
   border: 1px solid var(--color-gray-10);
   border-radius: var(--border-radius-sm);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   width: 100%;
 
   &:focus {
@@ -44,14 +45,6 @@ const MapPinButton = styled.button`
   cursor: pointer;
   width: 25px;
   height: 25px;
-
-  img {
-    width: 16px;
-  }
-
-  &:hover {
-    opacity: 0.5;
-  }
 `;
 
 const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
@@ -117,7 +110,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
           />
         </StandaloneSearchBox>
         <MapPinButton onClick={handleMapPinClick}>
-          <img src={MapPinIconImage} alt="Map Pin" />
+          <AnimatedPin size={18} color="var(--color-gray-6)" />
         </MapPinButton>
       </InputWrapper>
     ) : (

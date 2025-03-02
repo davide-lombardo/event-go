@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import UserIconImage from '/src/assets/user.svg';
-import MapPinIconImage from '/src/assets/map-pin.svg';
 import { useUserContext } from '../context/UserContext';
 import { EventCategory, EventData } from '../types/event.model';
 import EventModal from './dialogs/AddEvent';
@@ -9,6 +7,8 @@ import { useEventContext } from '../context/EventContext';
 import ConfirmDelete from './dialogs/ConfirmDelete';
 import { formatDateCustom } from '../utils/date.utils';
 import { categoryColors, categoryIcons } from '../utils/category.utils';
+import { DeleteIcon, EditIcon, MapPinIcon } from '../utils/icons.utils';
+import UserAvatar from './UserInfo';
 
 interface CardProps {
   title: string;
@@ -152,10 +152,19 @@ const CategoryTag = styled.span<{ $category: EventCategory }>`
   align-items: center;
 `;
 
-const CategoryIcon = styled.img`
+const CategoryIconWrapper = styled.div<{ $category: EventCategory }>`
   height: 1em;
-  width: auto;
+  width: 1em;
   margin-right: var(--5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => categoryColors[props.$category] || 'currentColor'};
+
+  & > svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const Description = styled.p<{ $isListView: boolean }>`
@@ -176,27 +185,6 @@ const Footer = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   flex-direction: row;
-`;
-
-const UserImage = styled.img`
-  width: var(--30px);
-  height: var(--30px);
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const UserName = styled.span`
-  font-size: 0.7rem;
-  color: var(--font-color-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const EventInfo = styled.div`
@@ -240,12 +228,16 @@ const AdminActions = styled.div`
 `;
 
 const ActionButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background-color: var(--color-gray-8);
   color: var(--color-gray-1);
   border: none;
   padding: var(--5px) var(--10px);
   border-radius: var(--border-radius);
   cursor: pointer;
+  font-size: 14px;
 
   &:hover {
     background-color: var(--color-primary);
@@ -253,6 +245,16 @@ const ActionButton = styled.button`
 
   &:focus {
     outline-offset: 0.3rem;
+  }
+`;
+
+const IconWrapper = styled.span`
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 16px;
+    height: 16px;
   }
 `;
 
@@ -362,10 +364,9 @@ const Card: React.FC<CardProps> = React.memo(
               </TitleSection>
               <LabelContainer>
                 <CategoryTag $category={category as EventCategory}>
-                  <CategoryIcon
-                    src={categoryIcons[category as EventCategory]}
-                    alt=""
-                  />
+                  <CategoryIconWrapper $category={category as EventCategory}>
+                    {categoryIcons[category as EventCategory]}
+                  </CategoryIconWrapper>
                   {category}
                 </CategoryTag>
               </LabelContainer>
@@ -380,24 +381,12 @@ const Card: React.FC<CardProps> = React.memo(
               )}
               {!isListView && (
                 <Footer>
-                  <UserInfo>
-                    <UserImage
-                      src={userImage ? userImage : UserIconImage}
-                      onError={e => (e.currentTarget.src = UserIconImage)}
-                      alt="User Avatar"
-                    />
-                    <UserName title={userName}>@{userName}</UserName>
-                  </UserInfo>
+                 <UserAvatar userName={userName} userImage={userImage} forceDefaultIcon={true}/>
 
                   <EventInfo>
                     <EventDate>{formatDateCustom(eventDate)}</EventDate>
                     <LocationContainer>
-                      <img
-                        src={MapPinIconImage}
-                        alt=""
-                        width={14}
-                        height={14}
-                      />
+                    <IconWrapper>{MapPinIcon}</IconWrapper>
                       <Location ref={locationRef} title={location}>
                         {location}
                       </Location>
@@ -410,8 +399,14 @@ const Card: React.FC<CardProps> = React.memo(
 
           {showAdminActions && (
             <AdminActions theme={{ $isListView: isListView }}>
-              <ActionButton onClick={handleEdit}>Edit</ActionButton>
-              <ActionButton onClick={handleDelete}>Delete</ActionButton>
+              <ActionButton onClick={handleEdit}>
+                <IconWrapper>{EditIcon}</IconWrapper>
+                Edit
+              </ActionButton>
+              <ActionButton onClick={handleDelete}>
+                <IconWrapper>{DeleteIcon}</IconWrapper>
+                Delete
+              </ActionButton>
             </AdminActions>
           )}
         </CardContainer>

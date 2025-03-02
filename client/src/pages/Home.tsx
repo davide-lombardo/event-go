@@ -8,8 +8,7 @@ import { EventFilters } from '../types/event.model';
 import Pagination from '../components/Pagination';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Skeleton from '../components/Skeleton';
-import GridIcon from '/src/assets/grid.svg';
-import ListIcon from '/src/assets/list.svg';
+import { GridIcon, ListIcon } from '../utils/icons.utils';
 
 
 const EventListWrapper = styled.div<{ $isListView: boolean }>`
@@ -96,10 +95,11 @@ const HiddenRadio = styled.input`
   height: 0;
 `;
 
-const ViewIcon = styled.img<{ $isActive: boolean }>`
+const ViewIcon = styled.div<{ $isActive: boolean }>`
+  display: flex;
   margin-right: 6px;
   width: 1rem;
-  filter: ${props => (props.$isActive ? 'invert(1)' : 'none')};
+  color: ${props => (props.$isActive ? 'var(--color-white)' : 'var(--color-gray-10)')};
 `;
 
 function Home() {
@@ -214,7 +214,7 @@ function Home() {
                   checked={isListView}
                   onChange={() => toggleView()}
                 />
-                <ViewIcon src={ListIcon} alt="" $isActive={isListView}></ViewIcon> List View
+                <ViewIcon $isActive={isListView}>{ListIcon}</ViewIcon> List View
               </SwitchLabel>
 
               <SwitchLabel $active={!isListView}>
@@ -224,7 +224,7 @@ function Home() {
                   checked={!isListView}
                   onChange={() => toggleView()}
                 />
-                <ViewIcon src={GridIcon} alt="" $isActive={!isListView}></ViewIcon> Grid View
+                <ViewIcon $isActive={!isListView}>{GridIcon}</ViewIcon> Grid View
               </SwitchLabel>
             </SwitchLabels>
           </SwitchContainer>

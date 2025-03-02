@@ -1,14 +1,15 @@
 import { EventCategory } from '../types/event.model';
-import MusicIcon from '../assets/music.svg';
-import HealthIcon from '../assets/heart.svg';
-import TechIcon from '../assets/code.svg';
-import BusinessIcon from '../assets/briefcase.svg';
-import EducationIcon from '../assets/book-open.svg';
-import ArtIcon from '../assets/image.svg';
-import SportsIcon from '../assets/award.svg';
+import {
+  ArtIcon,
+  BusinessIcon,
+  EducationIcon,
+  HealthIcon,
+  MusicIcon,
+  SportsIcon,
+  TechIcon,
+} from './icons.utils';
 
-
-export const categoryIcons: Record<EventCategory, string> = {
+export const categoryIcons: Record<EventCategory, JSX.Element> = {
   [EventCategory.Music]: MusicIcon,
   [EventCategory.Sports]: SportsIcon,
   [EventCategory.Tech]: TechIcon,
