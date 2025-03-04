@@ -14,7 +14,7 @@ const NavbarWrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--20px);
+  padding: var(--10px) var(--20px);
   background-color: transparent;
   color: var(--color-gray-1);
 
