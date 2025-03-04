@@ -69,9 +69,9 @@ export const getUserProfile = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
       // @ts-ignore
       where: { id: req.user.id },
-      include: {
-        events: true,
-      },
+      // include: {
+      //   events: true,
+      // },
     });
 
     if (!user) {
@@ -154,7 +154,7 @@ export const uploadProfileImage = async (
         email: true,
         photoURL: true,
         role: true,
-        events: true,
+        events: false,
       },
     });
 

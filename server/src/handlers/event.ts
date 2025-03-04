@@ -97,9 +97,6 @@ export const getEvents = async (req: Request, res: Response) => {
       where: whereConditions,
       skip: (Number(page) - 1) * Number(pageSize),
       take: Number(pageSize),
-      include: {
-        user: true,
-      },
       orderBy: {
         eventDate: 'asc',
       },
@@ -118,6 +115,7 @@ export const getEvents = async (req: Request, res: Response) => {
         totalPages: Math.ceil(totalEvents / Number(pageSize)),
       },
     });
+
   } catch (error) {
     console.error('Error fetching events:', error);
     res.status(500).json({ error: 'Error fetching events' });
