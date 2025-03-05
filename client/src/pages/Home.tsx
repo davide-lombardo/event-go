@@ -238,7 +238,7 @@ function Home() {
         $isListView={isListView}
       >
         {loading ? (
-          <Skeleton />
+          <Skeleton isListView={isListView}/>
         ) : eventsToDisplay.length > 0 ? (
           eventsToDisplay.map(event => (
             <Card

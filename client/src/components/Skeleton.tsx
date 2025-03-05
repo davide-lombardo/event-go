@@ -1,16 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const SkeletonCard = styled.div`
+const SkeletonCard = styled.div<{ $isListView: boolean }>`
   width: 100%;
-  height: 200px;
-  max-width: 25rem;
+  height: ${props => (props.$isListView ? '120px' : '200px')};
+  max-width: ${props => (props.$isListView ? '100%' : '25rem')};
   margin: var(--20px);
   border-radius: var(--border-radius);
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow-elevation-medium);
   background-color: var(--color-gray-2);
+  
+  display: ${props => (props.$isListView ? 'flex' : 'block')};
+  flex-direction: ${props => (props.$isListView ? 'column' : 'unset')};
 
   &::before {
     content: '';
@@ -41,8 +44,8 @@ const SkeletonTitle = styled.div`
   border-radius: 4px;
 `;
 
-const SkeletonDescription = styled.div`
-  height: 60px;
+const SkeletonDescription = styled.div<{ $isListView: boolean }>`
+  height: ${props => (props.$isListView ? '20px' : '60px')};
   width: 90%;
   background-color: var(--color-gray-3);
   margin: var(--20px);
@@ -57,14 +60,14 @@ const SkeletonFooter = styled.div`
   border-radius: 4px;
 `;
 
-const Skeleton: React.FC = () => {
+const Skeleton: React.FC<{ isListView: boolean }> = ({ isListView }) => {
   return (
     <>
       {Array.from({ length: 6 }).map((_, index) => (
-        <SkeletonCard key={index}>
+        <SkeletonCard key={index} $isListView={isListView}>
           <SkeletonTitle />
-          <SkeletonDescription />
-          <SkeletonFooter />
+          <SkeletonDescription $isListView={isListView}/>
+          { !isListView && <SkeletonFooter></SkeletonFooter> }
         </SkeletonCard>
       ))}
     </>
