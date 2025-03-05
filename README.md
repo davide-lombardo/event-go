@@ -29,7 +29,7 @@ Check out the live version of the app [here](https://event-go-frontend.onrender.
 
 - **Event Discovery**: Users can explore a variety of events near them based on different filters.
 - **Filters**: Filter events by criteria such as locationand date.
-- **Loading State**: A loading spinner is displayed while events are being fetched.
+- **Loading Skeleton**: A loading skeleton is displayed while events are being fetched.
 - **Responsive Design**: The application is responsive, optimized for both mobile and desktop devices.
 - **Event Cards**: Events are displayed as cards with essential details such as title, description, location, and more.
 - **Dynamic Content**: The event list is dynamically updated based on filter selection.

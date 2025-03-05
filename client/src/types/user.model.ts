@@ -1,6 +1,5 @@
 import { EventData } from "./event.model";
 
-
 export interface User {
   id: string;
   email: string;
