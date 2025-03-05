@@ -45,13 +45,40 @@ const GlobalStyle = createGlobalStyle`
   --color-purple: #673ece;
 
   /* Category Colors */
+  /* Music Category */
   --color-category-music: #FF6347;
+  --color-category-music-light: #FFE4E1;
+  --color-category-music-dark: #8B4513;
+
+  /* Sports Category */
   --color-category-sports: #1E90FF;
+  --color-category-sports-light: #E6F2FF;
+  --color-category-sports-dark: #00008B;
+
+  /* Art Category */
   --color-category-art: #8A2BE2;
+  --color-category-art-light: #E6E6FA;
+  --color-category-art-dark: #4B0082;
+
+  /* Education Category */
   --color-category-education: #FF4500;
+  --color-category-education-light: #FFF0F5;
+  --color-category-education-dark: #8B0000;
+
+  /* Health Category */
   --color-category-health: #32CD32;
-  --color-category-business: #dcbb00;
+  --color-category-health-light: #F0FFF0;
+  --color-category-health-dark: #006400;
+
+  /* Business Category */
+  --color-category-business: #DCB000;
+  --color-category-business-light: #FFF9E6;
+  --color-category-business-dark: #8B4513;
+
+  /* Tech Category */
   --color-category-tech: #800080;
+  --color-category-tech-light: #F0E6F0;
+  --color-category-tech-dark: #4B0082;
 
   --gradient-primary: linear-gradient(
     45deg,

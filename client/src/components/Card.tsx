@@ -6,8 +6,13 @@ import EventModal from './dialogs/AddEvent';
 import { useEventContext } from '../context/EventContext';
 import ConfirmDelete from './dialogs/ConfirmDelete';
 import { formatDateCustom } from '../utils/date.utils';
-import { categoryColors, categoryIcons } from '../utils/category.utils';
-import { DeleteIcon, EditIcon, MapPinIcon } from '../utils/icons.utils';
+import { categoryColorPalette, categoryIcons } from '../utils/category.utils';
+import {
+  CalendarIcon,
+  DeleteIcon,
+  EditIcon,
+  MapPinIcon,
+} from '../utils/icons.utils';
 import UserAvatar from './UserInfo';
 
 interface CardProps {
@@ -97,11 +102,11 @@ const TitleSection = styled.div<{ $isListView: boolean }>`
   padding-bottom: 0;
   gap: var(--10px);
   padding-bottom: ${props => (props.$isListView ? 'var(--20px)' : '0')};
-  width: ${props => (props.$isListView ? '50%' : '100%')};
+  width: ${props => (props.$isListView ? '100%' : '100%')};
 `;
 
-const Title = styled.span`
-  font-size: var(--font-size-medium);
+const Title = styled.span<{ $isListView: boolean }>`
+  font-size: var(--20px);
   color: var(--color-heading);
   font-weight: bold;
   white-space: nowrap;
@@ -109,19 +114,24 @@ const Title = styled.span`
   text-overflow: ellipsis;
   flex-grow: 1;
   margin: 0;
+  max-width: ${props => (props.$isListView ? '100%' : '18rem')};
+
+  @media (max-width: 500px) {
+    max-width: 10rem;
+  }
 `;
 
 const LabelContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: var(--10px) var(--20px);
+  /* padding: var(--10px) var(--20px); */
 `;
 
 const CategoryTag = styled.span<{ $category: EventCategory }>`
-  color: ${props => categoryColors[props.$category] || 'transparent'};
-  border: ${props => `1px solid ${categoryColors[props.$category]}`};
-  background-color: transparent;
-  font-size: var(--font-size-small);
+  background-color: ${props => categoryColorPalette[props.$category].light};
+  color: ${props => categoryColorPalette[props.$category].dark};
+  border: 1px solid ${props => categoryColorPalette[props.$category].base};
+  font-size: 0.75rem;
   padding: var(--4px) var(--8px);
   border-radius: 100px;
   display: flex;
@@ -135,7 +145,7 @@ const CategoryIconWrapper = styled.div<{ $category: EventCategory }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${props => categoryColors[props.$category] || 'currentColor'};
+  color: ${props => categoryColorPalette[props.$category].dark};
 
   & > svg {
     width: 100%;
@@ -146,6 +156,7 @@ const CategoryIconWrapper = styled.div<{ $category: EventCategory }>`
 const Description = styled.p<{ $isListView: boolean }>`
   padding: var(--20px);
   font-size: var(--font-size-small);
+  color: var(--font-color-muted);
   line-height: 1.5;
   max-height: ${props => (props.$isListView ? 'auto' : '4.5em')};
   overflow: hidden;
@@ -166,12 +177,16 @@ const Footer = styled.div`
 const EventInfo = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  gap: 0.2rem;
 `;
 
 const EventDate = styled.span`
   font-size: var(--font-size-small);
   color: var(--font-color-muted);
+`;
+
+const EmptyDescriptionPlaceholder = styled.div<{ $isListView: boolean }>`
+  padding: var(--20px);
 `;
 
 const LocationContainer = styled.div`
@@ -182,7 +197,7 @@ const LocationContainer = styled.div`
 
 const Location = styled.span`
   font-size: var(--font-size-small);
-  color: var(--color-grey-7);
+  color: var(--font-color-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -328,18 +343,18 @@ const Card: React.FC<CardProps> = React.memo(
           >
             <CardContentWrapper $isListView={isListView}>
               <TitleSection $isListView={isListView}>
-                <Title ref={titleRef} title={title}>
+                <Title ref={titleRef} title={title} $isListView={isListView}>
                   {title}
                 </Title>
+                <LabelContainer>
+                  <CategoryTag $category={category as EventCategory}>
+                    <CategoryIconWrapper $category={category as EventCategory}>
+                      {categoryIcons[category as EventCategory]}
+                    </CategoryIconWrapper>
+                    {category}
+                  </CategoryTag>
+                </LabelContainer>
               </TitleSection>
-              <LabelContainer>
-                <CategoryTag $category={category as EventCategory}>
-                  <CategoryIconWrapper $category={category as EventCategory}>
-                    {categoryIcons[category as EventCategory]}
-                  </CategoryIconWrapper>
-                  {category}
-                </CategoryTag>
-              </LabelContainer>
               {!isListView && description && (
                 <Description
                   ref={descriptionRef}
@@ -349,14 +364,27 @@ const Card: React.FC<CardProps> = React.memo(
                   {description}
                 </Description>
               )}
+              {!isListView && !description && (
+                <EmptyDescriptionPlaceholder
+                  $isListView={isListView}
+                ></EmptyDescriptionPlaceholder>
+              )}
               {!isListView && (
                 <Footer>
-                 <UserAvatar userName={userName} userImage={userImage} forceDefaultIcon={true}/>
+                  <UserAvatar
+                    userName={userName}
+                    userImage={userImage}
+                    forceDefaultIcon={true}
+                  />
 
                   <EventInfo>
-                    <EventDate>{formatDateCustom(eventDate)}</EventDate>
                     <LocationContainer>
-                    <IconWrapper>{MapPinIcon}</IconWrapper>
+                      <IconWrapper>{CalendarIcon}</IconWrapper>
+                      <EventDate>{formatDateCustom(eventDate)}</EventDate>
+                    </LocationContainer>
+
+                    <LocationContainer>
+                      <IconWrapper>{MapPinIcon}</IconWrapper>
                       <Location ref={locationRef} title={location}>
                         {location}
                       </Location>

@@ -23,7 +23,7 @@ const UserIconWrapper = styled.div`
 `;
 
 const UserName = styled.span`
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   color: var(--font-color-muted);
   white-space: nowrap;
   overflow: hidden;

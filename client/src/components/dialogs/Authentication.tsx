@@ -119,11 +119,9 @@ const TogglePasswordIcon = styled.span`
   color: var(--color-gray-10);
 `;
 
-
 const IconWrapper = styled.span`
   display: flex;
   align-items: center;
-  
 `;
 
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuth }) => {

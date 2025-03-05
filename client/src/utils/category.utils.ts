@@ -19,12 +19,40 @@ export const categoryIcons: Record<EventCategory, JSX.Element> = {
   [EventCategory.Business]: BusinessIcon,
 };
 
-export const categoryColors = {
-  [EventCategory.Music]: 'var(--color-category-music)',
-  [EventCategory.Sports]: 'var(--color-category-sports)',
-  [EventCategory.Art]: 'var(--color-category-art)',
-  [EventCategory.Education]: 'var(--color-category-education)',
-  [EventCategory.Health]: 'var(--color-category-health)',
-  [EventCategory.Business]: 'var(--color-category-business)',
-  [EventCategory.Tech]: 'var(--color-category-tech)',
+export const categoryColorPalette = {
+  [EventCategory.Music]: {
+    base: 'var(--color-category-music)',
+    light: 'var(--color-category-music-light)',
+    dark: 'var(--color-category-music-dark)',
+  },
+  [EventCategory.Sports]: {
+    base: 'var(--color-category-sports)',
+    light: 'var(--color-category-sports-light)',
+    dark: 'var(--color-category-sports-dark)',
+  },
+  [EventCategory.Art]: {
+    base: 'var(--color-category-art)',
+    light: 'var(--color-category-art-light)',
+    dark: 'var(--color-category-art-dark)',
+  },
+  [EventCategory.Education]: {
+    base: 'var(--color-category-education)',
+    light: 'var(--color-category-education-light)',
+    dark: 'var(--color-category-education-dark)',
+  },
+  [EventCategory.Health]: {
+    base: 'var(--color-category-health)',
+    light: 'var(--color-category-health-light)',
+    dark: 'var(--color-category-health-dark)',
+  },
+  [EventCategory.Business]: {
+    base: 'var(--color-category-business)',
+    light: 'var(--color-category-business-light)',
+    dark: 'var(--color-category-business-dark)',
+  },
+  [EventCategory.Tech]: {
+    base: 'var(--color-category-tech)',
+    light: 'var(--color-category-tech-light)',
+    dark: 'var(--color-category-tech-dark)',
+  },
 };
