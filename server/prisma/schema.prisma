@@ -16,7 +16,6 @@ model Event {
   longitude   Float
   description String
   link        String
-  paid        Boolean
   userImage   String
   userName    String
   eventDate   DateTime

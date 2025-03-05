@@ -132,7 +132,6 @@ export const createEvent = async (req: Request, res: Response) => {
       longitude,
       description, 
       link, 
-      paid, 
       userImage, 
       userName, 
       eventDate, 
@@ -148,7 +147,6 @@ export const createEvent = async (req: Request, res: Response) => {
         longitude,
         description,
         link,
-        paid,
         userImage,
         userName,
         eventDate: new Date(eventDate),
@@ -170,7 +168,7 @@ export const createEvent = async (req: Request, res: Response) => {
 export const updateEvent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, location, description, link, paid, userImage, userName, eventDate, category } = req.body;
+    const { name, location, description, link, userImage, userName, eventDate, category } = req.body;
 
     const event = await prisma.event.findUnique({
       where: {
@@ -193,7 +191,6 @@ export const updateEvent = async (req: Request, res: Response) => {
         location,
         description,
         link,
-        paid,
         userImage,
         userName,
         eventDate: new Date(eventDate),
