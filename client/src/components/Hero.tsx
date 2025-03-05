@@ -47,17 +47,19 @@ const SplitContent = styled(BaseContentContainer)`
 
 const MainContent = styled.div`
   h1 {
-    font-size: var(--50px);
-    line-height: 3.5rem;
-    font-weight: 300;
+    line-height: var(--50px);
+    font-size: var(--60px);
+    text-transform: uppercase;
+    font-weight: 900;
     margin-bottom: 1.5rem;
-    line-height: 1.1;
+    letter-spacing: -1px;
 
     span {
       font-weight: 700;
     }
 
     @media (max-width: 768px) {
+      line-height: var(--40px);
       font-size: var(--50px);
     }
   }
@@ -66,7 +68,6 @@ const MainContent = styled.div`
     font-size: var(--16px);
     margin-top: var(--10px);
     color: var(--color-gray-8);
-    margin-bottom: 2rem;
 
     @media (max-width: 768px) {
       margin-bottom: 3rem;
@@ -101,11 +102,7 @@ const Hero: React.FC<HeroProps> = ({ subtitle }) => (
   <SplitHeroWrapper>
     <SplitContent>
       <MainContent>
-        <h1>
-          Hey there!
-          <br />
-          Welcome to <span>EventGo</span>
-        </h1>
+        <h1>Don't let the best events slip away</h1>
         <p>{subtitle}</p>
       </MainContent>
       <ImageContainer />

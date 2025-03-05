@@ -103,6 +103,8 @@ const ViewIcon = styled.div<{ $isActive: boolean }>`
 `;
 
 function Home() {
+  const heroSubtitle = 'Easily find concerts, workshops, and unique experiences happening nearby. EventGo connects you with the best your city has to offer.';
+
   const { events, loading, fetchEvents, pagination } = useEventContext();
   const [isListView, setIsListView] = useState(false);
   const [userLocation, setUserLocation] = useState<string>('');
@@ -183,7 +185,7 @@ function Home() {
 
   return (
     <React.Fragment>
-      <Hero subtitle="Search and discover events happening near you. Explore upcoming events, and find unique experiences tailored to your location." />
+      <Hero subtitle={heroSubtitle} />
       <FilterSection
         onFilterChange={handleFilterChange}
         initialLocation={userLocation}

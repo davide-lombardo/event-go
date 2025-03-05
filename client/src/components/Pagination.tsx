@@ -32,7 +32,7 @@ const IconButton = styled.button`
   color: var(--color-gray-1);
   padding: var(--spacing-small);
   min-width: 40px;
-  border-radius: var(--border-radius-small);
+  border-radius: var(--border-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;

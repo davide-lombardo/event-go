@@ -78,7 +78,7 @@ const UserProfileStats = styled.div`
   width: 100%;
   padding: var(--spacing-medium);
   background-color: var(--background-color);
-  border-radius: var(--border-radius-small);
+  border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-elevation-medium);
 `;
 
