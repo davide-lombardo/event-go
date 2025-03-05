@@ -4,7 +4,7 @@
 
 
 
-Event Go is a web application that helps users discover and explore events happening around them. Users can filter events by different criteria, including location, paid or free events, and more.
+Event Go is a web application that helps users discover and explore events happening around them. Users can filter events by different criteria, including location, date and more.
 
 ## Live Demo
 

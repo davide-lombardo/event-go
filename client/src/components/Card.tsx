@@ -15,7 +15,6 @@ interface CardProps {
   eventId: string;
   link: string;
   description: string;
-  paid: boolean;
   userImage: string;
   userName: string;
   eventDate: string;
@@ -110,29 +109,6 @@ const Title = styled.span`
   text-overflow: ellipsis;
   flex-grow: 1;
   margin: 0;
-  max-width: 18rem;
-
-  @media (max-width: 500px) {
-    max-width: 10rem;
-  }
-`;
-
-const Label = styled.span<{ $paid: boolean }>`
-  display: inline-flex;
-  align-items: center;
-  font-size: var(--font-size-small);
-  font-weight: bold;
-  color: ${props =>
-    props.$paid ? 'var(--color-pink)' : 'var(--color-green-light)'};
-`;
-
-const LabelDot = styled.span<{ $paid: boolean }>`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: 5px;
-  background-color: ${props =>
-    props.$paid ? 'var(--color-pink)' : 'var(--color-green-light)'};
 `;
 
 const LabelContainer = styled.div`
@@ -146,7 +122,7 @@ const CategoryTag = styled.span<{ $category: EventCategory }>`
   border: ${props => `1px solid ${categoryColors[props.$category]}`};
   background-color: transparent;
   font-size: var(--font-size-small);
-  padding: var(--5px) var(--10px);
+  padding: var(--4px) var(--8px);
   border-radius: 100px;
   display: flex;
   align-items: center;
@@ -183,7 +159,7 @@ const Footer = styled.div`
   padding: var(--20px);
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   flex-direction: row;
 `;
 
@@ -264,7 +240,6 @@ const Card: React.FC<CardProps> = React.memo(
     eventId,
     link,
     description,
-    paid,
     userImage,
     userName,
     eventDate,
@@ -301,7 +276,6 @@ const Card: React.FC<CardProps> = React.memo(
         longitude,
         description,
         link,
-        paid,
         userImage,
         userName,
         eventDate,
@@ -357,10 +331,6 @@ const Card: React.FC<CardProps> = React.memo(
                 <Title ref={titleRef} title={title}>
                   {title}
                 </Title>
-                <Label $paid={paid}>
-                  <LabelDot $paid={paid} />
-                  {paid ? 'Paid' : 'Free'}
-                </Label>
               </TitleSection>
               <LabelContainer>
                 <CategoryTag $category={category as EventCategory}>

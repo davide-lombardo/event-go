@@ -126,29 +126,6 @@ const Label = styled.label<{ required?: boolean }>`
   }
 `;
 
-const RadioGroup = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-const RadioLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  color: var(--color-gray-10);
-
-  input[type='radio'] {
-    accent-color: var(--color-primary);
-    margin-right: 0.5rem;
-  }
-
-  &:hover {
-    color: var(--color-primary);
-  }
-`;
-
 const TextArea = styled.textarea`
   padding: 0.8rem;
   font-size: 1rem;
@@ -195,7 +172,6 @@ const EventModal: React.FC<EventModalProps> = ({
     longitude: 0,
     description: '',
     link: '',
-    paid: false,
     userImage: '',
     userName: '',
     eventDate: '',
@@ -218,7 +194,7 @@ const EventModal: React.FC<EventModalProps> = ({
   // Reset state when modal is opened with new data
   useEffect(() => {
     nameRef.current?.focus();
-    
+
     if (initialEventData) {
       setEventData({
         ...initialEventData,
@@ -233,7 +209,6 @@ const EventModal: React.FC<EventModalProps> = ({
         longitude: 0,
         description: '',
         link: '',
-        paid: false,
         userImage: '',
         userName: '',
         eventDate: '',
@@ -287,14 +262,6 @@ const EventModal: React.FC<EventModalProps> = ({
   ) => {
     const { name, value } = e.target;
     setEventData(prevData => ({ ...prevData, [name]: value }));
-  };
-
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setEventData(prevData => ({
-      ...prevData,
-      paid: value === 'paid',
-    }));
   };
 
   const handleLocationChange = (location: string, lat: number, lng: number) => {
@@ -407,19 +374,6 @@ const EventModal: React.FC<EventModalProps> = ({
               ))}
             </Select>
 
-            <Label htmlFor="description">Description</Label>
-            <TextArea
-              name="description"
-              placeholder="Add a brief description of the event"
-              value={eventData.description}
-              onChange={handleChange}
-              rows={4}
-            />
-
-            <Divider />
-          </GroupContainer>
-
-          <GroupContainer>
             <Label htmlFor="link" required>
               Event link
             </Label>
@@ -434,36 +388,21 @@ const EventModal: React.FC<EventModalProps> = ({
             />
             {errors.link && <ErrorText>{errors.link}</ErrorText>}
 
-            <Label>Payment Type</Label>
-            <RadioGroup>
-              <RadioLabel>
-                <input
-                  type="radio"
-                  name="paid"
-                  value="free"
-                  checked={!eventData.paid}
-                  onChange={handleRadioChange}
-                />
-                Free
-              </RadioLabel>
-              <RadioLabel>
-                <input
-                  type="radio"
-                  name="paid"
-                  value="paid"
-                  checked={eventData.paid}
-                  onChange={handleRadioChange}
-                />
-                Paid
-              </RadioLabel>
-            </RadioGroup>
+            <Label htmlFor="description">Description</Label>
+            <TextArea
+              name="description"
+              placeholder="Add a brief description of the event"
+              value={eventData.description}
+              onChange={handleChange}
+              rows={4}
+            />
           </GroupContainer>
 
           <ButtonRow>
-            <Button onClick={onClose} variant={'outline'} label='Cancel'>
+            <Button onClick={onClose} variant={'outline'} label="Cancel">
               Cancel
             </Button>
-            <Button type="submit" disabled={loading} label='Save Event'>
+            <Button type="submit" disabled={loading} label="Save Event">
               Save Event
             </Button>
           </ButtonRow>

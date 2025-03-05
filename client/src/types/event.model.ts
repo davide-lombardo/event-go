@@ -6,7 +6,6 @@ export interface EventData {
   longitude: number;
   description: string;
   link: string;
-  paid: boolean;
   userImage: string
   userName: string;
   eventDate: string;

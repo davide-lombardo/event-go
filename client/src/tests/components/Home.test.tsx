@@ -91,7 +91,6 @@ describe('Home Component', () => {
         name: 'Test Event',
         link: 'https://test.com',
         description: 'Test Description',
-        paid: true,
         userImage: 'https://test.com/image.jpg',
         userName: 'Test User',
         eventDate: new Date().toISOString(),

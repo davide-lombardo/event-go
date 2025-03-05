@@ -52,7 +52,6 @@ describe('EventModal Component', () => {
     longitude: -74.006,
     description: 'Test Description',
     link: 'https://example.com',
-    paid: false,
     userImage: 'http://example.com/photo.jpg',
     userName: 'testuser',
     eventDate: '2023-12-31',
@@ -194,20 +193,5 @@ describe('EventModal Component', () => {
     fireEvent.change(categorySelect, { target: { value: EventCategory.Tech } });
 
     expect(categorySelect).toHaveValue(EventCategory.Tech);
-  });
-
-  it('handles payment type change', () => {
-    render(
-      <EventModal
-        isOpen={true}
-        onClose={mockOnClose}
-        onSave={mockOnSave}
-      />
-    );
-
-    const paidRadio = screen.getByLabelText(/paid/i);
-    fireEvent.click(paidRadio);
-
-    expect(paidRadio).toBeChecked();
   });
 });

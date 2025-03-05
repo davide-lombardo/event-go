@@ -1,4 +1,3 @@
-// UserAvatar.tsx
 import React from 'react';
 import styled from 'styled-components';
 import { UserIcon } from '../utils/icons.utils';
@@ -10,8 +9,8 @@ const UserInfoContainer = styled.div`
 `;
 
 const UserIconWrapper = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;

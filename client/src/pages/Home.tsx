@@ -183,7 +183,7 @@ function Home() {
 
   return (
     <React.Fragment>
-      <Hero subtitle="Search and discover events happening near you. Explore upcoming events, and find both free and paid experiences tailored to your location." />
+      <Hero subtitle="Search and discover events happening near you. Explore upcoming events, and find unique experiences tailored to your location." />
       <FilterSection
         onFilterChange={handleFilterChange}
         initialLocation={userLocation}
@@ -245,7 +245,6 @@ function Home() {
               title={event.name}
               link={event.link}
               description={event.description}
-              paid={event.paid}
               userImage={event.userImage}
               userName={event.userName}
               eventDate={event.eventDate}
