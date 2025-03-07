@@ -46,6 +46,10 @@ const SplitContent = styled(BaseContentContainer)`
 `;
 
 const MainContent = styled.div`
+  @media (max-width: 768px) {
+    text-align: start;
+  }
+
   h1 {
     line-height: var(--50px);
     font-size: var(--60px);
