@@ -190,6 +190,7 @@ const FilterSection = ({
           <InputGroup>
             <Label htmlFor="location">Location</Label>
             <AutocompleteInput
+              id='location'
               initialValue={filters.location.searchText}
               onLocationChange={handleLocationChange}
               placeholder="Enter a location"

@@ -37,7 +37,7 @@ const GlobalStyle = createGlobalStyle`
 
   /* Misc colors */
   --color-white: #FFFFFF;
-  --color-red: #FE436C;
+  --color-red: #d01840;
   --color-orange: #ff7e22;
   --color-green-light: #00d1b2;
   --color-yellow: #fca62a;

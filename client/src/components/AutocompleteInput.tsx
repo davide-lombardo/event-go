@@ -7,6 +7,7 @@ import AnimatedPin from './MapPinIcon';
 const libraries: Libraries = ["places"];
 
 interface AutocompleteInputProps {
+  id: string;
   initialValue?: string;
   placeholder?: string;
   onLocationChange: (location: string, lat: number, lng: number) => void;
@@ -109,7 +110,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
             $fullWidth={false}
           />
         </StandaloneSearchBox>
-        <MapPinButton onClick={handleMapPinClick}>
+        <MapPinButton onClick={handleMapPinClick} aria-label="Select location on map">
           <AnimatedPin size={18} color="var(--color-gray-6)" />
         </MapPinButton>
       </InputWrapper>

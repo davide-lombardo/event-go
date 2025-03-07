@@ -343,7 +343,7 @@ const Card: React.FC<CardProps> = React.memo(
           >
             <CardContentWrapper $isListView={isListView}>
               <TitleSection $isListView={isListView}>
-                <Title ref={titleRef} title={title} $isListView={isListView}>
+                <Title ref={titleRef} $isListView={isListView}>
                   {title}
                 </Title>
                 <LabelContainer>

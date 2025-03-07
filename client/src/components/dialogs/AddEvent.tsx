@@ -323,6 +323,7 @@ const EventModal: React.FC<EventModalProps> = ({
               Event Name
             </Label>
             <Input
+              id="name"
               name="name"
               placeholder="Enter the name of the event"
               value={eventData.name}
@@ -332,10 +333,11 @@ const EventModal: React.FC<EventModalProps> = ({
             />
             {errors.name && <ErrorText>{errors.name}</ErrorText>}
 
-            <Label htmlFor="date" required>
+            <Label htmlFor="event-date" required>
               Event Date
             </Label>
             <Input
+              id='event-date'
               type="date"
               name="eventDate"
               placeholder="Event Date"
@@ -350,6 +352,7 @@ const EventModal: React.FC<EventModalProps> = ({
               Location
             </Label>
             <AutocompleteInput
+              id='location'
               initialValue={eventData.location}
               placeholder="Enter the location of the event"
               onLocationChange={handleLocationChange}
@@ -363,6 +366,7 @@ const EventModal: React.FC<EventModalProps> = ({
               Category
             </Label>
             <Select
+              id="category"
               name="category"
               value={eventData.category}
               onChange={handleCategoryChange}
@@ -378,6 +382,7 @@ const EventModal: React.FC<EventModalProps> = ({
               Event link
             </Label>
             <Input
+              id='link'
               name="link"
               type="url"
               placeholder="https://example.com"
@@ -390,6 +395,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
             <Label htmlFor="description">Description</Label>
             <TextArea
+              id='description'
               name="description"
               placeholder="Add a brief description of the event"
               value={eventData.description}

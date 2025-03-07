@@ -19,6 +19,7 @@ const EventListWrapper = styled.div<{ $isListView: boolean }>`
   justify-items: center;
   width: 100%;
   margin-top: 3rem;
+  margin-bottom: 3rem;
 
   &.empty-state {
     display: flex;
@@ -39,6 +40,7 @@ const NoEventsMessage = styled.div`
   text-align: center;
   margin-top: var(--50px);
 `;
+
 const SwitchContainer = styled.div`
   display: flex;
   align-items: center;
@@ -205,7 +207,7 @@ function Home() {
           >
             Available Events
           </h2>
-          <SwitchContainer>
+          <SwitchContainer {...{ inert: '' }}>
             <SwitchLabels>
               <Slider $isListView={isListView} />
 

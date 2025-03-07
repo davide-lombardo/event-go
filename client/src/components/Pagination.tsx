@@ -81,6 +81,7 @@ const Pagination: React.FC<PaginationProps> = ({ hasMore }) => {
   return (
     <PaginationWrapper>
       <IconButton
+        aria-label="Go to previous page"
         onClick={handlePrevPage}
         disabled={loading || pagination.page <= 1}
       >
@@ -89,7 +90,11 @@ const Pagination: React.FC<PaginationProps> = ({ hasMore }) => {
       <PageInfo>
         {pagination.page} of {pagination.totalPages}
       </PageInfo>
-      <IconButton onClick={handleNextPage} disabled={loading || !hasMore}>
+      <IconButton
+        onClick={handleNextPage}
+        disabled={loading || !hasMore}
+        aria-label="Go to next page"
+      >
         <IconWrapper>{ArrowRightIcon}</IconWrapper>
       </IconButton>
     </PaginationWrapper>
