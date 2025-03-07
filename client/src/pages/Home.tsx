@@ -207,7 +207,7 @@ function Home() {
           >
             Available Events
           </h2>
-          <SwitchContainer {...{ inert: '' }}>
+          <SwitchContainer>
             <SwitchLabels>
               <Slider $isListView={isListView} />
 
