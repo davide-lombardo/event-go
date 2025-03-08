@@ -408,3 +408,65 @@ export const CalendarIcon = (
   </svg>
 );
 
+export const LogoIcon = (
+  <svg
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 100 100"
+    width="40"
+    height="40"
+  >
+    {/* Background Shape with CSS Gradient */}
+    <rect
+      x="5"
+      y="10"
+      width="90"
+      height="80"
+      rx="12"
+      ry="12"
+      style={{ fill: 'url(#gradient-primary)' }}
+    />
+
+    {/* Centered "e" */}
+    <text
+      x="43"
+      y="58"
+      fontFamily="Arial, sans-serif"
+      fontSize="55"
+      fontWeight="bold"
+      fill="white"
+      textAnchor="middle"
+    >
+      e
+    </text>
+
+    {/* Arrow */}
+    <polyline
+      points="55,45 72,58 55,71"
+      stroke="white"
+      strokeWidth="6"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+
+    {/* Gradient Definition */}
+    <defs>
+      <linearGradient id="gradient-primary" gradientTransform="rotate(45)">
+        <stop offset="0%" stopColor="hsl(347, 99%, 63%)" />
+        <stop offset="6%" stopColor="hsl(339, 95%, 62%)" />
+        <stop offset="13%" stopColor="hsl(332, 91%, 61%)" />
+        <stop offset="20%" stopColor="hsl(324, 87%, 60%)" />
+        <stop offset="28%" stopColor="hsl(317, 84%, 60%)" />
+        <stop offset="37%" stopColor="hsl(309, 80%, 59%)" />
+        <stop offset="45%" stopColor="hsl(302, 77%, 58%)" />
+        <stop offset="54%" stopColor="hsl(294, 74%, 57%)" />
+        <stop offset="63%" stopColor="hsl(287, 71%, 56%)" />
+        <stop offset="73%" stopColor="hsl(280, 68%, 55%)" />
+        <stop offset="82%" stopColor="hsl(272, 65%, 54%)" />
+        <stop offset="91%" stopColor="hsl(265, 62%, 53%)" />
+        <stop offset="100%" stopColor="hsl(257, 60%, 53%)" />
+      </linearGradient>
+    </defs>
+  </svg>
+);

@@ -9,6 +9,9 @@ import { Toaster } from 'react-hot-toast';
 import { EventProvider } from './context/EventContext';
 import { UserProvider } from './context/UserContext';
 import NotFound from './pages/NotFound';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsConditions from './pages/TermsAndConditions';
+import AboutUs from './pages/AboutUs';
 
 const GlobalStyle = createGlobalStyle`
 :root {
@@ -162,6 +165,9 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/about-us" element={<AboutUs />} />
               <Route path="*" element={<NotFound />} />
               {/* <Route element={<ProtectedRoute />}>
                 <Route path="/user" element={<UserProfile />} />

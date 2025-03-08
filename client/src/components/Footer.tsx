@@ -22,16 +22,25 @@ const FooterText = styled.small`
   color: var(--color-gray-3);
 `;
 
+const LinksContainer = styled.div`
+  display: flex;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
 const Footer = () => {
   return (
     <FooterWrapper>
       <FooterContent>
         <FooterText>&copy; {new Date().getFullYear()} EventGo. All rights reserved.</FooterText>
 
-        <div>
+        <LinksContainer>
           <a href="/privacy-policy" style={{ margin: '0 var(--15px)', color: 'var(--color-gray-3)' }}>Privacy Policy</a>
           <a href="/terms-conditions" style={{ margin: '0 var(--15px)', color: 'var(--color-gray-3)' }}>Terms & Conditions</a>
-        </div>
+          <a href="/about-us" style={{ margin: '0 var(--15px)', color: 'var(--color-gray-3)' }}>About Us</a>
+        </LinksContainer>
       </FooterContent>
     </FooterWrapper>
   );

@@ -7,7 +7,7 @@ import { useUserContext } from '../context/UserContext';
 import AuthModal from './dialogs/Authentication';
 import { useUserService } from '../services/user.service';
 import { Link } from 'react-router-dom';
-import { AddEventIcon, LogoutIcon } from '../utils/icons.utils';
+import { AddEventIcon, LogoIcon, LogoutIcon } from '../utils/icons.utils';
 import UserAvatar from './UserInfo';
 
 const NavbarWrapper = styled.nav`
@@ -31,20 +31,6 @@ const NavbarWrapper = styled.nav`
     transition: all 0.8s ease-in-out;
     margin-top: 3rem;
   }
-`;
-
-const Logo = styled.div`
-  font-size: var(--25px);
-  font-weight: bold;
-  background-image: var(--gradient-primary);
-  background-size: 100%;
-  background-repeat: repeat;
-  background-clip: text;
-
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-background-clip: text;
-  -moz-text-fill-color: transparent;
 `;
 
 const ButtonGroup = styled.div`
@@ -101,6 +87,22 @@ const WelcomeMessage = styled.div`
   padding: 12px 16px;
   color: var(--color-gray-8);
   font-weight: 400;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const LogoText = styled.div`
+  font-size: var(--20px);
+  font-weight: bold;
+  color: var(--color-gray-8);
+
+  @media (max-width: 700px) {
+    display: none;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -165,7 +167,10 @@ const Nav = () => {
   return (
     <NavbarWrapper>
       <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <Logo>EventGo</Logo>
+        <LogoContainer>
+          <>{LogoIcon}</>
+          <LogoText>eventGo</LogoText>
+        </LogoContainer>
       </Link>
 
       <ButtonGroup>
