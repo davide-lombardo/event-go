@@ -220,7 +220,7 @@ const Nav = () => {
         ) : (
           <Button
             onClick={handleOpenAuthModal}
-            variant={'primary'}
+            variant='secondary'
             label="Sign In"
           >
             Sign In

@@ -57,6 +57,7 @@ const MainContent = styled.div`
     font-weight: 900;
     margin-bottom: 1.5rem;
     letter-spacing: -1px;
+    color: var(--color-gray-8);
 
     span {
       font-weight: 700;

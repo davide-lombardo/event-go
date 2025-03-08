@@ -17,7 +17,7 @@ interface ButtonProps {
 const StyledButton = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
-  padding: var(--12px) var(--25px);
+  padding: var(--10px) var(--25px);
   border: none;
   border-radius: var(--8px);
   font-size: var(--16px);
