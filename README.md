@@ -10,6 +10,10 @@ Event Go is a web application that helps users discover and explore events happe
 
 Check out the live version of the app [here](https://event-go-frontend.onrender.com).
 
+## Swagger docs
+
+Check out api docs [here](https://event-go-backend.onrender.com/api-docs/).
+
 ## Technologies Used
 
 - **React**: A JavaScript library for building user interfaces. [Link](https://reactjs.org)
