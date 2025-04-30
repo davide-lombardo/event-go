@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit';
 
 import userRoutes from './routes/user.routes';
 import router from './routes';
+import { setupSwaggerDocs } from './swagger';
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 // Limit requests from same API
 const limiter = rateLimit({
@@ -37,6 +38,9 @@ app.use('/user', userRoutes);
 
 // API routes
 app.use('/api', router);
+
+// Swagger documentation
+setupSwaggerDocs(app);
 
 // 404 handler
 app.all('*', (req, res) => {
