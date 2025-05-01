@@ -16,6 +16,8 @@ const protectedRouter = Router();
  * /api/events:
  *   get:
  *     summary: Retrieve a list of events
+ *     tags:
+ *       - Event
  *     responses:
  *       200:
  *         description: A list of events
@@ -33,6 +35,8 @@ publicRouter.get('/', getEvents);
  * /api/events:
  *   post:
  *     summary: Create a new event
+ *     tags:
+ *       - Event
  *     requestBody:
  *       required: true
  *       content:
@@ -68,6 +72,8 @@ protectedRouter.post(
  * /api/events/{id}:
  *   put:
  *     summary: Update an existing event
+ *     tags:
+ *       - Event
  *     parameters:
  *       - in: path
  *         name: id
@@ -109,6 +115,8 @@ protectedRouter.put(
  * /api/events/{id}:
  *   delete:
  *     summary: Delete an event
+ *    tags:
+ *       - Event
  *     parameters:
  *       - in: path
  *         name: id
