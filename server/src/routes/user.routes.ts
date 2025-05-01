@@ -25,7 +25,7 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RegisterUser'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: User created
@@ -54,7 +54,7 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/LoginUser'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
  *         description: Successful login

@@ -42,88 +42,67 @@ client: Contains the React frontend application.
 server: Contains the Node.js and Express backend application.
 
 
+### Manual Development
+
+You can run the application locally using the following steps:
+
+1. Clone the repository and install dependencies:
+```bash
+   git clone https://github.com/davide-lombardo/event-go.git
+   cd event-go/client
+   npm install
+   cd event-go/server
+   npm install
+```
+
+2. Run the application:
+- In one terminal, start the frontend:
+```bash
+   cd client
+   npm run dev
+```
+The frontend will be available at http://localhost:3000/
+
+   - In another terminal, start the backend:
+```bash
+   cd server
+   npm run dev
+```
+The backend will be available at http://localhost:4000/
+
+3. To build for production:
+```bash
+   # In /client
+   npm run build
+   # In /server
+   npm run build
+```
+
 ### Run with Docker
 
-You can run **Event Go** locally using Docker. Follow the steps below:
+If you prefer using Docker for local development, follow the steps below. This allows you to run the entire application in containers, ensuring consistency across environments.
 
 #### Prerequisites
 1. Install [Docker](https://docs.docker.com/get-started/get-docker/) on your machine.  
    - Follow the instructions on the Docker website to download and install Docker for your operating system.
 
-#### Pull the Docker Image
-Download the Docker image from Docker Hub by running the following command:
+#### Run Docker Compose
+2. Start both the frontend and backend containers with:
 
 ```bash
-docker pull davelombdev/event-go:latest
+docker-compose up --build
 ```
 
-#### Run the Application
-Run the application using the following command:
+- The frontend will be accessible at http://localhost:3000/.
+- The backend will be accessible at http://localhost:4000/.
+
+3. Stopping the Docker Containers:
+
+To stop the containers, use:
 
 ```bash
-docker run -p 5000:5000 davelombdev/event-go:latest
+docker-compose down
 ```
-
-This will start the application, making it accessible at `http://localhost:5000` in your browser.
-
-## Setup and Development
-
-Clone the repository and install dependencies:
-
-```bash
-git clone https://github.com/davide-lombardo/event-go.git
-cd event-go/client
-npm install
-cd event-go/server
-npm install
-```
-
-### Running the Application
-
-Once the dependencies are installed, you can start the development server using the following command:
-
-```bash
-npm run dev
-```
-
-This will start the application in development mode and you can access it by navigating to `http://localhost:3000/` in your browser.
-
-### Building the Application
-
-To build the application for production, use the following command:
-
-```bash
-npm run build
-```
-
-This will compile and bundle your application into optimized static files in the `dist/` directory.
-
-### Preview the Build
-
-To preview the production build locally, use the following command:
-
-
-```bash
-npm run preview
-```
-
-This will run a preview server, which you can access in your browser to test the production version of the app.
-
-### Linting
-
-To run the ESLint linter and check for issues in the code, use the following command:
-
-```bash
-npm run lint
-```
-
-If there are any linting issues, you can fix them automatically using:
-
-```bash
-npm run lint:fix
-```
-
-This will fix any auto-fixable linting problems in the codebase.
 
 ## Testing
 
