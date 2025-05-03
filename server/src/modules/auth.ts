@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '@prisma/client';
+import { getEnvVar } from '../utils/utils';
 
 export const comparePasswords = (password: string, hash: string) => {
   return bcrypt.compare(password, hash);
@@ -11,19 +12,24 @@ export const hashPassword = (password: string) => {
   return bcrypt.hash(password, 5);
 };
 
-export const createJWT = (user: User) => {
-  if (!process.env.JWT_SECRET) {
-    return;
-  }
+export const createAccessToken = (user: User) => {
+  const secret = getEnvVar('JWT_SECRET');
 
-  const token = jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-    },
-    process.env.JWT_SECRET
+  return jwt.sign(
+    { id: user.id, username: user.username },
+    secret,
+    { expiresIn: '15m' }
   );
-  return token;
+};
+
+export const createRefreshToken = (user: User) => {
+  const secret = getEnvVar('REFRESH_TOKEN_SECRET');
+
+  return jwt.sign(
+    { id: user.id },
+    secret,
+    { expiresIn: '7d' }
+  );
 };
 
 export const protect = (req: Request, res: Response, next: NextFunction) => {

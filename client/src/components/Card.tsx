@@ -282,7 +282,6 @@ const Card: React.FC<CardProps> = React.memo(
     const showAdminActions = role === 'admin' || isEventCreator;
 
     const handleEdit = () => {
-      console.log('Edit button clicked');
       setModalEventData({
         id: eventId,
         name: title,
@@ -300,7 +299,6 @@ const Card: React.FC<CardProps> = React.memo(
     };
 
     const handleDelete = () => {
-      console.log('Delete button clicked');
       setIsDeleteConfirmOpen(true);
     };
 

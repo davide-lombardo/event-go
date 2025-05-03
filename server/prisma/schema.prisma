@@ -29,16 +29,17 @@ model Event {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  photoURL  String?
-  following String[] @default([])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  password  String
-  username  String   @unique
-  role      String   @default("user")
-  events    Event[]  @relation("UserEvents")
+  id           String   @id @default(uuid())
+  email        String   @unique
+  photoURL     String?
+  following    String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  password     String
+  refreshToken String?
+  username     String   @unique
+  role         String   @default("user")
+  events       Event[]  @relation("UserEvents")
 }
 
 enum EventCategory {

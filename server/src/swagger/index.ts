@@ -2,6 +2,7 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { Express } from "express";
+import { refreshAccessToken } from "../handlers/user";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -52,6 +53,10 @@ const swaggerDefinition = {
           updatedAt: { type: "string", format: "date-time" },
           password: { type: "string" },
           username: { type: "string" },
+          refreshToken: {
+            type: "string",
+            nullable: true,
+          },
           role: { type: "string", default: "user" },
           events: {
             type: "array",

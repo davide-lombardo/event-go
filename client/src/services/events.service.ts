@@ -1,9 +1,7 @@
 import { EventData, EventFilters } from '../types/event.model';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 
 export default class EventsService {
-  private apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
   public async getEvents(
     filters: EventFilters, 
     page: number = 1, 
@@ -18,7 +16,7 @@ export default class EventsService {
     }
   }> {
     try {
-      const response = await axios.get(`${this.apiUrl}/api/events`, {
+      const response = await axiosInstance.get(`/api/events`, {
         params: {
           page,
           pageSize,
@@ -45,7 +43,7 @@ export default class EventsService {
     }
 
     try {
-      await axios.post(`${this.apiUrl}/api/events`, eventData, {
+      await axiosInstance.post(`/api/events`, eventData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +62,7 @@ export default class EventsService {
     }
 
     try {
-      await axios.put(`${this.apiUrl}/api/events/${eventData.id}`, eventData, {
+      await axiosInstance.put(`/api/events/${eventData.id}`, eventData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -82,7 +80,7 @@ export default class EventsService {
     }
 
     try {
-      await axios.delete(`${this.apiUrl}/api/events/${eventId}`, {
+      await axiosInstance.delete(`/api/events/${eventId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

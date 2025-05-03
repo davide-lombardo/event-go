@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 
 import userRoutes from './routes/user.routes';
 import router from './routes';
@@ -11,12 +12,18 @@ import { setupSwaggerDocs } from './swagger';
 
 const app = express();
 
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+  credentials: true, // Allow cookies/credentials
+};
+
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Limit requests from same API
 const limiter = rateLimit({

@@ -5,7 +5,7 @@ import {
   getEvents,
   createEvent,
   updateEvent,
-  deleteEvent
+  deleteEvent,
 } from '../handlers/event';
 
 const publicRouter = Router();
@@ -115,7 +115,7 @@ protectedRouter.put(
  * /api/events/{id}:
  *   delete:
  *     summary: Delete an event
- *    tags:
+ *     tags:
  *       - Event
  *     parameters:
  *       - in: path
@@ -131,5 +131,5 @@ protectedRouter.delete('/:id', deleteEvent);
 
 export default {
   publicRoutes: publicRouter,
-  protectedRoutes: protectedRouter
+  protectedRoutes: protectedRouter,
 };

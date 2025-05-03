@@ -1,8 +1,10 @@
 import prisma from '../db';
 import { Request, Response } from 'express';
-import { comparePasswords, createJWT, hashPassword } from '../modules/auth';
+import { comparePasswords, createAccessToken, createRefreshToken, hashPassword } from '../modules/auth';
 import path from 'path';
 import fs from 'fs';
+import jwt from 'jsonwebtoken';
+import { getEnvVar } from '../utils/utils';
 
 interface MulterRequest extends Request {
   file?: Express.Multer.File;
@@ -26,8 +28,22 @@ export const createNewUser = async (req: Request, res: Response) => {
       },
     });
 
-    const token = createJWT(user);
-    res.json({ token });
+    const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/user/refresh-token',
+    });
+
+    res.json({ accessToken });
   } catch (error: any) {
     console.error('User creation failed:', error);
 
@@ -36,7 +52,8 @@ export const createNewUser = async (req: Request, res: Response) => {
   }
 };
 
-export const signin = async (req: Request, res: Response) => {
+
+export const signin = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
@@ -44,34 +61,101 @@ export const signin = async (req: Request, res: Response) => {
       where: { email },
     });
 
-    if (!user) {
+    if (!user || !(await comparePasswords(password, user.password))) {
       res.status(401).json({ error: 'Invalid email or password' });
       return;
     }
 
-    const isValid = await comparePasswords(password, user.password);
+    const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
 
-    if (!isValid) {
-      res.status(401).json({ error: 'Invalid email or password' });
-      return;
-    }
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
 
-    const token = createJWT(user);
-    res.json({ token });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+    });
+
+    res.json({ accessToken });
   } catch (error) {
     console.error('Signin failed:', error);
     res.status(500).json({ error: 'Signin failed' });
   }
 };
 
+export const refreshAccessToken = async (req: Request, res: Response): Promise<void> => {
+  const token = req.cookies.refreshToken;
+  if (!token) {
+    res.status(401).json({ error: 'No refresh token' });
+    return;
+  }
+
+  try {
+    const payload: any = jwt.verify(token, getEnvVar('REFRESH_TOKEN_SECRET'));
+    const user = await prisma.user.findUnique({ where: { id: payload.id } });
+
+    if (!user || user.refreshToken !== token) {
+      res.status(403).json({ error: 'Invalid refresh token' });
+      return;
+    }
+
+    const newAccessToken = createAccessToken(user);
+    const newRefreshToken = createRefreshToken(user);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken: newRefreshToken },
+    });
+
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+    });
+
+    res.json({ accessToken: newAccessToken });
+  } catch (err) {
+    console.error('Refresh token error:', err);
+    res.status(403).json({ error: 'Token expired or invalid' });
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  const token = req.cookies.refreshToken;
+  if (token) {
+    try {
+      const payload: any = jwt.verify(token, getEnvVar('REFRESH_TOKEN_SECRET'));
+      await prisma.user.update({
+        where: { id: payload.id },
+        data: { refreshToken: null },
+      });
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+  }
+
+  res.clearCookie('refreshToken', {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+
+  res.status(200).json({ message: 'Logged out' });
+};
+
+
 export const getUserProfile = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
       // @ts-ignore
       where: { id: req.user.id },
-      // include: {
-      //   events: true,
-      // },
     });
 
     if (!user) {
@@ -174,4 +258,6 @@ export const uploadProfileImage = async (
       error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
+
+  
 };
