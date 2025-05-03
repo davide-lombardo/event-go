@@ -2,7 +2,6 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { Express } from "express";
-import { refreshAccessToken } from "../handlers/user";
 
 const swaggerDefinition = {
   openapi: "3.0.0",

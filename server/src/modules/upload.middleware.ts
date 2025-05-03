@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { upload } from '../config/multer.config';
 
 export const uploadMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  upload.single('profileImage')(req, res, (err: any) => {
+  upload.single('profileImage')(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.status(400).json({

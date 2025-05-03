@@ -12,7 +12,7 @@ export const handleInputErrors = (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export const errorHandler = (error: any, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (error: Error, req: Request, res: Response) => {
   console.error('Error:', error);
 
   if (error.name === 'UnauthorizedError') {

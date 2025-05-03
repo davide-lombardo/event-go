@@ -2,6 +2,12 @@ import { EventCategory } from "@prisma/client";
 import prisma from "../db";
 import { Request, Response } from "express";
 
+interface WhereConditions {
+  latitude?: { gte: number; lte: number };
+  longitude?: { gte: number; lte: number };
+  eventDate?: { gte: string; lt?: string; lte?: string };
+  category?: { in: EventCategory[] };
+}
 
 export const getEvents = async (req: Request, res: Response) => {
   const { 
@@ -13,7 +19,7 @@ export const getEvents = async (req: Request, res: Response) => {
   } = req.query;
 
   try {
-    const whereConditions: any = {};
+    const whereConditions: WhereConditions = {};
 
     if (location && typeof location === 'object' && 'searchText' in location) {
       const locationObj = location as {
@@ -82,9 +88,9 @@ export const getEvents = async (req: Request, res: Response) => {
     // Add category filtering if categories are provided
     if (categories && Array.isArray(categories) && categories.length > 0) {
       // Ensure all categories are valid EventCategory values
-      const validCategories = categories.filter(cat =>
-        Object.values(EventCategory).includes(cat as EventCategory)
-      );
+      const validCategories = categories
+        .filter(cat => typeof cat === 'string' && Object.values(EventCategory).includes(cat as EventCategory))
+        .map(cat => cat as EventCategory);
 
       if (validCategories.length > 0) {
         whereConditions.category = {
@@ -151,7 +157,7 @@ export const createEvent = async (req: Request, res: Response) => {
         userName,
         eventDate: new Date(eventDate),
         category,
-        // @ts-ignore
+        // @ts-expect-error req.user is added by auth middleware
         userId: req.user.id,
       },
     });
@@ -176,7 +182,7 @@ export const updateEvent = async (req: Request, res: Response) => {
       },
     });
 
-    // @ts-ignore
+    // @ts-expect-error user info is injected via middleware
     if (!event || (event.userId !== req.user?.id && req.user?.role !== 'admin')) {
       res.status(404).json({ error: 'Event not found or not authorized' });
       return;
@@ -200,6 +206,7 @@ export const updateEvent = async (req: Request, res: Response) => {
 
     res.json({ data: updatedEvent });
   } catch (error) {
+    console.error('Event update failed:', error);
     res.status(500).json({ error: 'Event update failed' });
   }
 };
@@ -215,7 +222,7 @@ export const deleteEvent = async (req: Request, res: Response) => {
       },
     });
 
-    // @ts-ignore
+    // @ts-expect-error user info is injected via middleware
     if (!event || (event.userId !== req.user?.id && req.user?.role !== 'admin')) {
       res.status(404).json({ error: 'Event not found or not authorized' });
       return;
@@ -229,6 +236,7 @@ export const deleteEvent = async (req: Request, res: Response) => {
 
     res.json({ data: deletedEvent });
   } catch (error) {
+    console.error('Event deletion failed:', error);
     res.status(500).json({ error: 'Event deletion failed' });
   }
 };

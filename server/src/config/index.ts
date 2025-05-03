@@ -1,18 +1,19 @@
 import merge from "lodash.merge";
+import localConfig from "./local";
+import testingConfig from "./testing";
+import prodConfig from "./prod";
 
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
-const stage = process.env.STAGE || "local";
-let envConfig;
+const stage = (process.env.STAGE || "local") as keyof typeof configMap;
 
+const configMap = {
+  production: prodConfig,
+  testing: testingConfig,
+  local: localConfig,
+};
 
-if (stage === "production") {
-  envConfig = require("./prod").default;
-} else if (stage === "staging") {
-  envConfig = require("./staging").default;
-} else {
-  envConfig = require("./local").default;
-}
+const envConfig = configMap[stage] || localConfig;
 
 const defaultConfig = {
   stage,

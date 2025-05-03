@@ -1,6 +1,11 @@
 import prisma from '../db';
 import { Request, Response } from 'express';
-import { comparePasswords, createAccessToken, createRefreshToken, hashPassword } from '../modules/auth';
+import {
+  comparePasswords,
+  createAccessToken,
+  createRefreshToken,
+  hashPassword,
+} from '../modules/auth';
 import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
@@ -10,7 +15,7 @@ interface MulterRequest extends Request {
   file?: Express.Multer.File;
   user?: {
     id: string;
-    [key: string]: any;
+    [key: string]: string;
   };
 }
 
@@ -44,14 +49,13 @@ export const createNewUser = async (req: Request, res: Response) => {
     });
 
     res.json({ accessToken });
-  } catch (error: any) {
+  } catch (error) {
     console.error('User creation failed:', error);
 
     // Generic error response
     res.status(500).json({ error: 'User creation failed. Please try again.' });
   }
 };
-
 
 export const signin = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -88,7 +92,10 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const refreshAccessToken = async (req: Request, res: Response): Promise<void> => {
+export const refreshAccessToken = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const token = req.cookies.refreshToken;
   if (!token) {
     res.status(401).json({ error: 'No refresh token' });
@@ -96,7 +103,14 @@ export const refreshAccessToken = async (req: Request, res: Response): Promise<v
   }
 
   try {
-    const payload: any = jwt.verify(token, getEnvVar('REFRESH_TOKEN_SECRET'));
+    const payload = jwt.verify(token, getEnvVar('REFRESH_TOKEN_SECRET'));
+
+    // Check if the payload is a string (token invalid) or a valid payload
+    if (typeof payload === 'string') {
+      res.status(403).json({ error: 'Invalid refresh token' });
+      return;
+    }
+
     const user = await prisma.user.findUnique({ where: { id: payload.id } });
 
     if (!user || user.refreshToken !== token) {
@@ -130,7 +144,14 @@ export const logout = async (req: Request, res: Response) => {
   const token = req.cookies.refreshToken;
   if (token) {
     try {
-      const payload: any = jwt.verify(token, getEnvVar('REFRESH_TOKEN_SECRET'));
+      const payload = jwt.verify(token, getEnvVar('REFRESH_TOKEN_SECRET'));
+
+      // Check if the payload is a string (token invalid) or a valid payload
+      if (typeof payload === 'string') {
+        res.status(403).json({ error: 'Invalid refresh token' });
+        return;
+      }
+
       await prisma.user.update({
         where: { id: payload.id },
         data: { refreshToken: null },
@@ -150,11 +171,10 @@ export const logout = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Logged out' });
 };
 
-
 export const getUserProfile = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
-      // @ts-ignore
+      // @ts-expect-error req.user is added by auth middleware
       where: { id: req.user.id },
     });
 
@@ -173,7 +193,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
 export const updateUserProfile = async (req: Request, res: Response) => {
   try {
     const { username, profileImage } = req.body;
-    // @ts-ignore
+    // @ts-expect-error req.user is added by auth middleware
     const userId = req.user.id;
 
     const updatedUser = await prisma.user.update({
@@ -258,6 +278,4 @@ export const uploadProfileImage = async (
       error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
-
-  
 };

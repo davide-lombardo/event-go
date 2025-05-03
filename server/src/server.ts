@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import path from 'path';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -9,6 +9,8 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user.routes';
 import router from './routes';
 import { setupSwaggerDocs } from './swagger';
+import pinoHttp from 'pino-http';
+import logger from './utils/logger';
 
 const app = express();
 
@@ -20,6 +22,7 @@ const corsOptions = {
 // Middleware
 app.use(helmet());
 app.use(cors(corsOptions));
+app.use(pinoHttp({ logger }));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -55,7 +58,7 @@ app.all('*', (req, res) => {
 });
 
 // Error handler
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response) => {
   console.error(err);
   res.status(500).json({ 
     message: 'Internal server error',

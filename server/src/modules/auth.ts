@@ -55,7 +55,7 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
     }
 
     const user = jwt.verify(token, process.env.JWT_SECRET);
-    // @ts-ignore
+    // @ts-expect-error Assigning decoded JWT payload to req.user, which isn't typed by default
     req.user = user;
     next();
   } catch (e) {
