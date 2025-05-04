@@ -65,7 +65,7 @@ You can run the application locally using the following steps:
    cd client
    npm run dev
 ```
-The frontend will be available at http://localhost:3000/
+The frontend will be available at http://localhost:5173/
 
    - In another terminal, start the backend:
 ```bash
@@ -97,7 +97,7 @@ If you prefer using Docker for local development, follow the steps below. This a
 docker-compose up --build
 ```
 
-- The frontend will be accessible at http://localhost:3000/.
+- The frontend will be accessible at http://localhost:5173/.
 - The backend will be accessible at http://localhost:4000/.
 
 3. Stopping the Docker Containers:

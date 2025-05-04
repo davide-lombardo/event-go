@@ -270,18 +270,18 @@ const UserProfile = () => {
         </Button>
       </UserProfileHeader>
 
-      {userData.events.length > 0 && (
+      {userData.events?.length > 0 && (
         <UserProfileStats>
           <UserProfileStat>
             <UserProfileStatLabel>Events Inserted</UserProfileStatLabel>
-            <UserProfileStatValue>{userData.events.length}</UserProfileStatValue>
+            <UserProfileStatValue>{userData.events?.length}</UserProfileStatValue>
           </UserProfileStat>
         </UserProfileStats>
       )}
     
       <UserProfileEvents>
-        {userData.events.length > 0 ? (
-          userData.events.map(event => (
+        {userData.events?.length > 0 ? (
+          userData.events?.map(event => (
             <UserProfileEvent key={event.id}>
               <UserProfileEventInfo>
                 <UserProfileEventName>{event.name}</UserProfileEventName>

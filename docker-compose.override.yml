@@ -1,16 +1,16 @@
-version: "3.9"
-
 services:
   client:
     command: npm run dev
     ports:
-      - "3000:3000"
+      - "5173:5173"
     volumes:
       - ./client:/app
       - /app/node_modules
     working_dir: /app
     env_file:
       - ./client/.env
+    depends_on:
+      - server
 
   server:
     command: npm run dev

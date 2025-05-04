@@ -3,12 +3,12 @@ import { toast } from 'react-hot-toast';
 import { useUserService } from '../services/user.service';
 
 // Base API URL
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 // Create Axios instance
 const axiosInstance = axios.create({
   baseURL: apiUrl,
-  timeout: 10000,
+  timeout: 30000,
   withCredentials: true,
 });
 

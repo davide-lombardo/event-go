@@ -1,18 +1,15 @@
-version: '3.9'
-
 services:
   client:
     build:
       context: ./client
       dockerfile: Dockerfile
-    environment:
-      VITE_API_URL: ${VITE_API_URL}
     ports:
-      - "3000:80"
+      - "5173:5173"
     env_file:
       - ./client/.env
     depends_on:
       - server
+    command: npm run dev
 
   server:
     build:
@@ -22,4 +19,5 @@ services:
       - "4000:4000"
     env_file:
       - ./server/.env
+    command: npm run dev
 

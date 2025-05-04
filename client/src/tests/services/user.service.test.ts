@@ -5,7 +5,7 @@ import { useUserService } from '../../services/user.service';
 import { User } from '../../types/user.model';
 
 const userService = useUserService();
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5173';
 
 describe('UserService', () => {
   beforeEach(() => {

@@ -177,7 +177,7 @@ function Home() {
   };
 
   const eventsToDisplay = useMemo(
-    () => (events.length > 0 ? events : []),
+    () => (events?.length > 0 ? events : []),
     [events]
   );
   const isEmptyState = useMemo(
@@ -265,7 +265,7 @@ function Home() {
           </NoEventsMessage>
         )}
       </EventListWrapper>
-      {events.length > 0 && (
+      {events?.length > 0 && (
         <Pagination hasMore={pagination.page < pagination.totalPages} />
       )}
     </React.Fragment>

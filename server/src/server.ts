@@ -19,6 +19,8 @@ const corsOptions = {
   credentials: true, // Allow cookies/credentials
 };
 
+console.log("Client URL:", process.env.CLIENT_URL);
+
 // Middleware
 app.use(helmet());
 app.use(cors(corsOptions));
